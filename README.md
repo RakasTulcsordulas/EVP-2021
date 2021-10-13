@@ -21,3 +21,5 @@ Csapattagok:
 👥 [User Story](https://docs.google.com/document/d/1o6ezy52--X3ziTpvVy_yXtGEoYT0JsRQ8xjCRltsVmo/edit)
 
 📜 [Weboldal](http://zsoltgombocz.web.elte.hu/EVP/)
+
+🖥️ [GD Szoftverek összehasonlítása](https://docs.google.com/document/d/1s8aZLjhlIdZWnpkSlG8ZHot3lrOqgP_GVSfPCtMIfyM/edit)
