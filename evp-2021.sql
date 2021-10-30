@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Sze 27. 19:01
+-- Létrehozás ideje: 2021. Okt 30. 18:36
 -- Kiszolgáló verziója: 10.4.18-MariaDB
 -- PHP verzió: 8.0.3
 
@@ -24,6 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `filmek`
+--
+
+CREATE TABLE `filmek` (
+  `id` int(11) NOT NULL COMMENT 'Unique ID auto increments for each movie.',
+  `title` varchar(128) NOT NULL COMMENT 'Release title of the movie. Can repeat.',
+  `release_date` int(11) NOT NULL COMMENT 'Release date of the movie, only year.',
+  `length` int(11) NOT NULL COMMENT 'Movie''s length in minutes, rounded up. Not including ad time.',
+  `type` varchar(16) NOT NULL COMMENT 'Movie''s media type (2D / 3D etc.). ',
+  `aspect` varchar(16) NOT NULL COMMENT 'Aspect ratio of the movie (16:9 etc). ',
+  `language` varchar(128) NOT NULL COMMENT 'List of available languages (ENG/HU etc).'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `users`
 --
 
@@ -40,7 +56,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `salt`, `emailAddress`) VALUES
-(17, 'attila', '*7975363AAA5B35675359236D56E5F330AAEF53FF', '��Ӡ����s�', 'attila@email.com');
+(17, 'attila', '*7975363AAA5B35675359236D56E5F330AAEF53FF', '��Ӡ����s�', 'attila@email.com'),
+(18, 'Nándor', '*EAB89CB19B9C03864DCD984311D9CD2CFEF82D01', '�)����nI', 'nandor@email.hu');
 
 --
 -- Eseményindítók `users`
@@ -55,6 +72,12 @@ DELIMITER ;
 --
 
 --
+-- A tábla indexei `filmek`
+--
+ALTER TABLE `filmek`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- A tábla indexei `users`
 --
 ALTER TABLE `users`
@@ -66,10 +89,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT a táblához `filmek`
+--
+ALTER TABLE `filmek`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID auto increments for each movie.';
+
+--
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
