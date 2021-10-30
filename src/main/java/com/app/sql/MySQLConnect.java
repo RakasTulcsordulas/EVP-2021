@@ -7,8 +7,12 @@
 
 package com.app.sql;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.*;
+import java.util.Properties;
 import java.util.Random;
 
 //TODO handling all exceptions
@@ -17,24 +21,32 @@ public class MySQLConnect {
     private Connection con;
 
     /**
-     * Establishes MySQL database connection, works as setter <br>
-     * TODO read connection parameters from JSON/config for easier setup
+     * Establishes MySQL database connection, works as a setter <br>
+     * Database parameters are read from database.conf
      *
      * @throws ClassNotFoundException on driver failure
      * @throws SQLException on MySQL failure
      */
     public void establishConnection() {
-        String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://127.0.0.1:3306/evp-2021";
-        String username = "root";
-        String password = "";
+
+        Properties prop = new Properties();
+        String configFile = "src/main/resources/database.conf";
+
+        try (FileInputStream fis = new FileInputStream(configFile)) {
+            prop.load(fis);
+        } catch (FileNotFoundException e) {
+            System.out.println("Config file not found!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
-            Class.forName(driver);
+            Class.forName(prop.getProperty("driver"));
         } catch (ClassNotFoundException e) {e.printStackTrace();}
 
         try {
-            con = DriverManager.getConnection(url, username, password);
+            con = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));
             System.out.println("MySQL Connected");
 
         } catch (SQLException e) {e.printStackTrace();}
@@ -74,9 +86,8 @@ public class MySQLConnect {
      * Executes a SELECT query on a given username and checks if it exists in the database.
      * @param username - the username to be checked
      * @return - true if at least one instance was found
-     * @throws SQLException - on SQL query error
      */
-    public boolean checkUsernameExists(String username) throws SQLException {
+    public boolean checkUsernameExists(String username) {
         String query = "SELECT username FROM `users` WHERE username = '"+ username +"'";
 
         try (Statement statement = con.createStatement()) {
@@ -95,9 +106,8 @@ public class MySQLConnect {
      * Executes a SELECT query on a given email address and checks if it exists in the database.
      * @param emailAddress - the email address to be checked
      * @return - true if at least one instance was found
-     * @throws SQLException - on SQL query error
      */
-    public boolean checkEmailExists(String emailAddress) throws SQLException {
+    public boolean checkEmailExists(String emailAddress) {
         String query = "SELECT emailAddress FROM `users` WHERE emailAddress = '"+ emailAddress +"'";
 
         try (Statement statement = con.createStatement()) {

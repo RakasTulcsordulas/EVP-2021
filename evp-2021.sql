@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Okt 30. 18:36
+-- Létrehozás ideje: 2021. Okt 30. 19:36
 -- Kiszolgáló verziója: 10.4.18-MariaDB
 -- PHP verzió: 8.0.3
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `filmek`
+-- Tábla szerkezet ehhez a táblához `movies`
 --
 
-CREATE TABLE `filmek` (
+CREATE TABLE `movies` (
   `id` int(11) NOT NULL COMMENT 'Unique ID auto increments for each movie.',
   `title` varchar(128) NOT NULL COMMENT 'Release title of the movie. Can repeat.',
   `release_date` int(11) NOT NULL COMMENT 'Release date of the movie, only year.',
@@ -57,7 +57,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `salt`, `emailAddress`) VALUES
 (17, 'attila', '*7975363AAA5B35675359236D56E5F330AAEF53FF', '��Ӡ����s�', 'attila@email.com'),
-(18, 'Nándor', '*EAB89CB19B9C03864DCD984311D9CD2CFEF82D01', '�)����nI', 'nandor@email.hu');
+(18, 'Nándor', '*EAB89CB19B9C03864DCD984311D9CD2CFEF82D01', '�)����nI', 'nandor@email.hu'),
+(19, 'Feri', '*C6FEC89B259FDB6179FB51E46FDD9FAC3F6293B5', '(;����ø@', 'aki@aseggedbeveri.com');
 
 --
 -- Eseményindítók `users`
@@ -72,9 +73,9 @@ DELIMITER ;
 --
 
 --
--- A tábla indexei `filmek`
+-- A tábla indexei `movies`
 --
-ALTER TABLE `filmek`
+ALTER TABLE `movies`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -89,16 +90,16 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT a táblához `filmek`
+-- AUTO_INCREMENT a táblához `movies`
 --
-ALTER TABLE `filmek`
+ALTER TABLE `movies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID auto increments for each movie.';
 
 --
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

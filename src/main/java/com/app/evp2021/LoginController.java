@@ -26,14 +26,9 @@ public class LoginController {
         con.establishConnection();
         if (username.getText() != "" && password.getText() != "" && emailAddress.getText() != "") {
 
-            try {
-                if (    con.checkUsernameExists(username.getText()) == true &&
-                        con.checkEmailExists(emailAddress.getText()) ==true) {
-                    System.out.println("Exists");
-                    return;
-                }
-            } catch (SQLException e) {
-                System.out.println("SQL Error");
+            if (    con.checkUsernameExists(username.getText()) == true &&
+                    con.checkEmailExists(emailAddress.getText()) ==true) {
+                System.out.println("Exists");
                 return;
             }
             con.signUpNewUser(username.getText(), password.getText(), emailAddress.getText());
