@@ -18,14 +18,16 @@ import java.util.Random;
 //TODO handling all exceptions
 public class MySQLConnect {
 
+    //*************************
+    //** CONNECTION HANDLING **
+    //*************************
+
     private Connection con;
 
     /**
      * Establishes MySQL database connection, works as a setter <br>
      * Database parameters are read from database.conf
      *
-     * @throws ClassNotFoundException on driver failure
-     * @throws SQLException on MySQL failure
      */
     public void establishConnection() {
 
@@ -53,12 +55,26 @@ public class MySQLConnect {
     }
 
     /**
+     * Closes database connection, quasi works as destructor but not really.
+     *
+     */
+    public void closeConnection() {
+        try {
+            con.close();
+        } catch (SQLException e) {e.printStackTrace();}
+    }
+
+
+    //*******************
+    //** USER HANDLING **
+    //*******************
+
+    /**
      * Executes an INSERT INTO command into 'users' table on a given connection. Passwords are hashed on server side, salt is a randomized 10 character string.
      *
      * @param username varchar(30)
      * @param password varchar(224)
      * @param emailAddress varchar(50)
-     * @throws SQLException on SQL command failure
      */
     public void signUpNewUser(String username, String password, String emailAddress) {
 
@@ -122,14 +138,34 @@ public class MySQLConnect {
         return false;
     }
 
+
+    //********************
+    //** MOVIE HANDLING **
+    //********************
+
     /**
-     * Closes database connection, quasi works as destructor but not really.
+     * Inserts a new movie into the database with the given parameters on an established database connection.
      *
-     * @throws SQLException on SQL command failure
+     * @param title varchar(128) NOTNULL
+     * @param release_date int(11) NOTNULL
+     * @param length int(11)
+     * @param type varchar(16)
+     * @param aspect varchar(16)
+     * @param language varchar(128)
      */
-    public void closeConnection() {
+    public void insertNewMovie(String title, int release_date, int length, String type, String aspect, String language) {
         try {
-            con.close();
+            Statement statement = con.createStatement();
+            statement.executeUpdate("   INSERT INTO `movies` (`id`, `title`, `release_date`, `length`, `type`, `aspect`, `language`) " +
+                    "VALUES (NULL, " +              //id auto increments
+                    "'" + title +"', " +            //NOTNULL
+                    "'" + release_date +"', " +
+                    "'" + length +"', " +
+                    "'" + type +"', " +
+                    "'" + aspect +"', " +
+                    "'" + language +"')");
+
         } catch (SQLException e) {e.printStackTrace();}
     }
+
 }
