@@ -12,8 +12,7 @@
       fx:controller="com.app.evp2021.LoginController">
     <Label fx:id="welcomeText" text="Welcome"/>
     <TextArea fx:id="username" maxWidth="300" maxHeight="0" promptText="Username"/>
-    <TextArea fx:id="emailAddress" maxWidth="300" maxHeight="0" promptText="Email Address"/>
     <PasswordField fx:id="password" maxWidth="300" maxHeight="0" promptText="Password"/>
-    <Button fx:id="signUp" text="Sign up" onAction="#onSignUpClick"/>
+    <Button fx:id="logIn" text="Log in" onAction="#onLogInClick"/>
     <Label fx:id="missing" text="Minden mezőt ki kell tölteni!" visible="false"/>
 </VBox>
