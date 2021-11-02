@@ -9,7 +9,7 @@
 
 <?import javafx.scene.control.Button?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.app.evp2021.LoginController">
+      fx:controller="com.app.evp2021.controllers.LoginController">
     <Label fx:id="welcomeText" text="Welcome"/>
     <TextArea fx:id="username" maxWidth="300" maxHeight="0" promptText="Username"/>
     <PasswordField fx:id="password" maxWidth="300" maxHeight="0" promptText="Password"/>
