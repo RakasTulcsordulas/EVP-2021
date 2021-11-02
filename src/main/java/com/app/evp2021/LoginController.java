@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import com.app.sql.*;
 
+import javax.sql.RowSet;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -19,12 +21,6 @@ public class LoginController {
     //Adding user to database
     @FXML protected void onLogInClick() {
         con.establishConnection();
-
-        if (username.getText() == "" || password.getText() == "") {
-            missing.setVisible(true);
-            return;
-        }
-
 
         if (con.checkPassword(username.getText(), password.getText())) {
             //TODO Admin page

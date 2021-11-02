@@ -26,7 +26,6 @@ public class MySQLConnect {
     /**
      * Establishes MySQL database connection, works as a setter <br>
      * Database parameters are read from database.conf
-     *
      */
     public void establishConnection() {
 
@@ -55,7 +54,6 @@ public class MySQLConnect {
 
     /**
      * Closes database connection, quasi works as destructor but not really.
-     *
      */
     public void closeConnection() {
         try {
@@ -69,15 +67,14 @@ public class MySQLConnect {
     //*******************
 
     /**
-     * Executes an INSERT INTO command into 'users' table on a given connection. Passwords are hashed on server side, salt is a randomized 10 character string.
-     *
+     * Executes an INSERT INTO command into 'employee' table on a given connection. Passwords are hashed on server side, salt is a randomized 10 character string.
      * @param username varchar(30)
      * @param password varchar(224)
      * @param emailAddress varchar(50)
      */
-    public void signUpNewUser(String username, String password, String emailAddress) {
+    public void signUpNewEmployee (String username, String password, String emailAddress) {
 
-        String query = "INSERT INTO users (id, username, password, salt, emailAddress) VALUES (NULL, ?, ?, ?, ?)";
+        String query = "INSERT INTO employee (id, username, password, salt) VALUES (NULL, ?, ?, ?)";
 
         //Setting stored salted password
         byte[] array = new byte[10]; // salt length is bounded by 10
@@ -90,22 +87,21 @@ public class MySQLConnect {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, salt);
-            preparedStatement.setString(4, emailAddress);
 
             int result = preparedStatement.executeUpdate();
             System.out.println(result);
             if (result > 0) {
-                System.out.println("New user is inserted into the database!");
+                System.out.println("New employee is inserted into the database!");
             } else {
                 System.out.println("Error! Incorrect parameters!");
             }
         } catch (SQLException e) {e.printStackTrace();}
     }
 
-    public void deleteUser(String username) {
-        String query = "DELETE FROM users WHERE username = ?";
+    public void deleteEmployee (String username) {
+        String query = "DELETE FROM employee WHERE username = ?";
 
-        System.out.println("Deleting user...");
+        System.out.println("Deleting employee...");
         try (PreparedStatement preparedStatement = con.prepareStatement(query)){
             preparedStatement.setString(1, username);
             int result = preparedStatement.executeUpdate();
@@ -122,13 +118,12 @@ public class MySQLConnect {
 
     /**
      * Checks if a username + password combination exists in the database.
-     *
      * @param username user's name associated with the password
      * @param password password to be checked
      * @return true if given username and password matches in database
      */
     public boolean checkPassword(String username, String password) {
-        String query = "SElECT users.username FROM users WHERE PASSWORD(CONCAT(?, users.salt)) = users.password AND users.username = ?";
+        String query = "SElECT employee.username FROM employee WHERE PASSWORD(CONCAT(?, employee.salt)) = employee.password AND employee.username = ?";
 
         System.out.println("Checking for username and password...");
 
@@ -141,7 +136,7 @@ public class MySQLConnect {
                 System.out.println("Success!");
                 return true;
             }
-        } catch (SQLException e) {e.printStackTrace();};
+        } catch (SQLException e) {e.printStackTrace();}
         System.out.println("Authentication failed!");
         return false;
     }
@@ -152,7 +147,7 @@ public class MySQLConnect {
      * @return - true if at least one instance was found
      */
     public boolean checkUsernameExists(String username) {
-        String query = "SELECT username FROM users WHERE username = ?";
+        String query = "SELECT username FROM employee WHERE username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, username);
@@ -167,63 +162,87 @@ public class MySQLConnect {
         return false;
     }
 
-    /**
-     * Executes a SELECT query on a given email address and checks if it exists in the database.
-     * @param emailAddress - the email address to be checked
-     * @return - true if at least one instance was found
-     */
-    public boolean checkEmailExists(String emailAddress) {
-        String query = "SELECT emailAddress FROM users WHERE emailAddress = ?";
-
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, emailAddress);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
     //********************
     //** MOVIE HANDLING **
     //********************
 
-    //TODO test this
     /**
      * Inserts a new movie into the database with the given parameters on an established database connection.
-     *
      * @param title varchar(128) NOTNULL
-     * @param release_date int(11) NOTNULL
-     * @param length int(11)
-     * @param type varchar(16)
-     * @param aspect varchar(16)
-     * @param language varchar(128)
+     * @param director varchar(256)
+     * @param cast varchar(1024)
+     * @param description text
+     * @param duration_min int(11)
      */
-    public void insertNewMovie(String title, int release_date, int length, String type, String aspect, String language) {
-        String query = "INSERT INTO movies (id, title, release_date, length, type, aspect, language) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+    public void insertNewMovie(String title, String director, String cast, String description, String duration_min) {
+        String query = "INSERT INTO movie (id, title, director, length, type, aspect, language, directors, category) VALUES (NULL, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
 
-            preparedStatement.setString(1, title);
-            preparedStatement.setInt(2, release_date);
-            preparedStatement.setInt(3, length);
-            preparedStatement.setString(4,type);
-            preparedStatement.setString(5, aspect);
-            preparedStatement.setString(6, language);
+            preparedStatement.setString(1,title);
+            preparedStatement.setString(2,director);
+            preparedStatement.setString(3,cast);
+            preparedStatement.setString(4,description);
+            preparedStatement.setString(5,duration_min);
 
             int result = preparedStatement.executeUpdate();
 
             if (result > 0) {
-                System.out.println("New movie " + title + " " + release_date + " is inserted into the database!");
+                System.out.println("New movie " + title + " is inserted into the database!");
             } else {
                 System.out.println("Error! Incorrect parameters!");
             }
         } catch (SQLException e) {e.printStackTrace();}
+    }
+
+    /**
+     * Deletes a movie with the given title and release_date combination
+     * @param title title of the movie VARCHAR(128)
+     */
+    public void deleteMovie(String title) {
+        String query = "DELETE FROM movie WHERE title = ?";
+
+        System.out.println("Deleting movie...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setString(1, title);
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Movie was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Executes an SQL query on the 'movie' table with the given title.
+     * @param title Title to be searched in the database, case-sensitive.
+     * @return an array of object starting from 1, containing the records of the movie the order as stored in the database.
+     */
+    public Object[] getMovie(String title) {
+        Object[] resultSetObject = null;
+        String query = "SELECT * FROM movie WHERE title = ?";
+
+        System.out.println("Searching for movie...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setString(1, title);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject = new Object[rsmd.getColumnCount()];
+
+                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
+                    resultSetObject[i] = resultSet.getObject(i);
+                }
+            } else {return null;}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSetObject;
     }
 
 }

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Gép: 127.0.0.1:3307
--- Létrehozás ideje: 2021. Okt 31. 14:26
--- Kiszolgáló verziója: 10.4.21-MariaDB
--- PHP verzió: 8.0.12
+-- Gép: 127.0.0.1
+-- Létrehozás ideje: 2021. Nov 02. 10:28
+-- Kiszolgáló verziója: 10.4.18-MariaDB
+-- PHP verzió: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,163 +24,286 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `booking`
+-- Tábla szerkezet ehhez a táblához `auditorium`
 --
 
-CREATE TABLE `booking` (
-  `booking_id` int(11) NOT NULL COMMENT 'These are the identifier(ID) of the customers.',
-  `booking_time` varchar(5) NOT NULL COMMENT 'These are the identifier of the booking times.',
-  `booking_expired` varchar(10) NOT NULL COMMENT 'These are the identifier of the expired booking times.'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='It stores the booking datas.';
+CREATE TABLE `auditorium` (
+  `id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `seats_no` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='seats_no is redundancy (it could be computed by counting Seat.id_seat related to specific room)';
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `movies`
+-- Tábla szerkezet ehhez a táblához `employee`
 --
 
-CREATE TABLE `movies` (
-  `movie_id` int(11) NOT NULL COMMENT 'Unique ID auto increments for each movie.',
-  `title` varchar(128) NOT NULL COMMENT 'Release title of the movie. Can repeat.',
-  `release_date` varchar(10) NOT NULL COMMENT 'Release date of the movie, only year.',
-  `length` varchar(5) NOT NULL COMMENT 'Movie''s length in minutes, rounded up. Not including ad time.',
-  `type` varchar(16) NOT NULL COMMENT 'Movie''s media type (2D / 3D etc.). ',
-  `aspect` varchar(16) NOT NULL COMMENT 'Aspect ratio of the movie (16:9 etc). ',
-  `language` varchar(128) NOT NULL COMMENT 'List of available languages (ENG/HU etc).',
-  `directors` varchar(100) NOT NULL COMMENT 'Directors of the movies.',
-  `category` varchar(50) NOT NULL COMMENT 'The category of the movies. Like Horror, Action...'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='It stores the movies datas.';
+CREATE TABLE `employee` (
+  `id` int(11) NOT NULL,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `salt` varchar(10) NOT NULL COMMENT 'Security ''salt'' for the password. Randomized UTF-8 String.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Employee list (users of system)';
 
 --
--- A tábla adatainak kiíratása `movies`
+-- A tábla adatainak kiíratása `employee`
 --
 
-INSERT INTO `movies` (`movie_id`, `title`, `release_date`, `length`, `type`, `aspect`, `language`, `directors`, `category`) VALUES
-(1, 'Venom 2. - Vérontó', '2021', '97', '2D', '2,39:1', 'Magyar szinkron', 'Andy Serkis', 'action-horror, comedy'),
-(2, 'Dűne', '2021', '155', '2D', '1,85:1', 'Angol szinkron, Magyar felirat', 'illeneuve, Mary Parent, Cale Boyter, Joe Caracci', 'sci-fi drama, advanture'),
-(3, 'Elk*rtuk', '2021', '127', '2D', '1,85:1', 'Magyar szinkron', 'Kálomista Gábor', 'crime-drama'),
-(4, 'Gyilkos Halloween', '2021', '106', '3D', '2,39:1', 'Magyar szinkron', 'David Gordon Green', 'horror / thriller'),
-(5, 'Post Mortem', '2020', '115', '2D', '1,85:1', 'Magyar szinkron', 'Bergendy Péter', 'thriller / mystic');
-
--- --------------------------------------------------------
+INSERT INTO `employee` (`id`, `username`, `password`, `salt`) VALUES
+(1, 'Attila', '*E61D14E12ADD0C1A23ABD98DE7ABD38B664AB653', 'asdfghjklé'),
+(2, 'Zsolt', '*64E8693C13EBBD0389DC15CD5B684B78F5048CE9', 'qwertzuiop'),
+(3, 'Ádám', '*6FB0989C28E7333DAA3578C0D122829632FC2FFD', 'íyxcvbnmkl'),
+(4, 'Kornél', '*E41AB1AC577E10B9A5B122938A4F6EF3EA4ADFD0', 'qaíwsyedxr'),
+(5, 'Gergő', '*286426CEB8FA4B317F6810DD70A9E2DC7E184094', 'úűőápéolik');
 
 --
--- Tábla szerkezet ehhez a táblához `rooms`
---
-
-CREATE TABLE `rooms` (
-  `room_id` int(2) NOT NULL COMMENT 'The number of ther screening rooms.',
-  `chair_number` int(3) NOT NULL COMMENT 'The numbers of the chairs in a screening room.'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='It stores the screening rooms datas.';
-
---
--- A tábla adatainak kiíratása `rooms`
---
-
-INSERT INTO `rooms` (`room_id`, `chair_number`) VALUES
-(1, 10),
-(2, 8),
-(3, 25),
-(4, 49),
-(5, 17);
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `screens`
---
-
-CREATE TABLE `screens` (
-  `day` int(2) NOT NULL COMMENT 'Days of screenings in a month.\r\n1<=day<=31',
-  `time` varchar(5) NOT NULL COMMENT 'The time of the screening days.\r\n8:00-24:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='It stores the screening time datas.';
-
---
--- A tábla adatainak kiíratása `screens`
---
-
-INSERT INTO `screens` (`day`, `time`) VALUES
-(1, '14:00'),
-(2, '14:30'),
-(10, '19:30'),
-(15, '20:30'),
-(22, '21:30');
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL COMMENT 'These are the identifier(id) of all users. ',
-  `username` varchar(30) NOT NULL,
-  `password` varchar(224) NOT NULL,
-  `salt` varchar(10) NOT NULL,
-  `emailAddress` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='It stores the users datas.';
-
---
--- A tábla adatainak kiíratása `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `salt`, `emailAddress`) VALUES
-(17, 'attila', '*7975363AAA5B35675359236D56E5F330AAEF53FF', '��Ӡ����s�', 'attila@email.com'),
-(18, 'Nándor', '*EAB89CB19B9C03864DCD984311D9CD2CFEF82D01', '�)����nI', 'nandor@email.hu'),
-(19, 'asd', '*9B056AD9B98CEB655AE216C79D7104ADF488E295', 'z/޽�ˊs�', 'asd@asd.cga');
-
---
--- Eseményindítók `users`
+-- Eseményindítók `employee`
 --
 DELIMITER $$
-CREATE TRIGGER `passwordHash` BEFORE INSERT ON `users` FOR EACH ROW SET NEW.password = PASSWORD(NEW.password)
+CREATE TRIGGER `passwordHash` BEFORE INSERT ON `employee` FOR EACH ROW SET NEW.password = PASSWORD(NEW.password)
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `movie`
+--
+
+CREATE TABLE `movie` (
+  `id` int(11) NOT NULL,
+  `title` varchar(256) NOT NULL,
+  `director` varchar(256) DEFAULT NULL,
+  `cast` varchar(1024) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `duration_min` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- A tábla adatainak kiíratása `movie`
+--
+
+INSERT INTO `movie` (`id`, `title`, `director`, `cast`, `description`, `duration_min`) VALUES
+(2, 'Elk*rtuk', 'Keith English', 'Vivianne Bánovits,András Mózes,Barna Bokor', 'When a young, ambitious market researcher finds out her boss is involved in the leaking of a scandalous Prime Minister speech, she decides to investigate the case to gain a position among the big-shots. Based on actual events.', 125),
+(3, 'Dune', 'Denis Villeneuve', 'Timothée Chalamet,Rebecca Ferguson,Oscar Isaac,Jason Momoa', 'Feature adaptation of Frank Herbert\'s science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.', 155),
+(4, 'Blade Runner 2049', 'Denis Villeneuve', 'Ryan Gosling,Dave Bautista,Robin Wright,Mark Arnold', 'Young Blade Runner K\'s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who\'s been missing for thirty years.', 204);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `reservation`
+--
+
+CREATE TABLE `reservation` (
+  `id` int(11) NOT NULL,
+  `screening_id` int(11) NOT NULL,
+  `employee_reserved_id` int(11) DEFAULT NULL,
+  `reservation_type_id` int(11) DEFAULT NULL,
+  `reservation_contact` varchar(1024) NOT NULL,
+  `reserved` tinyint(1) DEFAULT NULL,
+  `employee_paid_id` int(11) DEFAULT NULL,
+  `paid` tinyint(1) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `reservation_type`
+--
+
+CREATE TABLE `reservation_type` (
+  `id` int(11) NOT NULL,
+  `reservation_type` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `screening`
+--
+
+CREATE TABLE `screening` (
+  `id` int(11) NOT NULL,
+  `movie_id` int(11) NOT NULL,
+  `auditorium_id` int(11) NOT NULL,
+  `screening_start` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `seat`
+--
+
+CREATE TABLE `seat` (
+  `id` int(11) NOT NULL,
+  `row` int(11) NOT NULL,
+  `number` int(11) NOT NULL,
+  `auditorium_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `seat_reserved`
+--
+
+CREATE TABLE `seat_reserved` (
+  `id` int(11) NOT NULL,
+  `seat_id` int(11) NOT NULL,
+  `reservation_id` int(11) NOT NULL,
+  `screening_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexek a kiírt táblákhoz
 --
 
 --
--- A tábla indexei `booking`
+-- A tábla indexei `auditorium`
 --
-ALTER TABLE `booking`
-  ADD PRIMARY KEY (`booking_id`);
+ALTER TABLE `auditorium`
+  ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `movies`
+-- A tábla indexei `employee`
 --
-ALTER TABLE `movies`
-  ADD PRIMARY KEY (`movie_id`);
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `rooms`
+-- A tábla indexei `movie`
 --
-ALTER TABLE `rooms`
-  ADD PRIMARY KEY (`room_id`);
+ALTER TABLE `movie`
+  ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `users`
+-- A tábla indexei `reservation`
 --
-ALTER TABLE `users`
+ALTER TABLE `reservation`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `userName` (`username`);
+  ADD KEY `Reservation_Projection` (`screening_id`),
+  ADD KEY `Reservation_Reservation_type` (`reservation_type_id`),
+  ADD KEY `Reservation_paid_Employee` (`employee_paid_id`),
+  ADD KEY `Reservation_reserving_employee` (`employee_reserved_id`);
+
+--
+-- A tábla indexei `reservation_type`
+--
+ALTER TABLE `reservation_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- A tábla indexei `screening`
+--
+ALTER TABLE `screening`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Projection_ak_1` (`auditorium_id`,`screening_start`),
+  ADD KEY `Projection_Movie` (`movie_id`);
+
+--
+-- A tábla indexei `seat`
+--
+ALTER TABLE `seat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Seat_Room` (`auditorium_id`);
+
+--
+-- A tábla indexei `seat_reserved`
+--
+ALTER TABLE `seat_reserved`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Seat_reserved_Reservation_projection` (`screening_id`),
+  ADD KEY `Seat_reserved_Reservation_reservation` (`reservation_id`),
+  ADD KEY `Seat_reserved_Seat` (`seat_id`);
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
 --
--- AUTO_INCREMENT a táblához `booking`
+-- AUTO_INCREMENT a táblához `auditorium`
 --
-ALTER TABLE `booking`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'These are the identifier(ID) of the customers.';
+ALTER TABLE `auditorium`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT a táblához `users`
+-- AUTO_INCREMENT a táblához `employee`
 --
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'These are the identifier(id) of all users. ', AUTO_INCREMENT=20;
+ALTER TABLE `employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT a táblához `movie`
+--
+ALTER TABLE `movie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT a táblához `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `reservation_type`
+--
+ALTER TABLE `reservation_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `screening`
+--
+ALTER TABLE `screening`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `seat`
+--
+ALTER TABLE `seat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `seat_reserved`
+--
+ALTER TABLE `seat_reserved`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Megkötések a kiírt táblákhoz
+--
+
+--
+-- Megkötések a táblához `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `Reservation_Projection` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`),
+  ADD CONSTRAINT `Reservation_Reservation_type` FOREIGN KEY (`reservation_type_id`) REFERENCES `reservation_type` (`id`),
+  ADD CONSTRAINT `Reservation_paid_Employee` FOREIGN KEY (`employee_paid_id`) REFERENCES `employee` (`id`),
+  ADD CONSTRAINT `Reservation_reserving_employee` FOREIGN KEY (`employee_reserved_id`) REFERENCES `employee` (`id`);
+
+--
+-- Megkötések a táblához `screening`
+--
+ALTER TABLE `screening`
+  ADD CONSTRAINT `Projection_Movie` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`),
+  ADD CONSTRAINT `Projection_Room` FOREIGN KEY (`auditorium_id`) REFERENCES `auditorium` (`id`);
+
+--
+-- Megkötések a táblához `seat`
+--
+ALTER TABLE `seat`
+  ADD CONSTRAINT `Seat_Room` FOREIGN KEY (`auditorium_id`) REFERENCES `auditorium` (`id`);
+
+--
+-- Megkötések a táblához `seat_reserved`
+--
+ALTER TABLE `seat_reserved`
+  ADD CONSTRAINT `Seat_reserved_Reservation_projection` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`),
+  ADD CONSTRAINT `Seat_reserved_Reservation_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`),
+  ADD CONSTRAINT `Seat_reserved_Seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
