@@ -64,7 +64,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.app.evp2021/com.app.evp2021.HelloApplication</mainClass>
+                            <mainClass>com.app.evp2021/com.app.evp2021.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
