@@ -65,7 +65,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutY="720.0" prefHeight="48.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <Button fx:id="adminmodal" mnemonicParsing="false" onAction="#openAdminModal" onMouseClicked="#listMovies" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
+                  <Button fx:id="adminmodal" mnemonicParsing="false" onAction="#openAdminModal" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
