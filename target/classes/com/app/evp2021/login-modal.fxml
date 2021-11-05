@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -10,44 +11,86 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #e1e1e1;" stylesheets="@css/bootstrap.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.evp2021.controllers.LoginModalController">
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.evp2021.controllers.LoginModalController">
    <children>
-      <Text layoutX="48.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Admin belépés" textAlignment="CENTER" wrappingWidth="203.78124237060547" />
-      <VBox alignment="CENTER" layoutX="44.0" layoutY="66.0" prefHeight="160.0" prefWidth="212.0">
+      <AnchorPane id="login_pane" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #e1e1e1;">
          <children>
-            <TextField alignment="CENTER">
-               <VBox.margin>
-                  <Insets bottom="40.0" />
-               </VBox.margin>
-            </TextField>
-            <PasswordField alignment="CENTER">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </PasswordField>
+            <Text layoutX="48.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Admin belépés" textAlignment="CENTER" wrappingWidth="203.78124237060547" />
+            <VBox alignment="CENTER" layoutX="44.0" layoutY="66.0" prefHeight="160.0" prefWidth="212.0">
+               <children>
+                  <TextField fx:id="username" alignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="40.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <PasswordField fx:id="psw" alignment="CENTER">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </PasswordField>
+                  <Text fx:id="errormsg" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-danger" textAlignment="CENTER" wrappingWidth="211.9309902191162">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Text>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" layoutY="228.0" prefHeight="72.0" prefWidth="300.0" spacing="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onLoginAttempt" prefHeight="30.0" prefWidth="111.0" text="Belépés" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-primary" />
+                        <String fx:value="btn" />
+                     </styleClass>
+                  </Button>
+                  <Button id="exit_btn" fx:id="exit_btn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="118.0" text="Bezár" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-danger" />
+                        <String fx:value="btn" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-      </VBox>
-      <HBox alignment="CENTER" layoutY="228.0" prefHeight="72.0" prefWidth="300.0" spacing="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <stylesheets>
+            <URL value="@css/bootstrap.css" />
+            <URL value="@css/main.css" />
+         </stylesheets>
+      </AnchorPane>
+      <AnchorPane id="success_login" fx:id="success_login" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="310.0" prefWidth="310.0" style="-fx-background-color: #e1e1e1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="111.0" text="Belépés" textAlignment="CENTER">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
+            <Text layoutX="48.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Admin belépés" textAlignment="CENTER" wrappingWidth="203.78124237060547" />
+            <HBox alignment="CENTER" layoutY="228.0" prefHeight="72.0" prefWidth="300.0" spacing="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Button id="success_exit_btn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="118.0" text="Bezár" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <styleClass>
+                        <String fx:value="btn-danger" />
+                        <String fx:value="btn" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </HBox>
+            <Text id="success_message" fx:id="success_message" layoutX="48.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin belépés" textAlignment="CENTER" wrappingWidth="203.78124237060547">
                <styleClass>
-                  <String fx:value="btn-primary" />
-                  <String fx:value="btn" />
+                  <String fx:value="h4" />
+                  <String fx:value="alert-success" />
                </styleClass>
-            </Button>
-            <Button id="exit_btn" fx:id="exit_btn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="118.0" text="Bezár" textAlignment="CENTER">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <styleClass>
-                  <String fx:value="btn-danger" />
-                  <String fx:value="btn" />
-               </styleClass>
-            </Button>
+            </Text>
          </children>
-      </HBox>
+         <stylesheets>
+            <URL value="@css/bootstrap.css" />
+            <URL value="@css/main.css" />
+         </stylesheets>
+      </AnchorPane>
    </children>
 </AnchorPane>
