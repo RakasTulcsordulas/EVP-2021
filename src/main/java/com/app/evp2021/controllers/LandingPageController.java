@@ -1,6 +1,8 @@
 package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
+import com.app.evp2021.services.UserSession;
+import com.app.evp2021.views.LandingPage;
 import com.app.evp2021.views.LoginModal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,18 +60,26 @@ public class LandingPageController{
 
     @FXML
     private void openAdminModal() {
-        System.out.println("nyom");
         try {
             LoginModal.display();
         }catch (Exception e){
 
         }
+    }
 
+
+    @FXML
+    void logoutAdmin(MouseEvent event) throws Exception{
+        UserSession.getSession().logout();
+        LandingPage.refresh();
     }
 
     public void initialize() {
-        date_picker.setValue(LocalDate.now());
-        current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
-        movie_list.setSpacing(20);
+        if(UserSession.getSession() != null && !UserSession.getSession().getLoggedIn()) {
+            date_picker.setValue(LocalDate.now());
+            current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
+            movie_list.setSpacing(20);
+        }
+
     }
 }
