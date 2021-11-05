@@ -25,14 +25,21 @@ public class LandingPage extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("landing-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("CinemApp - Főoldal");
-
         stage.setMinWidth(1024);
         stage.setMinHeight(768);
 
         stage.setMaximized(true);
+
+        Scene sc = getLoggedOfScene(stage);
+
+        stage.setScene(sc);
+        stage.show();
+    }
+
+    public Scene getLoggedOfScene(Stage stage) throws Exception{
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("landing-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("CinemApp - Főoldal");
 
         DatePicker dp = (DatePicker) scene.lookup("#datepicker");
         DatePickerSkin dps = new DatePickerSkin(dp);
@@ -43,9 +50,6 @@ public class LandingPage extends Application {
         scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
-        stage.setScene(scene);
-        stage.show();
-
-
+        return scene;
     }
 }
