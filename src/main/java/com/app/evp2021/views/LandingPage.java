@@ -1,22 +1,20 @@
 package com.app.evp2021.views;
 
 import com.app.evp2021.Main;
-import com.app.evp2021.controllers.LandingPageController;
+import com.app.evp2021.controllers.Auditorium;
 import com.app.evp2021.services.UserSession;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.skin.DatePickerSkin;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class LandingPage extends Application {
@@ -25,24 +23,48 @@ public class LandingPage extends Application {
         launch(args);
     }
     private static Stage _stage = null;
+    private static Scene active_scene = null;
+    private static AnchorPane auditorium_holder = null;
 
     @Override
     public void start(Stage stage) throws Exception{
         _stage = stage;
 
-        Scene sc = getLoggedOutScene();
+        active_scene = getLoggedOutScene();
+        AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
+        FXMLLoader fxmlLoader;
+        fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
+        AnchorPane a = fxmlLoader.load();
+        Auditorium c = fxmlLoader.<Auditorium>getController();
+        c.create(18,18);
 
-        showStage(sc);
+
+        fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
+        AnchorPane a1 = fxmlLoader.load();
+        Auditorium c1 = fxmlLoader.<Auditorium>getController();
+        c1.create(18,10);
+
+        parent.getChildren().add(a1);
+
+        showStage(active_scene);
+
+        setLogoVisible(false);
     }
 
     public static void showStage (Scene sc) {
         _stage.close();
-        _stage.setMinWidth(1024);
-        _stage.setMinHeight(768);
+        _stage.setMinWidth(1124);
+        _stage.setMinHeight(868);
 
         _stage.setMaximized(true);
         _stage.setScene(sc);
         _stage.show();
+
+        _stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                LoginModal.close();
+            }
+        });
     }
 
     public static void refresh() throws Exception{
@@ -68,7 +90,6 @@ public class LandingPage extends Application {
     }
 
     public static Scene getLoggedInScene() throws Exception{
-        System.out.println("meghivva");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("admin-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         _stage.setTitle("CinemApp - Admin");
@@ -77,5 +98,10 @@ public class LandingPage extends Application {
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
         return scene;
+    }
+
+    public static void setLogoVisible(boolean b) throws Exception {
+        HBox logo_holder = (HBox) active_scene.lookup("#logo_holder");
+        logo_holder.setVisible(b);
     }
 }

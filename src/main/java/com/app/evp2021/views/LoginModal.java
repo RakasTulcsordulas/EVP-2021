@@ -28,10 +28,10 @@ public class LoginModal {
 
         public static void display() throws Exception
         {
-            System.out.println("asd");
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-modal.fxml"));
             scene = new Scene(fxmlLoader.load());
             modal = new Stage();
+
             modal.initModality(Modality.APPLICATION_MODAL);
             modal.setResizable(false);
             modal.setAlwaysOnTop(true);
@@ -61,5 +61,11 @@ public class LoginModal {
 
             Text msg = (Text) scene.lookup("#success_message");
             msg.setText(message);
+        }
+
+        public static void close() {
+            if(modal != null) {
+                modal.close();
+            }
         }
 }

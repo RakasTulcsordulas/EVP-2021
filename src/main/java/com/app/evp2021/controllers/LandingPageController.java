@@ -4,6 +4,7 @@ import com.app.evp2021.Main;
 import com.app.evp2021.services.UserSession;
 import com.app.evp2021.views.LandingPage;
 import com.app.evp2021.views.LoginModal;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -75,7 +76,7 @@ public class LandingPageController{
     }
 
     public void initialize() {
-        if(UserSession.getSession() != null && !UserSession.getSession().getLoggedIn()) {
+       if(UserSession.getSession() == null || UserSession.getSession().getLoggedIn() == false) {
             date_picker.setValue(LocalDate.now());
             current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
             movie_list.setSpacing(20);
