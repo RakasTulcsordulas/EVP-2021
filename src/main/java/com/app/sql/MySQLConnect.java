@@ -307,6 +307,48 @@ public class MySQLConnect {
         } catch (SQLException e) {e.printStackTrace();}
     }
 
+    /**
+     * Executes a SELECT query on the screening table with any combination of the given parameters.
+     * @param id Seat id int(11). Can be null.
+     * @param row Row number int(11). Can be null.
+     * @param number Seat's number in the row (i.e. column number) int(11). Can be null.
+     * @param auditorium_id Auditorium's id FK_int(11). Can be null.
+     * @return An Object[] starting from 1 containing the columns of all seats with at least matching the given attributes or null if no matching seat was found.
+     */
+    public Object[] getSeat (Object id, Object row, Object number, Object auditorium_id) {
+        Object[] resultSetObject = null;
+        String query = "SELECT * FROM seat WHERE " +
+                "(? IS NULL OR ? = id) " +
+                "AND " +
+                "(? IS NULL OR ? = row) " +
+                "AND " +
+                "(? IS NULL OR ? = number) " +
+                "AND " +
+                "(? IS NULL OR ? = auditorium_id)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+            preparedStatement.setObject(3, row);
+            preparedStatement.setObject(4, row);
+            preparedStatement.setObject(5, number);
+            preparedStatement.setObject(6, number);
+            preparedStatement.setObject(7, auditorium_id);
+            preparedStatement.setObject(8, auditorium_id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject = new Object[rsmd.getColumnCount()];
+
+                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
+                    resultSetObject[i] = resultSet.getObject(i);
+                }
+            } else {return null;}
+        } catch (SQLException e) {e.printStackTrace();}
+        return resultSetObject;
+    }
+
     //************************
     //** SCREENING HANDLING **
     //************************
@@ -376,5 +418,10 @@ public class MySQLConnect {
         } catch (SQLException e) {e.printStackTrace();}
         return resultSetObject;
     }
+
+    //**************************
+    //** RESERVATION HANDLING **
+    //**************************
+
 
 }
