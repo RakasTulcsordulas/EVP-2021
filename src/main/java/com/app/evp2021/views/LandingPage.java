@@ -2,47 +2,47 @@ package com.app.evp2021.views;
 
 import com.app.evp2021.Main;
 import com.app.evp2021.controllers.Auditorium;
+import com.app.evp2021.services.CustomAlert;
 import com.app.evp2021.services.UserSession;
+import com.app.sql.MySQLConnect;
 import javafx.application.Application;
-<<<<<<< Updated upstream
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-=======
-<<<<<<< Updated upstream
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-=======
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.control.skin.DatePickerSkin;
-<<<<<<< Updated upstream
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-=======
-<<<<<<< Updated upstream
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
-=======
+
 import javafx.scene.layout.*;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class LandingPage extends Application {
 
@@ -51,46 +51,21 @@ public class LandingPage extends Application {
     }
     private static Stage _stage = null;
     private static Scene active_scene = null;
-    private static AnchorPane auditorium_holder = null;
 
     @Override
     public void start(Stage stage) throws Exception{
         _stage = stage;
 
-<<<<<<< Updated upstream
-        active_scene = getLoggedOutScene();
-        AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
-        FXMLLoader fxmlLoader;
-        fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
-        AnchorPane a = fxmlLoader.load();
-        Auditorium c = fxmlLoader.<Auditorium>getController();
-        c.create(18,18);
+        //active_scene = getLoggedOutScene();
+        active_scene = getLoggedInScene();
+        //AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
 
-
-        fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
-        AnchorPane a1 = fxmlLoader.load();
-        Auditorium c1 = fxmlLoader.<Auditorium>getController();
-        c1.create(18,10);
-
-        parent.getChildren().add(a1);
-
-        showStage(active_scene);
-
-        setLogoVisible(false);
-=======
-<<<<<<< Updated upstream
-        Scene sc = getLoggedOutScene();
-
-        showStage(sc);
-=======
-        active_scene = getLoggedOutScene();
-        AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
-        ArrayList<Object> arr = new ArrayList<Object>();
+        /*ArrayList<Object> arr = new ArrayList<Object>();
         for(int i = 0; i < 2; i++) {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
             AnchorPane a = fxmlLoader.load();
             Auditorium c = fxmlLoader.getController();
-            c.create(18,18);
+            c.create();
             c.setTitle("film"+i);
             Object[] view_contr = new Object[2];
             view_contr[0] = a;
@@ -102,18 +77,20 @@ public class LandingPage extends Application {
             parent.setTopAnchor(a, 0.0);
             parent.setBottomAnchor(a, 0.0);
             c.showSelf(false);
-        }
+        }*/
+        checkConnection();
+
         showStage(active_scene);
 
-        setLogoVisible(false);
+        setLogoVisible(true);
 
-        Object[] o = (Object[]) arr.get(0);
-        AnchorPane a = (AnchorPane) o[0];
-        Auditorium c = (Auditorium) o[1];
-        c.showSelf(true);
-        c.setSeat(1,1, 1);
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
+
+        /*Object[] o = (Object[]) arr.get(0);
+        AnchorPane anchor = (AnchorPane) o[0];
+        Auditorium control = (Auditorium) o[1];
+        control.showSelf(true);
+        control.setSeat(2,2, 1);*/
     }
 
     public static void showStage (Scene sc) {
@@ -159,14 +136,32 @@ public class LandingPage extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         _stage.setTitle("CinemApp - Admin");
 
+        Button new_movie = (Button) scene.lookup("#new_movie");
+        new_movie.setStyle("-fx-cursor: hand;");
+
+        Button logout = (Button) scene.lookup("#logout");
+        logout.setStyle("-fx-cursor: hand;");
+
         scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
         return scene;
     }
 
-    public static void setLogoVisible(boolean b) throws Exception {
-        HBox logo_holder = (HBox) active_scene.lookup("#logo_holder");
-        logo_holder.setVisible(b);
+    public static void setLogoVisible(boolean b) {
+        try{
+            HBox logo_holder = (HBox) active_scene.lookup("#logo_holder");
+            logo_holder.setVisible(b);
+        }catch (RuntimeException err) {}
+
+    }
+
+    public static void checkConnection() {
+        try {
+            MySQLConnect con = new MySQLConnect();
+            con.establishConnection();
+        }catch (SQLException err) {
+            new CustomAlert(Alert.AlertType.ERROR, "Nincs kapcsolat", "Nem sikerült kapcsolódni az adatbázishoz!", "A program most bezárul!", ButtonType.OK);
+        }
     }
 }
