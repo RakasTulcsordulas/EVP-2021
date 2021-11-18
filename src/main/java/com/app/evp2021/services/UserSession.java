@@ -3,8 +3,8 @@ package com.app.evp2021.services;
 public final class UserSession {
     private static UserSession instance;
 
-    private String employee;
-    private boolean loggedIn;
+    private static String employee;
+    private static boolean loggedIn;
 
     private UserSession(String employee, boolean loggedIn) {
         this.employee = employee;
@@ -29,7 +29,7 @@ public final class UserSession {
         return loggedIn;
     }
 
-    public void logout() {
+    public static void logout() {
         employee = null;
         loggedIn = false;
     }
