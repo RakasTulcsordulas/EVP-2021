@@ -27,7 +27,7 @@ public class MySQLConnect {
      * Establishes MySQL database connection, works as a setter <br>
      * Database parameters are read from database.conf
      */
-    public void establishConnection() {
+    public void establishConnection() throws SQLException{
 
         Properties prop = new Properties();
         String configFile = "src/main/resources/database.conf";
@@ -49,7 +49,7 @@ public class MySQLConnect {
             con = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));
             System.out.println("MySQL Connected");
 
-        } catch (SQLException e) {e.printStackTrace();}
+        } catch (SQLException e) {throw new SQLException(e);}
     }
 
     /**
