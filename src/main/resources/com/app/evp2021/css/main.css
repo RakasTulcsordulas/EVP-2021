@@ -154,7 +154,7 @@
     -fx-text-fill: white;
 }
 
-.text-field {
+.text-field, .text-area {
     -fx-background-color: transparent;
     -fx-border-width: 0 0 2 0;
     -fx-border-color:  #337ab7;
@@ -163,9 +163,172 @@
     -fx-font-size: 14px;
 }
 
+.text-area .content {
+    -fx-padding: 0.25em 0.583em 0.25em 0.583em; /* 3 7 3 7 */
+    -fx-cursor: text;
+    -fx-background-color:  #e1e1e1;
+   -fx-text-fill: #337ab7;
+   -fx-font-size: 14px;
+}
+
+.text-area > .text {
+    -fx-text-fill: #337ab7;
+    -fx-font-size: 14px;
+}
+
+.text-area:focused .content {
+    -fx-background-color:  #e1e1e1;
+    -fx-background-insets: 0, 0, 2;
+    -fx-background-radius: 2, 1, 0;
+}
+
+.text-area > .scroll-pane {
+    -fx-background-color: transparent;
+}
+
 .seat {
 -fx-text-fill: white;
 -fx-cursor: hand !important;
 }
+
+.choice-box, .check-box > .box{
+    -fx-background-color: #e1e1e1;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: #337ab7;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-border-color: #337ab7;
+}
+
+.choice-box > .label {
+    -fx-text-fill: #337ab7;
+}
+
+.choice-box:hover{
+    -fx-background-color: #337ab7;
+}
+
+.check-box > .box {
+    -fx-padding: 10px !important;
+}
+
+.check-box:hover > .box > .mark {
+    -fx-background-color: #286090;
+   -fx-shape: "M-0.25,6.083c0.843-0.758,4.583,4.833,5.75,4.833S14.5-1.5,15.917-0.917c1.292,0.532-8.75,17.083-10.5,17.083C3,16.167-1.083,6.833-0.25,6.083z";
+   -fx-font-size: 18px;
+}
+
+.choice-box:hover > .label {
+    -fx-text-fill: white;
+}
+
+.choice-box:hover > .open-button > .arrow{
+    -fx-background-color: white;
+}
+
+.choice-box > .open-button > .arrow {
+    -fx-background-color: #337ab7;
+    -fx-background-insets: 0 0 -1 0, 0;
+    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.choice-box:showing {
+    -fx-color: -fx-pressed-base;
+     -fx-background-color: #e1e1e1;
+}
+
+.choice-box:focused {
+    -fx-background-color: #337ab7;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.choice-box:focused > .label{
+    -fx-text-fill: white;
+}
+
+.choice-box:focused > .open-button > .arrow {
+    -fx-color: white;
+    -fx-text-fill: white;
+    -fx-background-color: white;
+}
+
+.choice-box > .label {
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: #337ab7;
+}
+.choice-box > .open-button > .arrow{
+    -fx-alignment: CENTER;
+    -fx-content-display: CENTER;
+}
+
+
+.choice-box .context-menu { -fx-background-color: #337ab7; }
+
+.choice-box .menu-item:focused { -fx-background-color: #286090; }
+
+.choice-box .menu-item > .label { -fx-text-fill: white; }
+
+.choice-box .menu-item:focused > .label { -fx-text-fill: white; }
+
+
+.radio-menu-item:checked > .left-container > .radio {
+    -fx-background-color: white;
+    -fx-shape: "M0,5H2L4,8L8,0H10L5,10H3Z";
+    -fx-scale-shape: false;
+}
+.radio-menu-item:focused:checked > .left-container > .radio {
+    -fx-background-color: white;
+}
+
+.check-box {
+    -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em; /* 0 0 0 5 */
+    -fx-text-fill: -fx-text-background-color;
+}
+.check-box > .box {
+    -fx-background-radius: 3, 2, 1;
+    -fx-padding: 0.166667em 0.166667em 0.25em 0.25em; /* 2 2 3 3 */
+}
+.check-box > .box > .mark {
+    -fx-background-color: null;
+      -fx-shape: "M-0.25,6.083c0.843-0.758,4.583,4.833,5.75,4.833S14.5-1.5,15.917-0.917c1.292,0.532-8.75,17.083-10.5,17.083C3,16.167-1.083,6.833-0.25,6.083z";
+      -fx-font-size: 18px;
+}
+.check-box:indeterminate > .box {
+    -fx-padding: 0;
+}
+.check-box:indeterminate  > .box > .mark {
+    -fx-shape: "M0,0H10V2H0Z";
+    -fx-scale-shape: false;
+    -fx-padding: 0.666667em; /* 16x16 = 8+8 */
+}
+.check-box:selected > .box,
+.check-box:indeterminate  > .box {
+    -fx-background-color: #286090;
+}
+
+.check-box:selected > .box > .mark,
+.check-box:indeterminate  > .box > .mark {
+    -fx-background-color: white;
+}
+
+.input-error{
+    -fx-border-color: #a94442;
+}
+
+.choice-error{
+    -fx-text-fill: #a94442 !important;
+    -fx-border-color: #a94442 !important;
+}
+
+.choice-error > .open-button > .arrow {
+  -fx-color: #a94442 ;
+  -fx-text-fill: #a94442 ;
+  -fx-background-color: #a94442;
+}
+
 
 //#c7c7c7
