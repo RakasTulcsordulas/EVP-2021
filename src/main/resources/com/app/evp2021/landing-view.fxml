@@ -68,9 +68,9 @@
                   <DatePicker id="datepicker" fx:id="date_picker" onAction="#onActionPerformed" prefHeight="25.0" prefWidth="366.0" styleClass="bg-primary" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutY="705.673828125" prefHeight="48.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" layoutY="705.673828125" prefHeight="68.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <Button fx:id="adminmodal" mnemonicParsing="false" onAction="#openAdminModal" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
+                  <Button fx:id="adminmodal" alignment="CENTER" mnemonicParsing="false" onAction="#openAdminModal" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

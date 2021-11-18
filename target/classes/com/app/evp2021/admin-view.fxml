@@ -33,18 +33,32 @@
 -->
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.evp2021.controllers.LandingPageController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #e1e1e1;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.evp2021.controllers.LandingPageController">
    <children>
-      <AnchorPane fx:id="container" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #e1e1e1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" layoutY="720.0" prefHeight="48.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" layoutY="720.0" prefHeight="48.0" prefWidth="311.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <Button fx:id="logout" mnemonicParsing="false" onMouseClicked="#logoutAdmin" prefHeight="30.0" prefWidth="106.0" text="KILÉPÉS">
+                  <Button id="logout" fx:id="logout" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#logoutAdmin" prefHeight="30.0" prefWidth="289.0" stylesheets="@css/bootstrap.css" text="KILÉPÉS" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -52,10 +66,223 @@
                         <String fx:value="btn" />
                         <String fx:value="btn-danger" />
                      </styleClass>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
                </children>
             </HBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="311.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <content>
+                  <VBox id="movie_holder" alignment="CENTER" prefHeight="640.0" prefWidth="309.0" />
+               </content>
+            </ScrollPane>
+            <HBox alignment="CENTER_LEFT" layoutY="668.0" prefHeight="48.0" prefWidth="311.0" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="0.0">
+               <children>
+                  <Button id="new_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addMovie" prefHeight="30.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ FILM" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <styleClass>
+                        <String fx:value="btn" />
+                        <String fx:value="btn-primary" />
+                     </styleClass>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
+            <AnchorPane layoutX="311.0" prefHeight="768.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="311.0" AnchorPane.rightAnchor="475.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
+                           <children>
+                              <HBox id="input_title" alignment="CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" styleClass="panel-primary">
+                                 <children>
+                                    <Text id="input_title" fx:id="input_title" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Film szerkesztése" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="30.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="60.0" prefWidth="240.0">
+                                 <children>
+                                    <TextField fx:id="movie_title_input" alignment="CENTER" promptText="Film címe" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
+                                 <children>
+                                    <TextField fx:id="director_input" alignment="CENTER" promptText="Rendezők" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
+                                 <children>
+                                    <TextField id="cast_input" fx:id="cast_input" alignment="CENTER" promptText="Színészek" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" maxHeight="100.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
+                                 <children>
+                                    <TextArea fx:id="description_input" prefHeight="200.0" prefWidth="200.0" promptText="Leírás..." />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="40.0" prefWidth="120.0">
+                                       <children>
+                                          <Label text="Besorolás" />
+                                          <ChoiceBox id="rating_drop" fx:id="rating_drop" prefHeight="24.0" prefWidth="60.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefWidth="120.0">
+                                       <children>
+                                          <Label text="Terem" />
+                                          <ChoiceBox id="movie_room" fx:id="movie_room" prefHeight="24.0" prefWidth="60.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefWidth="120.0">
+                                       <children>
+                                          <TextField id="duration_input" fx:id="duration_input" alignment="CENTER" promptText="Hossz (p)" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <VBox alignment="CENTER" maxWidth="400.0">
+                                 <children>
+                                    <GridPane hgap="10.0" vgap="15.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="H:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <CheckBox fx:id="check_1" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" />
+                                          <ChoiceBox fx:id="choice_1" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" />
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="K:" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="SZ:" GridPane.rowIndex="2">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="CS:" GridPane.rowIndex="3">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="P:" GridPane.rowIndex="4">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="SZO:" GridPane.rowIndex="5">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" style="-fx-font-weight: 700;" text="V:" GridPane.rowIndex="6">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <CheckBox fx:id="check_2" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <CheckBox fx:id="check_3" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <CheckBox fx:id="check_4" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <CheckBox fx:id="check_5" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <CheckBox fx:id="check_6" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <CheckBox fx:id="check_7" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <ChoiceBox fx:id="choice_2" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                          <ChoiceBox fx:id="choice_3" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="choice_4" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                          <ChoiceBox fx:id="choice_5" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                          <ChoiceBox fx:id="choice_6" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                          <ChoiceBox fx:id="choice_7" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <HBox alignment="CENTER" maxWidth="400.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox id="once_checkbox" fx:id="once_checkbox" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" maxHeight="60.0" maxWidth="400.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="47.0" text="Egy időpont" underline="true" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </CheckBox>
+                                    <Label id="once_text" fx:id="once_text" prefHeight="16.0" prefWidth="216.0" text="Egy időpontban" underline="true" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="BOTTOM_CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Button id="save_movie" fx:id="save_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#saveMovie" prefHeight="30.0" prefWidth="121.0" stylesheets="@css/bootstrap.css" text="MENTÉS">
+                                       <styleClass>
+                                          <String fx:value="btn" />
+                                          <String fx:value="btn-primary" />
+                                       </styleClass>
+                                    </Button>
+                                    <Button id="delete_movie" fx:id="delete_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#deleteMovie" prefHeight="30.0" prefWidth="106.0" stylesheets="@css/bootstrap.css" text="TÖRÖL">
+                                       <styleClass>
+                                          <String fx:value="btn" />
+                                          <String fx:value="btn-danger" />
+                                       </styleClass>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
+            <AnchorPane layoutX="620.0" layoutY="6.0" prefHeight="396.0" prefWidth="475.0" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>
+   <stylesheets>
+      <URL value="@css/bootstrap.css" />
+      <URL value="@css/main.css" />
+   </stylesheets>
 </AnchorPane>
