@@ -25,7 +25,7 @@ public class UserSessionTest {
     public void getEmployee() {
         UserSession.setSession("Zsolt", false);
         assertTrue(UserSession.getSession().getEmployee() == "Zsolt");
-        assertFalse(UserSession.getSession().getEmployee() == "Ádám");
+        assertFalse(UserSession.getSession().getEmployee() == "Adam");
     }
 
     @Test

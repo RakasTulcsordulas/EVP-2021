@@ -292,6 +292,38 @@ public class MySQLConnect {
     }
 
     /**
+     * Executes an SQL query on the 'movie' table with the given title.
+     * @param id Id of the auditorium. Can be null
+     * @return an array of objects starting from 1, containing the records of the auditoriums in the order as stored in the database.
+     */
+    public Object[][] getAuditorium(Object id) {
+        Object[][] resultSetObject = null;
+        String query = "SELECT * FROM auditorium WHERE " +
+                "(? IS NULL OR ? = id)";
+
+        System.out.println("Searching for auditorium...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSetObject = new Object[resultSet.getRow()][]{};
+            System.out.println(resultSetObject[0]);
+            while (resultSet.next()) {
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
+
+                    resultSetObject[i] = new Object[]{resultSet.getObject(i)};
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSetObject;
+    }
+
+    /**
      * Executes an INSERT INTO update on the seat table with the given parameters.
      * @param row Row of the seat int(11).
      * @param number Number of the seat int(11).

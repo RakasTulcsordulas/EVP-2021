@@ -2,26 +2,18 @@ package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
 import com.app.evp2021.services.UserSession;
+import com.app.evp2021.views.AuditCreationPopup;
 import com.app.evp2021.views.LandingPage;
 import com.app.evp2021.views.LoginModal;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import com.app.sql.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import java.net.URL;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
 
 public class LandingPageController{
 
@@ -136,6 +128,22 @@ public class LandingPageController{
         setUpInputs();
     }
 
+    @FXML
+    void addNewAudit(MouseEvent event) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
+        AnchorPane root = fxmlLoader.load();
+        AuditoriumController controller = fxmlLoader.getController();
+        controller.create();
+        controller.setTitle("Terem létrehozás");
+        controller.setButtonText("Terem mentése");
+        controller.setActionButtonType(1);
+
+        AuditCreationPopup popup = new AuditCreationPopup();
+        popup.display(root);
+        //bezaras utan mehet a termek frissitese
+        System.out.println("asd");
+    }
+
     public void setUpInputs(String title, String movie_title, String directors, String desc, int rating, int auditroom, Object[] screening, boolean one_screening) {
 
     }
@@ -167,6 +175,7 @@ public class LandingPageController{
     void deleteMovie(MouseEvent event) {
 
     }
+
     public boolean checkInputs() {
         boolean b = true;
         Tooltip t1 = null, t2 = null, t3 = null, t4 = null;

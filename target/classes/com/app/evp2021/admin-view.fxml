@@ -97,7 +97,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" visible="false" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox id="input_title" alignment="CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" styleClass="panel-primary">
                                  <children>
@@ -277,7 +277,39 @@
                      </children>
                   </VBox>
                </children></AnchorPane>
-            <AnchorPane layoutX="620.0" layoutY="6.0" prefHeight="396.0" prefWidth="475.0" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane layoutX="620.0" layoutY="6.0" prefHeight="396.0" prefWidth="475.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" layoutY="399.0" maxHeight="400.0" prefHeight="400.0" prefWidth="475.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Text id="audit_title" fx:id="audit_title" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Termek" textAlignment="CENTER" wrappingWidth="386.1888008117676">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <HBox id="audit_btn_holder" fx:id="audit_btn_holder" prefHeight="298.0" prefWidth="425.0">
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Button id="new_audit" fx:id="new_audit" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addNewAudit" prefHeight="33.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ TEREM">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-primary" />
+                           </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="25.0" right="25.0" top="25.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
          </children>
       </AnchorPane>
    </children>

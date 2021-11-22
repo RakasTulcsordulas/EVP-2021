@@ -187,8 +187,13 @@
 }
 
 .seat {
--fx-text-fill: white;
 -fx-cursor: hand !important;
+-fx-border-widht: 1px;
+-fx-border-color: white;
+}
+
+.seat > Label {
+    -fx-text-fill: white;
 }
 
 .choice-box, .check-box > .box{

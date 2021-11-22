@@ -1,26 +1,13 @@
 package com.app.evp2021.views;
 
 import com.app.evp2021.Main;
-import com.app.evp2021.controllers.Auditorium;
 import com.app.evp2021.services.CustomAlert;
 import com.app.evp2021.services.UserSession;
 import com.app.sql.MySQLConnect;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.DatePickerSkin;
@@ -28,21 +15,10 @@ import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.stage.Screen;
-
-import javafx.scene.layout.*;
-
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Optional;
 
 public class LandingPage extends Application {
 
@@ -58,7 +34,7 @@ public class LandingPage extends Application {
 
         //active_scene = getLoggedOutScene();
         active_scene = getLoggedInScene();
-        //AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
+        AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
 
         /*ArrayList<Object> arr = new ArrayList<Object>();
         for(int i = 0; i < 2; i++) {
@@ -78,6 +54,7 @@ public class LandingPage extends Application {
             parent.setBottomAnchor(a, 0.0);
             c.showSelf(false);
         }*/
+
         checkConnection();
 
         showStage(active_scene);
@@ -145,7 +122,24 @@ public class LandingPage extends Application {
         scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
+        getAuditoriums();
+
         return scene;
+    }
+
+    private static void getAuditoriums() {
+        Object[][] result = null;
+        MySQLConnect con = new MySQLConnect();
+        try {
+            con.establishConnection();
+            result = con.getAuditorium(null);
+            System.out.println(result[1][0]);
+            System.out.println(result[2][0]);
+            System.out.println(result[3][0]);
+
+        }catch (SQLException err){
+            err.printStackTrace();
+        }
     }
 
     public static void setLogoVisible(boolean b) {
