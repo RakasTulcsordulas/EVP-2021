@@ -15,6 +15,7 @@ public class LoginApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("loginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setMaximized(true);
+
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
