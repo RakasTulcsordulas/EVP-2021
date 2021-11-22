@@ -6,9 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -18,7 +20,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 
-public class Auditorium {
+public class AuditoriumController {
 
 
     @FXML private AnchorPane seat_holder;
@@ -27,6 +29,7 @@ public class Auditorium {
 
     @FXML private GridPane root = null;
     @FXML private AnchorPane auditorium;
+    @FXML private Button audit_btn;
     private String title = null;
 
     public void create() {
@@ -43,8 +46,6 @@ public class Auditorium {
                 Label text = new Label();
                 text.setWrapText(true);
 
-                text.getStyleClass().add("seat");
-
                 StackPane p = new StackPane();
                 p.getChildren().add(text);
                 StackPane.setAlignment(text, Pos.CENTER);
@@ -53,15 +54,14 @@ public class Auditorium {
 
                 if(col == 0) {
                     text.setText(""+(row+1));
-                    text.setStyle("-fx-color: black");
+                    p.setCursor(Cursor.NONE);
                 }else{
                     if(col <= 9) {
                         text.setText((9-col)+1 + "b");
                     }else{
                         text.setText(col-9 + "j");
                     }
-                    text.getStyleClass().add("seat");
-                    p.setVisible(false);
+                    p.getStyleClass().add("seat");
                 }
 
                 root.add(p, col, row);
@@ -109,9 +109,17 @@ public class Auditorium {
                 e.setVisible(true);
                 e.getStyleClass().add("btn-danger");
                 break;
+            case 2:
+                e.setVisible(true);
+                e.getStyleClass().add("seat");
+                break;
         }
         Label t = (Label) e.getChildren().get(0);
         System.out.println(t.getText() + " - " + status);
+    }
+
+    public void setButtonText(String text){
+        audit_btn.setText(text);
     }
 
     public void showSelf(boolean b){
