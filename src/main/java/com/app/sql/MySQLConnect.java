@@ -266,22 +266,28 @@ public class MySQLConnect {
      * Executes and INSERT INTO update on the auditorium table with the given parameters.
      * @param name name of the auditorium varchar(32)
      * @param seats_no total number of seats in the auditorium int(11)
+     * @return Inserted auditorium id as an int
      */
-    public void insertAuditorium (String name, int seats_no) {
+    public int insertAuditorium (String name, int seats_no) {
         String query = "INSERT INTO auditorium (id, name, seats_no) VALUES (NULL, ?, ?)";
 
         System.out.println("Inserting new auditorium...");
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, name);
             preparedStatement.setInt(2, seats_no);
 
             if (preparedStatement.executeUpdate() > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
                 System.out.println("New auditorium " + name + " is inserted into the database.");
+                return resultSet.getInt(1);
             } else {
                 System.out.println("Could not insert " + name + "into the database.");
+                return -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
     }
 
