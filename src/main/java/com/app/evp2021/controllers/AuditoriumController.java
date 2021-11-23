@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -38,7 +39,13 @@ public class AuditoriumController {
 
     @FXML private int _button_action = 0;
 
-    public void create() {
+    @FXML private HBox legends;
+
+    @FXML private Stage parentStage;
+
+    @FXML private Object[] actionParams;
+
+    void create(boolean addSeatClass, boolean startHidden) {
         root = new GridPane();
         root.setHgap(12);
         root.setVgap(12);
@@ -65,8 +72,17 @@ public class AuditoriumController {
                     }else{
                         text.setText(col-9 + "j");
                     }
-                    p.getStyleClass().add("seat");
-                    addClass(p, "btn-success");
+                    if(addSeatClass){
+                        p.getStyleClass().add("seat");
+                    }
+
+                    if(!startHidden) {
+                        p.getStyleClass().add("text-white");
+                        addClass(p, "btn-success");
+                    }else{
+                        p.setVisible(false);
+                    }
+
                 }
 
                 int index = ((row)*19)+col;
@@ -98,6 +114,17 @@ public class AuditoriumController {
         movie_title.setText(title);
     }
 
+    void setParentStage(Stage parentStage) {
+        this.parentStage = parentStage;
+    }
+
+    void setAllSeat(Object[][] seats) throws Exception {
+        for(int i = 1; i < seats.length; i++) {
+            setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
+        }
+
+    }
+
     private void paneClick(int index) {
         if(_button_action == 1) {
             try {
@@ -112,16 +139,17 @@ public class AuditoriumController {
                 System.out.println(err);
             }
         }
-
-
-
     }
 
-    public void setTitle(String s){
+    void toggleLegend(boolean t) {
+        legends.setVisible(t);
+    }
+
+    void setTitle(String s){
         movie_title.setText(s);
     }
 
-    public void setSeat(int row, int col, int status) throws Exception{
+    void setSeat(int row, int col, int status) throws Exception{
         if(row <= 0 || col <= 0) throw new Exception("0-nál nagyobb szám elvárt!");
 
         int index = ((row-1)*19)+col;
@@ -147,7 +175,7 @@ public class AuditoriumController {
         }
     }
 
-    public void setSeat(int index, int status) throws Exception{
+    void setSeat(int index, int status) throws Exception{
         if(index <= 0 || index > 342) throw new Exception("0-nál nagyobb szám elvárt!");
         StackPane e = (StackPane) root.getChildren().get(index);
         switch (status){
@@ -187,20 +215,26 @@ public class AuditoriumController {
         return n.getStyleClass().contains(className);
     }
 
-    public void setButtonText(String text){
+    void setButtonText(String text){
         audit_btn.setText(text);
     }
 
-    public void showSelf(boolean b){
+    void showSelf(boolean b){
         auditorium.setVisible(b);
     }
 
-    public void setActionButtonType(int i) {
+    void setActionButtonType(int i) {
         switch (i) {
             case 0: _button_action = 0; break;
             case 1:
                 _button_action = 1;
                 audit_btn.setDisable(false);
+                break;
+            case 2:
+                _button_action = 2;
+                audit_btn.setDisable(false);
+                removeClass(audit_btn, "btn-primary");
+                addClass(audit_btn, "btn-danger");
                 break;
         }
     }
@@ -210,7 +244,6 @@ public class AuditoriumController {
         if(_button_action == 0){
             //reserv
         }else if(_button_action == 1) {
-            int num = 1;
             MySQLConnect con = null;
             try{
                 con = new MySQLConnect();
@@ -234,7 +267,25 @@ public class AuditoriumController {
                     }
                 }
             }
-            System.out.println("admin ment");
+            con.closeConnection();
+            audit_btn.setDisable(true);
+            parentStage.close();
+        }else if(_button_action == 2 && (actionParams[0] != null &&  (Integer) actionParams[0] == actionParams[0])) {
+            MySQLConnect con = null;
+            try{
+                con = new MySQLConnect();
+                con.establishConnection();
+            }catch (SQLException err){}
+            con.deleteSeats((Integer) actionParams[0]);
+            con.deleteAuditorium((Integer) actionParams[0]);
+
+            con.closeConnection();
+            audit_btn.setDisable(true);
+            parentStage.close();
         }
+    }
+
+    public void setActionButtonParams(Object[] objects) {
+        this.actionParams = objects;
     }
 }
