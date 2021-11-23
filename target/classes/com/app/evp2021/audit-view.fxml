@@ -59,7 +59,7 @@
                      <children>
                         <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="519.0" HBox.hgrow="ALWAYS">
+                              <HBox id="legends" fx:id="legends" alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="519.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Pane maxHeight="20.0" maxWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #337ab7; -fx-border-color: black;" HBox.hgrow="NEVER">
                                        <HBox.margin>
