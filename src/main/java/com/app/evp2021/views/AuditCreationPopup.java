@@ -25,7 +25,7 @@ public class AuditCreationPopup {
     private static Scene scene = null;
     private static Stage modal = null;
 
-    public static void display(Node audit) throws Exception
+    public static void create(Node audit) throws Exception
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("popup-audit-creator.fxml"));
         scene = new Scene(fxmlLoader.load());
@@ -37,14 +37,22 @@ public class AuditCreationPopup {
         modal.setMinWidth(761);
         modal.setMinHeight(868);
 
-        modal.setTitle("CinemApp - Terem létrehozás");
+        modal.setTitle("CinemApp - Terem felugró");
 
         scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
         modal.setScene(scene);
         attachAuditorium(audit);
+
+    }
+
+    public static void display() {
         modal.showAndWait();
+    }
+
+    public Stage getStage() {
+        return modal;
     }
 
     private static void attachAuditorium(Node audit){
