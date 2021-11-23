@@ -5,6 +5,7 @@ import com.app.evp2021.services.UserSession;
 import com.app.evp2021.views.AuditCreationPopup;
 import com.app.evp2021.views.LandingPage;
 import com.app.evp2021.views.LoginModal;
+import com.app.sql.MySQLConnect;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +14,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class LandingPageController{
 
@@ -133,15 +138,52 @@ public class LandingPageController{
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
         AnchorPane root = fxmlLoader.load();
         AuditoriumController controller = fxmlLoader.getController();
-        controller.create();
+        controller.create(true, false);
         controller.setTitle("Terem létrehozás");
         controller.setButtonText("Terem mentése");
         controller.setActionButtonType(1);
 
         AuditCreationPopup popup = new AuditCreationPopup();
-        popup.display(root);
-        //bezaras utan mehet a termek frissitese
-        System.out.println("asd");
+        popup.create(root);
+
+        controller.setParentStage(popup.getStage());
+
+        popup.display();
+
+        LandingPage.refresh();
+
+    }
+
+    public static void showAuditorium(int id) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
+        AnchorPane root = fxmlLoader.load();
+        AuditoriumController controller = fxmlLoader.getController();
+        controller.create(false, true);
+        controller.setTitle("Terem mutatás");
+        controller.setButtonText("Terem törlése");
+        controller.setActionButtonType(2);
+        controller.setActionButtonParams(new Object[]{id});
+
+        controller.toggleLegend(false);
+
+        MySQLConnect con = new MySQLConnect();
+        try {
+            Object[][] seats = null;
+            con.establishConnection();
+            seats = con.getSeat(null,null,null, id);
+            controller.setAllSeat(seats);
+
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+
+        AuditCreationPopup popup = new AuditCreationPopup();
+        popup.create(root);
+        controller.setParentStage(popup.getStage());
+        popup.display();
+
+        LandingPage.refresh();
+
     }
 
     public void setUpInputs(String title, String movie_title, String directors, String desc, int rating, int auditroom, Object[] screening, boolean one_screening) {
