@@ -172,8 +172,8 @@ public class MySQLConnect {
      * @param description text
      * @param duration_min int(11)
      */
-    public void insertNewMovie(String title, String director, String cast, String description, String duration_min) {
-        String query = "INSERT INTO movie (id, title, director, length, type, aspect, language, directors, category) VALUES (NULL, ?, ?, ?, ?, ?)";
+    public void insertNewMovie(String title, String director, String cast, String description, String rating, String duration_min) {
+        String query = "INSERT INTO movie (id, title, director, cast, description, rating, duration_min) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
 
@@ -181,7 +181,8 @@ public class MySQLConnect {
             preparedStatement.setString(2,director);
             preparedStatement.setString(3,cast);
             preparedStatement.setString(4,description);
-            preparedStatement.setString(5,duration_min);
+            preparedStatement.setString(5, rating);
+            preparedStatement.setString(6,duration_min);
 
             int result = preparedStatement.executeUpdate();
 
