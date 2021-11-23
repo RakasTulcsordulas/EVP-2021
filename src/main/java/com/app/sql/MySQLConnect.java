@@ -302,25 +302,56 @@ public class MySQLConnect {
                 "(? IS NULL OR ? = id)";
 
         System.out.println("Searching for auditorium...");
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+        try (PreparedStatement preparedStatement = con.prepareStatement(query,
+                ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY))
+        {
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            resultSetObject = new Object[resultSet.getRow()][]{};
-            System.out.println(resultSetObject[0]);
-            while (resultSet.next()) {
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
 
-                    resultSetObject[i] = new Object[]{resultSet.getObject(i)};
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
                 }
+
+                j++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return resultSetObject;
+    }
+
+    /**
+     * Executes a DELETE SQL query on the 'Auditoirum' table with the given id.
+     * @param id Id of the auditorium. Cannot be null
+     */
+    public void deleteAuditorium(int id) {
+        String query = "DELETE FROM auditorium WHERE id = ?";
+
+        System.out.println("Deleting auditorium...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setInt(1, id);
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Auditorium was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -353,8 +384,8 @@ public class MySQLConnect {
      * @param auditorium_id Auditorium's id FK_int(11). Can be null.
      * @return An Object[] starting from 1 containing the columns of all seats with at least matching the given attributes or null if no matching seat was found.
      */
-    public Object[] getSeat (Object id, Object row, Object number, Object auditorium_id) {
-        Object[] resultSetObject = null;
+    public Object[][] getSeat (Object id, Object row, Object number, Object auditorium_id) {
+        Object[][] resultSetObject = null;
         String query = "SELECT * FROM seat WHERE " +
                 "(? IS NULL OR ? = id) " +
                 "AND " +
@@ -364,7 +395,8 @@ public class MySQLConnect {
                 "AND " +
                 "(? IS NULL OR ? = auditorium_id)";
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, id);
             preparedStatement.setObject(3, row);
@@ -375,16 +407,46 @@ public class MySQLConnect {
             preparedStatement.setObject(8, auditorium_id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                resultSetObject = new Object[rsmd.getColumnCount()];
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
 
-                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
-                    resultSetObject[i] = resultSet.getObject(i);
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
                 }
-            } else {return null;}
+
+                j++;
+            }
         } catch (SQLException e) {e.printStackTrace();}
         return resultSetObject;
+    }
+
+
+    /**
+     * Executes a DELETE SQL query on the 'Seat' table with the given auditorium id.
+     * @param auditoriumId Id of the auditorium. Cannot be null
+     */
+    public void deleteSeats(int auditoriumId) {
+        String query = "DELETE FROM seat WHERE auditorium_id = ?";
+
+        System.out.println("Deleting seats...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setInt(1, auditoriumId);
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Seats was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     //************************
