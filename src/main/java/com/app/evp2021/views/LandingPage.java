@@ -1,6 +1,7 @@
 package com.app.evp2021.views;
 
 import com.app.evp2021.Main;
+import com.app.evp2021.controllers.LandingPageController;
 import com.app.evp2021.services.CustomAlert;
 import com.app.evp2021.services.UserSession;
 import com.app.sql.MySQLConnect;
@@ -8,6 +9,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.DatePickerSkin;
@@ -33,8 +35,7 @@ public class LandingPage extends Application {
         _stage = stage;
 
         //active_scene = getLoggedOutScene();
-        active_scene = getLoggedInScene();
-        AnchorPane parent = (AnchorPane) active_scene.lookup("#holder");
+
 
         /*ArrayList<Object> arr = new ArrayList<Object>();
         for(int i = 0; i < 2; i++) {
@@ -54,12 +55,11 @@ public class LandingPage extends Application {
             parent.setBottomAnchor(a, 0.0);
             c.showSelf(false);
         }*/
+        setLoggedOutScene();
 
         checkConnection();
 
         showStage(active_scene);
-
-        setLogoVisible(true);
 
 
 
@@ -71,7 +71,6 @@ public class LandingPage extends Application {
     }
 
     public static void showStage (Scene sc) {
-        _stage.close();
         _stage.setMinWidth(1124);
         _stage.setMinHeight(868);
 
@@ -88,59 +87,83 @@ public class LandingPage extends Application {
 
     public static void refresh() throws Exception{
         boolean logged = UserSession.getSession().getLoggedIn();
-        if(logged == true) { showStage(getLoggedInScene()); }else{ showStage(getLoggedOutScene());}
+        if(logged == true) { setLoggedInScene(); }else{ setLoggedOutScene();}
     }
 
-    public static Scene getLoggedOutScene() throws Exception{
+    public static void setLoggedOutScene() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("landing-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
         _stage.setTitle("CinemApp - Főoldal");
 
-        DatePicker dp = (DatePicker) scene.lookup("#datepicker");
+        if (active_scene == null) {
+            active_scene = new Scene(fxmlLoader.load());
+        }else{
+            active_scene.setRoot(fxmlLoader.load());
+        }
+
+        DatePicker dp = (DatePicker) active_scene.lookup("#datepicker");
         DatePickerSkin dps = new DatePickerSkin(dp);
-        HBox holder = (HBox) scene.lookup("#dateholder");
+        HBox holder = (HBox) active_scene.lookup("#dateholder");
         holder.getChildren().add(dps.getPopupContent());
         holder.getChildren().remove(dp);
 
-        scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
-        scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
+        setLogoVisible(true);
 
-        return scene;
+        active_scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
+        active_scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
     }
 
-    public static Scene getLoggedInScene() throws Exception{
+    public static void setLoggedInScene() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("admin-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
         _stage.setTitle("CinemApp - Admin");
 
-        Button new_movie = (Button) scene.lookup("#new_movie");
+        if (active_scene == null) {
+            active_scene = new Scene(fxmlLoader.load());
+        }else{
+            active_scene.setRoot(fxmlLoader.load());
+        }
+
+        Button new_movie = (Button) active_scene.lookup("#new_movie");
         new_movie.setStyle("-fx-cursor: hand;");
 
-        Button logout = (Button) scene.lookup("#logout");
+        Button logout = (Button) active_scene.lookup("#logout");
         logout.setStyle("-fx-cursor: hand;");
 
-        scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
-        scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
+        active_scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
+        active_scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
-        getAuditoriums();
-
-        return scene;
+        getAuditoriums(active_scene);
     }
 
-    private static void getAuditoriums() {
+    private static void getAuditoriums(Scene sc) {
         Object[][] result = null;
         MySQLConnect con = new MySQLConnect();
         try {
             con.establishConnection();
             result = con.getAuditorium(null);
-            System.out.println(result[1][0]);
-            System.out.println(result[2][0]);
-            System.out.println(result[3][0]);
+            for(int i = 1; i < result.length; i++){
+                HBox container = (HBox) sc.lookup("#audit_btn_holder");
+                Button btn = new Button(result[i][2].toString() + "" + i);
+                btn.getStyleClass().add("btn");
+                btn.getStyleClass().add("btn-primary");
+                btn.setStyle("-fx-cursor: hand; -fx-padding: 10 5 10 5;");
+                container.getChildren().add(btn);
 
+                final int id = (Integer) result[i][1];
+
+                btn.setOnMouseClicked(event -> {
+                    try {
+                        LandingPageController.showAuditorium(id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }catch (SQLException err){
             err.printStackTrace();
         }
     }
+
+
 
     public static void setLogoVisible(boolean b) {
         try{
