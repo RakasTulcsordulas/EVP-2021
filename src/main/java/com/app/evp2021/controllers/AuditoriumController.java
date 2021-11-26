@@ -32,7 +32,7 @@ public class AuditoriumController {
     @FXML private Text movie_title;
 
 
-    @FXML private GridPane root = null;
+    @FXML private GridPane rootGridPane = null;
     @FXML private AnchorPane auditorium;
     @FXML private Button audit_btn;
     @FXML private String title = null;
@@ -46,72 +46,67 @@ public class AuditoriumController {
     @FXML private Object[] actionParams;
 
     void create(boolean addSeatClass, boolean startHidden) {
-        root = new GridPane();
-        root.setHgap(12);
-        root.setVgap(12);
+        rootGridPane = new GridPane();
+        rootGridPane.setHgap(12);
+        rootGridPane.setVgap(12);
 
         audit_btn.setCursor(Cursor.HAND);
 
         for (int row = 0; row < 18; row++) {
             for (int col = 0; col < 19; col ++) {
-                Label text = new Label();
-                text.setWrapText(true);
 
-                StackPane p = new StackPane();
-                p.getChildren().add(text);
-                StackPane.setAlignment(text, Pos.CENTER);
-                p.setMaxHeight(50);
-                p.setMaxWidth(50);
+                Label seatText = new Label();
+                seatText.setWrapText(true);
+
+                StackPane seatPane = new StackPane();
+                seatPane.getChildren().add(seatText);
+                StackPane.setAlignment(seatText, Pos.CENTER);
+                seatPane.setMaxHeight(50);
+                seatPane.setMaxWidth(50);
 
                 if(col == 0) {
-                    text.setText(""+(row+1));
-                    p.setCursor(Cursor.NONE);
+                    seatText.setText(""+(row+1));
+                    seatPane.setCursor(Cursor.NONE);
                 }else{
                     if(col <= 9) {
-                        text.setText((9-col)+1 + "b");
+                        seatText.setText((9-col)+1 + "b");
                     }else{
-                        text.setText(col-9 + "j");
+                        seatText.setText(col-9 + "j");
                     }
                     if(addSeatClass){
-                        p.getStyleClass().add("seat");
+                        seatPane.getStyleClass().add("seat");
                     }
 
                     if(!startHidden) {
-                        p.getStyleClass().add("text-white");
-                        addClass(p, "btn-success");
+                        seatPane.getStyleClass().add("text-white");
+                        addClass(seatPane, "btn-success");
                     }else{
-                        p.setVisible(false);
+                        seatPane.setVisible(false);
                     }
 
                 }
 
-                int index = ((row)*19)+col;
-                p.setOnMouseClicked(event ->  {
-                    paneClick(index);
+                int seatIndex = ((row)*19)+col;
+                seatPane.setOnMouseClicked(event ->  {
+                    paneClick(seatIndex);
                 });
 
-                root.add(p, col, row);
+                rootGridPane.add(seatPane, col, row);
             }
         }
-        for (int i = 0; i < 19; i++) {
-            root.getColumnConstraints().add(new ColumnConstraints(25, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
+        for (int col = 0; col < 19; col++) {
+            rootGridPane.getColumnConstraints().add(new ColumnConstraints(25, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
 
         }
-        for (int i = 0; i < 18; i++) {
-            root.getRowConstraints().add(new RowConstraints(25, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
+        for (int row = 0; row < 18; row++) {
+            rootGridPane.getRowConstraints().add(new RowConstraints(25, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
-        seat_holder.getChildren().add(root);
+        seat_holder.getChildren().add(rootGridPane);
 
-        seat_holder.setLeftAnchor(root, 0.0);
-        seat_holder.setRightAnchor(root, 0.0);
-        seat_holder.setTopAnchor(root, 0.0);
-        seat_holder.setBottomAnchor(root, 0.0);
-
-
-
-        int ti = 18 * 19;
-        title = String.valueOf(ti);
-        movie_title.setText(title);
+        seat_holder.setLeftAnchor(rootGridPane, 0.0);
+        seat_holder.setRightAnchor(rootGridPane, 0.0);
+        seat_holder.setTopAnchor(rootGridPane, 0.0);
+        seat_holder.setBottomAnchor(rootGridPane, 0.0);
     }
 
     void setParentStage(Stage parentStage) {
@@ -128,8 +123,8 @@ public class AuditoriumController {
     private void paneClick(int index) {
         if(_button_action == 1) {
             try {
-                StackPane e = (StackPane) root.getChildren().get(index);
-                if(hasClass(e, "btn-success")){
+                StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+                if(hasClass(seatPane, "btn-success")){
                     setSeat(index, 2);
                 }else{
                     setSeat(index, 0);
@@ -153,66 +148,67 @@ public class AuditoriumController {
         if(row <= 0 || col <= 0) throw new Exception("0-nál nagyobb szám elvárt!");
 
         int index = ((row-1)*19)+col;
-        StackPane e = (StackPane) root.getChildren().get(index);
+        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
         switch (status){
             case -1:
-                e.setVisible(false);
-                e.getStyleClass().removeAll();
-                addClass(e, "seat");
+                seatPane.setVisible(false);
+                seatPane.getStyleClass().removeAll();
+                addClass(seatPane, "seat");
                 break;
             case 0:
-                e.setVisible(true);
-                addClass(e, "btn-success");
+                seatPane.setVisible(true);
+                addClass(seatPane, "btn-success");
                 break;
             case 1:
-                e.setVisible(true);
-               addClass(e, "btn-danger");
+                seatPane.setVisible(true);
+               addClass(seatPane, "btn-danger");
                 break;
             case 2:
-                e.setVisible(true);
-                removeClass(e, "btn-success");
+                seatPane.setVisible(true);
+                removeClass(seatPane, "btn-success");
                 break;
         }
     }
 
     void setSeat(int index, int status) throws Exception{
         if(index <= 0 || index > 342) throw new Exception("0-nál nagyobb szám elvárt!");
-        StackPane e = (StackPane) root.getChildren().get(index);
+
+        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
         switch (status){
             case -1:
-                e.setVisible(false);
-                e.getStyleClass().removeAll();
-                addClass(e, "seat");
+                seatPane.setVisible(false);
+                seatPane.getStyleClass().removeAll();
+                addClass(seatPane, "seat");
                 break;
             case 0:
-                e.setVisible(true);
-                addClass(e, "btn-success");
+                seatPane.setVisible(true);
+                addClass(seatPane, "btn-success");
                 break;
             case 1:
-                e.setVisible(true);
-                addClass(e, "btn-danger");
+                seatPane.setVisible(true);
+                addClass(seatPane, "btn-danger");
                 break;
             case 2:
-                e.setVisible(true);
-                removeClass(e, "btn-success");
+                seatPane.setVisible(true);
+                removeClass(seatPane, "btn-success");
                 break;
         }
     }
 
-    private void addClass(Node n, String className){
-        if(!n.getStyleClass().contains(className)){
-            n.getStyleClass().add(className);
+    private void addClass(Node node, String className){
+        if(!node.getStyleClass().contains(className)){
+            node.getStyleClass().add(className);
         }
     }
 
-    private void removeClass(Node n, String className){
-        if(n.getStyleClass().contains(className)){
-            n.getStyleClass().remove(className);
+    private void removeClass(Node node, String className){
+        if(node.getStyleClass().contains(className)){
+            node.getStyleClass().remove(className);
         }
     }
 
-    private boolean hasClass(Node n, String className){
-        return n.getStyleClass().contains(className);
+    private boolean hasClass(Node node, String className){
+        return node.getStyleClass().contains(className);
     }
 
     void setButtonText(String text){
@@ -223,8 +219,8 @@ public class AuditoriumController {
         auditorium.setVisible(b);
     }
 
-    void setActionButtonType(int i) {
-        switch (i) {
+    void setActionButtonType(int actionId) {
+        switch (actionId) {
             case 0: _button_action = 0; break;
             case 1:
                 _button_action = 1;
@@ -244,42 +240,46 @@ public class AuditoriumController {
         if(_button_action == 0){
             //reserv
         }else if(_button_action == 1) {
-            MySQLConnect con = null;
+            MySQLConnect dbConnection = null;
             try{
-                con = new MySQLConnect();
-                con.establishConnection();
-            }catch (SQLException err){}
+                dbConnection = new MySQLConnect();
+                dbConnection.establishConnection();
+            }catch (SQLException err){
+                err.printStackTrace();
+            }
 
-            int id = con.insertAuditorium("T", 18*19);
-            System.out.println(id);
+            int insertId = dbConnection.insertAuditorium("T", 18*19);
 
             for (int row = 0; row < 18; row++) {
                 for (int col = 0; col < 19; col ++) {
 
                     if(col > 0) {
                         int index = ((row)*19)+col;
-                        StackPane e = (StackPane) root.getChildren().get(index);
-                        if(hasClass(e, "btn-success")){
-                            Label l = (Label) e.getChildren().get(0);
-                            System.out.println("Sor:" + (row+1) + ", Oszlop: " + col + ", Szekszam: "  + l.getText());
-                            con.insertSeat(row+1, col, id);
+                        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+                        if(hasClass(seatPane, "btn-success")){
+                            dbConnection.insertSeat(row+1, col, insertId);
                         }
                     }
                 }
             }
-            con.closeConnection();
+
+            dbConnection.closeConnection();
             audit_btn.setDisable(true);
             parentStage.close();
-        }else if(_button_action == 2 && (actionParams[0] != null &&  (Integer) actionParams[0] == actionParams[0])) {
-            MySQLConnect con = null;
-            try{
-                con = new MySQLConnect();
-                con.establishConnection();
-            }catch (SQLException err){}
-            con.deleteSeats((Integer) actionParams[0]);
-            con.deleteAuditorium((Integer) actionParams[0]);
 
-            con.closeConnection();
+        }else if(_button_action == 2 && (actionParams[0] != null &&  (Integer) actionParams[0] == actionParams[0])) {
+            MySQLConnect dbConnection = null;
+            try{
+                dbConnection = new MySQLConnect();
+                dbConnection.establishConnection();
+            }catch (SQLException err){
+                err.printStackTrace();
+            }
+
+            dbConnection.deleteSeats((Integer) actionParams[0]);
+            dbConnection.deleteAuditorium((Integer) actionParams[0]);
+
+            dbConnection.closeConnection();
             audit_btn.setDisable(true);
             parentStage.close();
         }
