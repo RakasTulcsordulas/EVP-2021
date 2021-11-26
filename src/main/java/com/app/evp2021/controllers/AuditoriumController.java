@@ -45,7 +45,7 @@ public class AuditoriumController {
 
     @FXML private Object[] actionParams;
 
-    void create(boolean addSeatClass, boolean startHidden) {
+    void createAuditorium(boolean addSeatClass, boolean startHidden) {
         rootGridPane = new GridPane();
         rootGridPane.setHgap(12);
         rootGridPane.setVgap(12);
@@ -285,7 +285,7 @@ public class AuditoriumController {
         }
     }
 
-    public void setActionButtonParams(Object[] objects) {
-        this.actionParams = objects;
+    public void setActionButtonParams(Object[] params) {
+        this.actionParams = params;
     }
 }
