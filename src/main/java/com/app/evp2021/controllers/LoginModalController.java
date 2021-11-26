@@ -7,7 +7,6 @@ import com.app.sql.MySQLConnect;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 public class LoginModalController {
@@ -21,12 +20,12 @@ public class LoginModalController {
             errormsg.setText("Minden mező kitöltése kötelező!");
         }else{
 
-            MySQLConnect con = new MySQLConnect();
-            con.establishConnection();
-            boolean login = con.checkPassword(username.getText(), psw.getText());
+            MySQLConnect dbConnection = new MySQLConnect();
+            dbConnection.establishConnection();
+            boolean loginAttempt = dbConnection.checkPassword(username.getText(), psw.getText());
 
-            if(login) {
-                LoginModal.showSuccessPane("Sikeres belépés! Üdvözöllek " + username.getText());
+            if(loginAttempt) {
+                LoginModal.close();
                 UserSession.setSession(username.getText(), true);
                 LandingPage.refresh();
             }else{
