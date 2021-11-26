@@ -223,8 +223,8 @@ public class MySQLConnect {
      * @param duration_min duration of the movie in minutes int(11). Can be null
      * @return an array of objects starting from 1, containing the records of the movie in the order as stored in the database.
      */
-    public Object[] getMovie(Object id, Object title, Object duration_min) {
-        Object[] resultSetObject = null;
+    public Object[][] getMovie(Object id, Object title, Object duration_min) {
+        Object[][] resultSetObject = null;
         String query = "SELECT * FROM movie WHERE " +
                 "(? IS NULL OR ? = id)" +
                 "AND " +
@@ -233,7 +233,8 @@ public class MySQLConnect {
                 "(? IS NULL OR ? = duration_min)";
 
         System.out.println("Searching for movie...");
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)){
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, id);
             preparedStatement.setObject(3, title);
@@ -243,16 +244,21 @@ public class MySQLConnect {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                resultSetObject = new Object[rsmd.getColumnCount()];
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
 
-                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
-                    resultSetObject[i] = resultSet.getObject(i);
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
                 }
-            } else {
-                System.out.println("No movie is found.");
-                return null;}
+
+                j++;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
