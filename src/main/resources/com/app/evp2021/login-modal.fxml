@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.evp2021.controllers.LoginModalController">
    <children>
       <AnchorPane id="login_pane" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #e1e1e1;">
@@ -64,7 +63,7 @@
             <URL value="@css/main.css" />
          </stylesheets>
       </AnchorPane>
-      <AnchorPane id="success_login" fx:id="success_login" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="310.0" prefWidth="310.0" style="-fx-background-color: #e1e1e1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane id="success_login" fx:id="success_login" layoutX="10.0" layoutY="10.0" maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="310.0" prefWidth="310.0" style="-fx-background-color: #e1e1e1;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text layoutX="48.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Admin belépés" textAlignment="CENTER" wrappingWidth="203.78124237060547" />
             <HBox alignment="CENTER" layoutY="228.0" prefHeight="72.0" prefWidth="300.0" spacing="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

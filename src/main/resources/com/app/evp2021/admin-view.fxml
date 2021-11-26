@@ -56,43 +56,55 @@
    <children>
       <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" layoutY="720.0" prefHeight="48.0" prefWidth="311.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button id="logout" fx:id="logout" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#logoutAdmin" prefHeight="30.0" prefWidth="289.0" stylesheets="@css/bootstrap.css" text="KILÉPÉS" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                     <styleClass>
-                        <String fx:value="btn" />
-                        <String fx:value="btn-danger" />
-                     </styleClass>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
+                  <AnchorPane maxWidth="333.0" prefHeight="668.0" prefWidth="311.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ScrollPane id="movie_scroll" fx:id="movie_scroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxWidth="311.0" minWidth="311.0" prefHeight="668.0" prefWidth="311.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <VBox fx:id="movie_holder" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+                  <HBox alignment="CENTER_LEFT" layoutY="720.0" prefHeight="48.0" prefWidth="311.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Button id="logout" fx:id="logout" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#logoutAdmin" prefHeight="30.0" prefWidth="289.0" stylesheets="@css/bootstrap.css" text="KILÉPÉS" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-danger" />
+                           </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutY="668.0" prefHeight="48.0" prefWidth="311.0" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Button id="new_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addMovie" prefHeight="30.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ FILM" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-primary" />
+                           </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="311.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <content>
-                  <VBox id="movie_holder" alignment="CENTER" prefHeight="640.0" prefWidth="309.0" />
-               </content>
-            </ScrollPane>
-            <HBox alignment="CENTER_LEFT" layoutY="668.0" prefHeight="48.0" prefWidth="311.0" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="0.0">
-               <children>
-                  <Button id="new_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addMovie" prefHeight="30.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ FILM" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                     <styleClass>
-                        <String fx:value="btn" />
-                        <String fx:value="btn-primary" />
-                     </styleClass>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
-            </HBox>
+            </AnchorPane>
             <AnchorPane layoutX="311.0" prefHeight="768.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="311.0" AnchorPane.rightAnchor="475.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -294,7 +306,7 @@
                               <Insets bottom="20.0" />
                            </VBox.margin>
                         </HBox>
-                        <Button id="new_audit" fx:id="new_audit" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addNewAudit" prefHeight="33.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ TEREM">
+                        <Button id="new_audit" fx:id="new_audit" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addNewAuditorium" prefHeight="33.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ TEREM">
                            <styleClass>
                               <String fx:value="btn" />
                               <String fx:value="btn-primary" />

@@ -93,7 +93,7 @@
                <children>
                   <ScrollPane fx:id="movie_scroll" prefHeight="315.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <VBox fx:id="movie_list" alignment="TOP_CENTER" fillWidth="false" prefHeight="315.0" prefWidth="333.0" spacing="20.0">
+                        <VBox fx:id="movie_holder" alignment="TOP_CENTER" fillWidth="false" prefHeight="315.0" prefWidth="333.0" spacing="20.0">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
