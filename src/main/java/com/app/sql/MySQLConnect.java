@@ -7,9 +7,7 @@
 
 package com.app.sql;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.sql.*;
 import java.util.Properties;
@@ -30,10 +28,11 @@ public class MySQLConnect {
     public void establishConnection() throws SQLException{
 
         Properties prop = new Properties();
-        String configFile = "src/main/resources/database.conf";
 
-        try (FileInputStream fis = new FileInputStream(configFile)) {
-            prop.load(fis);
+        InputStream configFile = MySQLConnect.class.getResourceAsStream("database.conf");
+
+        try {
+            prop.load(configFile);
         } catch (FileNotFoundException e) {
             System.out.println("Config file not found!");
             e.printStackTrace();
