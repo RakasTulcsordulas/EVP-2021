@@ -7,23 +7,15 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 
 public class CustomAlert {
-    public CustomAlert(Alert.AlertType type, String title, String headerText, String footerText) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(footerText);
-
-        alert.showAndWait();
-    }
 
     public CustomAlert(Alert.AlertType type, String title, String headerText, String footerText, ButtonType buttonToClose) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(footerText);
+        Alert alertWindow = new Alert(type);
+        alertWindow.setTitle(title);
+        alertWindow.setHeaderText(headerText);
+        alertWindow.setContentText(footerText);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == buttonToClose) {
+        Optional<ButtonType> btnClickResult = alertWindow.showAndWait();
+        if(btnClickResult.get() == buttonToClose) {
             Platform.exit();
         }
     }

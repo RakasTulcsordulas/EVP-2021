@@ -25,7 +25,7 @@ public class LoginModalController {
             boolean loginAttempt = dbConnection.checkPassword(username.getText(), psw.getText());
 
             if(loginAttempt) {
-                LoginModal.close();
+                LoginModal.closeWindow();
                 UserSession.setSession(username.getText(), true);
                 LandingPage.refresh();
             }else{

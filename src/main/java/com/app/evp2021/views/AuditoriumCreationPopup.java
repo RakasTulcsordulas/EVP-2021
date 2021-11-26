@@ -20,12 +20,12 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class AuditCreationPopup {
+public class AuditoriumCreationPopup {
 
     private static Scene scene = null;
     private static Stage modal = null;
 
-    public static void create(Node audit) throws Exception
+    public static void createWindow(Node auditoriumView) throws Exception
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("popup-audit-creator.fxml"));
         scene = new Scene(fxmlLoader.load());
@@ -43,7 +43,8 @@ public class AuditCreationPopup {
         scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
 
         modal.setScene(scene);
-        attachAuditorium(audit);
+
+        attachAuditorium(auditoriumView);
 
     }
 
@@ -55,14 +56,14 @@ public class AuditCreationPopup {
         return modal;
     }
 
-    private static void attachAuditorium(Node audit){
-        AnchorPane holder = (AnchorPane) scene.lookup("#holder");
+    private static void attachAuditorium(Node auditoriumView){
+        AnchorPane auditoriumHolder = (AnchorPane) scene.lookup("#holder");
 
-        holder.getChildren().add(audit);
-        holder.setTopAnchor(audit, 0.0d);
-        holder.setBottomAnchor(audit, 0.0d);
-        holder.setLeftAnchor(audit, 0.0d);
-        holder.setRightAnchor(audit, 0.0d);
+        auditoriumHolder.getChildren().add(auditoriumView);
+        auditoriumHolder.setTopAnchor(auditoriumView, 0.0d);
+        auditoriumHolder.setBottomAnchor(auditoriumView, 0.0d);
+        auditoriumHolder.setLeftAnchor(auditoriumView, 0.0d);
+        auditoriumHolder.setRightAnchor(auditoriumView, 0.0d);
 
     }
 }

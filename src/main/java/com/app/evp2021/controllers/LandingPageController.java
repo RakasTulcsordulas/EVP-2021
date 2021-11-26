@@ -2,7 +2,7 @@ package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
 import com.app.evp2021.services.UserSession;
-import com.app.evp2021.views.AuditCreationPopup;
+import com.app.evp2021.views.AuditoriumCreationPopup;
 import com.app.evp2021.views.LandingPage;
 import com.app.evp2021.views.LoginModal;
 import com.app.sql.MySQLConnect;
@@ -29,6 +29,7 @@ public class LandingPageController{
     @FXML private Text input_title;
     @FXML private Button save_movie;
     @FXML private Button delete_movie;
+    @FXML private HBox audit_btn_holder;
 
     @FXML private TextField movie_title_input;
     @FXML private TextField director_input;
@@ -109,7 +110,7 @@ public class LandingPageController{
     @FXML
     private void openAdminModal() {
         try {
-            LoginModal.display();
+            LoginModal.displayWindow();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -141,8 +142,9 @@ public class LandingPageController{
         Controller.setButtonText("Terem mentése");
         Controller.setActionButtonType(1);
 
-        AuditCreationPopup popupAuditoriumWindow = new AuditCreationPopup();
-        popupAuditoriumWindow.create(rootAnchorPane);
+        AuditoriumCreationPopup popupAuditoriumWindow = new AuditoriumCreationPopup();
+
+        popupAuditoriumWindow.createWindow(rootAnchorPane);
 
         Controller.setParentStage(popupAuditoriumWindow.getStage());
 
@@ -177,8 +179,8 @@ public class LandingPageController{
             err.printStackTrace();
         }
 
-        AuditCreationPopup popupAuditoriumWindow = new AuditCreationPopup();
-        popupAuditoriumWindow.create(root);
+        AuditoriumCreationPopup popupAuditoriumWindow = new AuditoriumCreationPopup();
+        popupAuditoriumWindow.createWindow(root);
         Controller.setParentStage(popupAuditoriumWindow.getStage());
         popupAuditoriumWindow.display();
 
@@ -417,6 +419,37 @@ public class LandingPageController{
         }catch (SQLException err){
             err.printStackTrace();
         }catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
+
+    public void setAuditoriumsOnAdminView() {
+        Object[][] resultAuditoriums = null;
+        MySQLConnect dbConnection = new MySQLConnect();
+        try {
+            dbConnection.establishConnection();
+            resultAuditoriums = dbConnection.getAuditorium(null);
+            for(int i = 1; i < resultAuditoriums.length; i++){
+
+                Button auditoriumButton = new Button(resultAuditoriums[i][2].toString() + "" + i);
+
+                auditoriumButton.getStyleClass().add("btn");
+                auditoriumButton.getStyleClass().add("btn-primary");
+                auditoriumButton.setStyle("-fx-cursor: hand; -fx-padding: 10 5 10 5;");
+                audit_btn_holder.getChildren().add(auditoriumButton);
+                audit_btn_holder.setSpacing(20.0);
+
+                final int id = (Integer) resultAuditoriums[i][1];
+
+                auditoriumButton.setOnMouseClicked(event -> {
+                    try {
+                        showAuditorium(id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        }catch (SQLException err){
             err.printStackTrace();
         }
     }
