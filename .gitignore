@@ -7,6 +7,9 @@
 # Config file
 *.conf
 
+#Keep database conf
+!database.conf
+
 # BlueJ files
 *.ctxt
 
