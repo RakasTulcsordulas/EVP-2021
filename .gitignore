@@ -29,4 +29,5 @@
 hs_err_pid*
 
 .idea/
+.idead/misc.xml
 javadoc/
