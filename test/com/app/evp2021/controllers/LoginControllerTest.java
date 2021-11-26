@@ -12,7 +12,7 @@ public class LoginControllerTest {
     MySQLConnect con = new MySQLConnect();
 
     @Test
-    public void onLogInClick1() {
+    public void onLogInClick1() {           //Ellenőrzi, a "username"-eket, hogy benne van-e az AB-ban
         try{
             con.establishConnection();
         }catch(SQLException err) {}
