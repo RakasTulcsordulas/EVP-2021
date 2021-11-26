@@ -306,7 +306,7 @@
                               <Insets bottom="20.0" />
                            </VBox.margin>
                         </HBox>
-                        <Button id="new_audit" fx:id="new_audit" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addNewAudit" prefHeight="33.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ TEREM">
+                        <Button id="new_audit" fx:id="new_audit" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#addNewAuditorium" prefHeight="33.0" prefWidth="97.0" stylesheets="@css/bootstrap.css" text="ÚJ TEREM">
                            <styleClass>
                               <String fx:value="btn" />
                               <String fx:value="btn-primary" />
