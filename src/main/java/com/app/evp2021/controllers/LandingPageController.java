@@ -190,7 +190,7 @@ public class LandingPageController{
 
     public void setUpInputs(Object movie_title, Object directors, Object cast, Object desc, Object rating, Object auditroom, Object[] screening, boolean one_screening) {
         setTooltip(once_text, "Ez a funkció hasznos ha egy filmet csakis EGYSZER szeretnénk játszani, a jelőlő négyzeteknél egyet bepipálva adhatjuk meg mikor legyen játszva a film, ha már ay a nap elmúlt, a következő hátre fog csúszni. Ha több van bejelölve, akkor is csak egy időpont lesz kiválasztva.");
-
+        input_title.setText(movie_title + " című film szerkesztése");
         rating_drop.getItems().add(6);
         rating_drop.getItems().add(12);
         rating_drop.getItems().add(16);
@@ -431,7 +431,7 @@ public class LandingPageController{
             resultAuditoriums = dbConnection.getAuditorium(null);
             for(int i = 1; i < resultAuditoriums.length; i++){
 
-                Button auditoriumButton = new Button(resultAuditoriums[i][2].toString() + "" + i);
+                Button auditoriumButton = new Button(resultAuditoriums[i][2].toString());
 
                 auditoriumButton.getStyleClass().add("btn");
                 auditoriumButton.getStyleClass().add("btn-primary");
