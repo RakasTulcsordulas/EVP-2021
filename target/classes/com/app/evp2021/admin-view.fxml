@@ -109,15 +109,32 @@
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" visible="false" VBox.vgrow="ALWAYS">
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox id="input_title" alignment="CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" styleClass="panel-primary">
+                              <HBox alignment="TOP_CENTER" maxWidth="600.0">
                                  <children>
-                                    <Text id="input_title" fx:id="input_title" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Film szerkesztése" />
+                                    <GridPane alignment="TOP_CENTER" maxWidth="600.0" HBox.hgrow="SOMETIMES">
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
+                                          <ColumnConstraints fillWidth="false" halignment="LEFT" maxWidth="1.7976931348623157E308" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <HBox id="input_title" alignment="CENTER" maxWidth="565.0" prefHeight="35.0" prefWidth="183.0" styleClass="panel-primary" GridPane.vgrow="ALWAYS">
+                                             <children>
+                                                <Text id="input_title" fx:id="input_title" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Film szerkesztése" />
+                                             </children>
+                                          </HBox>
+                                          <HBox id="close_inputs" fx:id="close_inputs" alignment="CENTER" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" onMouseClicked="#closeInputs" prefHeight="35.0" prefWidth="35.0" styleClass="btn-danger" GridPane.columnIndex="1">
+                                             <children>
+                                                <Text id="input_title" fx:id="input_title1" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="X" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
                                  </children>
-                                 <VBox.margin>
-                                    <Insets bottom="30.0" top="10.0" />
-                                 </VBox.margin>
                               </HBox>
                               <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="60.0" prefWidth="240.0">
                                  <children>
@@ -145,7 +162,7 @@
                               </VBox>
                               <VBox alignment="CENTER_LEFT" maxHeight="100.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
                                  <children>
-                                    <TextArea fx:id="description_input" prefHeight="200.0" prefWidth="200.0" promptText="Leírás..." />
+                                    <TextArea fx:id="description_input" prefHeight="200.0" prefWidth="200.0" promptText="Leírás..." wrapText="true" />
                                  </children>
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
@@ -262,7 +279,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </HBox>
-                              <HBox alignment="BOTTOM_CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                              <HBox alignment="BOTTOM_CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" spacing="15.0" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets top="15.0" />
                                  </VBox.margin>
@@ -273,7 +290,7 @@
                                           <String fx:value="btn-primary" />
                                        </styleClass>
                                     </Button>
-                                    <Button id="delete_movie" fx:id="delete_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#deleteMovie" prefHeight="30.0" prefWidth="106.0" stylesheets="@css/bootstrap.css" text="TÖRÖL">
+                                    <Button id="delete_movie" fx:id="delete_movie1" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#deleteMovie" prefHeight="30.0" prefWidth="106.0" stylesheets="@css/bootstrap.css" text="TÖRÖL">
                                        <styleClass>
                                           <String fx:value="btn" />
                                           <String fx:value="btn-danger" />
