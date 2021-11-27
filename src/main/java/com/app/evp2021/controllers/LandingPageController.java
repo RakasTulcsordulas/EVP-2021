@@ -246,6 +246,12 @@ public class LandingPageController{
 
     }
 
+    @FXML
+    void closeInputs(MouseEvent event) {
+        resetInputs();
+        movie_inputs.setVisible(false);
+    }
+
     public boolean checkInputs() {
         boolean errorFound = true;
         Tooltip t1 = null, t2 = null, t3 = null;
