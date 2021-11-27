@@ -248,7 +248,8 @@ public class AuditoriumController {
                 err.printStackTrace();
             }
 
-            int insertId = dbConnection.insertAuditorium("T", 18*19);
+            int numberOfAuditoriums = dbConnection.getAuditorium(null).length;
+            int insertId = dbConnection.insertAuditorium("T" + numberOfAuditoriums, 18*19);
 
             for (int row = 0; row < 18; row++) {
                 for (int col = 0; col < 19; col ++) {
