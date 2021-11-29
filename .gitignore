@@ -34,4 +34,6 @@ hs_err_pid*
 .idea/
 .idea/misc.xml
 javadoc/
-GIT WIKI/
+git_wiki/
+git_wiki/*
+
