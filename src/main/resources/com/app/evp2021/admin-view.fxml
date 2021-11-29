@@ -109,7 +109,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" visible="false" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="TOP_CENTER" maxWidth="600.0">
                                  <children>
@@ -290,7 +290,7 @@
                                           <String fx:value="btn-primary" />
                                        </styleClass>
                                     </Button>
-                                    <Button id="delete_movie" fx:id="delete_movie1" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#deleteMovie" prefHeight="30.0" prefWidth="106.0" stylesheets="@css/bootstrap.css" text="TÖRÖL">
+                                    <Button id="delete_movie" fx:id="delete_movie" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#deleteMovie" prefHeight="30.0" prefWidth="106.0" stylesheets="@css/bootstrap.css" text="TÖRÖL">
                                        <styleClass>
                                           <String fx:value="btn" />
                                           <String fx:value="btn-danger" />
