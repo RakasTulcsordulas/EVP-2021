@@ -1,0 +1,20 @@
+# Welcome to the EVP-2021 wiki!
+0. Kezdőlap:
+- A projekt leírása. Pl.: Mit csinálhatunk lényegében a projektben. 
+- Képek
+- [formazas](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) 
+- Weboldalról a linkeket meg ide is betenni azokat a linkeket, amik a weboldalon vannak.
+
+1. oldal:
+- Osztály(UML) diagrammok 
+
+2. oldal:
+- Kapcsolat(Adatbázis) diagram
+- PHP myAdminből képeket a diagrammokról, hogy hogyan csatlakoznak stb...
+
+3. oldal:
+Javadoc
+
+4. oldal:
+pl. fogalás hogyan működik meg ilyenek.
+Bemutató videó vagy valami.
