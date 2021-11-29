@@ -191,31 +191,22 @@ public class LandingPageController{
     public void setUpInputs(Object movie_title, Object directors, Object cast, Object desc, Object rating, Object auditroom, Object[] screening, boolean one_screening) {
         setTooltip(once_text, "Ez a funkció hasznos ha egy filmet csakis EGYSZER szeretnénk játszani, a jelőlő négyzeteknél egyet bepipálva adhatjuk meg mikor legyen játszva a film, ha már ay a nap elmúlt, a következő hátre fog csúszni. Ha több van bejelölve, akkor is csak egy időpont lesz kiválasztva.");
         input_title.setText(movie_title + " című film szerkesztése");
-        rating_drop.getItems().add(6);
-        rating_drop.getItems().add(12);
-        rating_drop.getItems().add(16);
-        rating_drop.getItems().add(18);
 
-        rating_drop.setValue(rating);
+        setRatingsInDropdown();
 
         movie_title_input.setText(movie_title.toString());
         director_input.setText((directors != null) ? directors.toString() : "");
         cast_input.setText((cast != null) ? cast.toString() : "");
         description_input.setText((desc != null) ? desc.toString() : "");
-        //auditorium names must include the number of the room, not enough to put index after when listing
-        //--> when creating an auditorium get the number of the existing ones and then automatically add the +1 to the name
+
+        setAuditoriumsInDropdown();
     }
 
     public void setUpInputs() {
 
         setTooltip(once_text, "Ez a funkció hasznos ha egy filmet csakis EGYSZER szeretnénk játszani, a jelőlő négyzeteknél egyet bepipálva adhatjuk meg mikor legyen játszva a film, ha már ay a nap elmúlt, a következő hátre fog csúszni. Ha több van bejelölve, akkor is csak egy időpont lesz kiválasztva.");
 
-        rating_drop.getItems().add(6);
-        rating_drop.getItems().add(12);
-        rating_drop.getItems().add(16);
-        rating_drop.getItems().add(18);
-
-        rating_drop.setValue(6);
+        setRatingsInDropdown();
 
         movie_inputs.setVisible(true);
         input_title.setText("Új film hozzáadása");
@@ -225,6 +216,13 @@ public class LandingPageController{
 
         screening_day_boxes = new CheckBox[]{check_1, check_2, check_3, check_4, check_5, check_6, check_7};
         screening_day_times = new ChoiceBox[]{choice_1, choice_2, choice_3, choice_4, choice_5, choice_6, choice_7};
+
+        setAuditoriumsInDropdown();
+    }
+
+    private void setAuditoriumsInDropdown(){
+        movie_room.getItems().clear();
+
         MySQLConnect dbConnection = new MySQLConnect();
         try {
             dbConnection.establishConnection();
@@ -237,8 +235,19 @@ public class LandingPageController{
         dbConnection.closeConnection();
 
         for(int i = 1; i < resultAuditoriums.length; i++) {
-            movie_room.getItems().add(resultAuditoriums[i][2] + "" + i);
+            movie_room.getItems().add(resultAuditoriums[i][2]);
         }
+    }
+
+    private void setRatingsInDropdown() {
+        rating_drop.getItems().clear();
+
+        rating_drop.getItems().add(6);
+        rating_drop.getItems().add(12);
+        rating_drop.getItems().add(16);
+        rating_drop.getItems().add(18);
+
+        rating_drop.setValue(6);
     }
 
     @FXML
@@ -308,7 +317,18 @@ public class LandingPageController{
 
     private boolean isScreeningSelected() {
         for(int i = 0; i < screening_day_boxes.length; i++) {
-            if(screening_day_boxes[i].isSelected()) return true;
+            if(screening_day_boxes[i].isSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isScreeningTimeSelected() {
+        for(int i = 0; i < screening_day_times.length; i++) {
+            if(screening_day_times[i].getValue() != null) {
+                return true;
+            }
         }
         return false;
     }
@@ -334,17 +354,21 @@ public class LandingPageController{
         Tooltip t[] = new Tooltip[7];
 
         for(int i = 0; i < 7; i++) {
-            removeErrorClass(screening_day_boxes[i]);
-            removeTooltip(screening_day_boxes[i], t[i]);
-            
-            if(screening_day_boxes[i].isSelected() && screening_day_times[i].getValue() == null){
-                setErrorClass(screening_day_times[i]);
-                t[i] = setTooltip(screening_day_times[i], "Adott naphoz kötelező megjelőlni kezdődátumot.");
-                errorFound = false;
-            }else if(screening_day_times[i].getValue() != null && !screening_day_boxes[i].isSelected()) {
-                setErrorClass(screening_day_times[i]);
-                t[i] = setTooltip(screening_day_times[i], "Adott dátumhoz kötelező kiválasztani a napot is!");
-                errorFound = false;
+            if(isScreeningSelected() || isScreeningTimeSelected()){
+                if(screening_day_boxes[i].isSelected() && screening_day_times[i].getValue() == null){
+                    setErrorClass(screening_day_times[i]);
+                    t[i] = setTooltip(screening_day_times[i], "Adott naphoz kötelező megjelőlni kezdődátumot.");
+                    errorFound = false;
+                }else if(screening_day_times[i].getValue() != null && !screening_day_boxes[i].isSelected()) {
+                    setErrorClass(screening_day_times[i]);
+                    t[i] = setTooltip(screening_day_times[i], "Adott dátumhoz kötelező kiválasztani a napot is!");
+                    errorFound = false;
+                }
+            }else{
+                removeErrorClass(screening_day_boxes[i]);
+                removeTooltip(screening_day_boxes[i], t[i]);
+                removeErrorClass(screening_day_times[i]);
+                removeTooltip(screening_day_times[i], t[i]);
             }
         }
 
@@ -364,6 +388,7 @@ public class LandingPageController{
         if(new_movie){
             boolean inputValid = checkInputs();
             boolean boxesValid =  checkScreeningInput();
+
             if(inputValid && boxesValid){
                 MySQLConnect dbConnection = new MySQLConnect();
                 try{
