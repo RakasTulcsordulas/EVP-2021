@@ -101,6 +101,18 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
+                        <Button id="new_movie" fx:id="refresh_button" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#refreshAdminView" prefHeight="30.0" prefWidth="126.0" stylesheets="@css/bootstrap.css" text="FRISSÍTÉS">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="btn-primary" />
+                           </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Button>
                      </children>
                   </HBox>
                </children>
