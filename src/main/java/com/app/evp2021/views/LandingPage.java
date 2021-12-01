@@ -108,6 +108,7 @@ public class LandingPage extends Application {
 
         getAuditoriums(active_scene);
         getMovies(active_scene);
+        active_controller.initializeAdminView();
     }
 
     private static void getAuditoriums(Scene sc) {
