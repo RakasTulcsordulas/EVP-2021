@@ -2,10 +2,11 @@ package com.app.evp2021.views;
 
 import com.app.evp2021.Main;
 import com.app.evp2021.controllers.LandingPageController;
-import com.app.evp2021.services.CustomAlert;
+import com.app.evp2021.services.PopupWindow;
 import com.app.evp2021.services.UserSession;
 import com.app.sql.MySQLConnect;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 
@@ -136,7 +137,8 @@ public class LandingPage extends Application {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
         }catch (SQLException err) {
-            new CustomAlert(Alert.AlertType.ERROR, "Nincs kapcsolat", "Nem sikerült kapcsolódni az adatbázishoz!", "A program most bezárul!", ButtonType.OK);
+            new PopupWindow(PopupWindow.TYPE.ERROR, "Adatbázis hiba", "Nem sikerült kapcsolódni az adatbázishoz! \nA program most bezárul!", null).displayWindow();
+            Platform.exit();
         }
     }
 }
