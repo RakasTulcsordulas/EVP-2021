@@ -31,50 +31,6 @@ public class MovieInputsController {
     private final Label screenOnceText;
     private final CheckBox screenOnceCheckBox;
 
-    public TextField getMovieTitleInput() {
-        return movieTitleInput;
-    }
-
-    public TextField getMovieDirectorInput() {
-        return movieDirectorInput;
-    }
-
-    public TextField getMovieCastInput() {
-        return movieCastInput;
-    }
-
-    public TextArea getMovieDescriptionInput() {
-        return movieDescriptionInput;
-    }
-
-    public ChoiceBox getMovieRatingDropdown() {
-        return movieRatingDropdown;
-    }
-
-    public ChoiceBox getMovieAuditoriumDropdown() {
-        return movieAuditoriumDropdown;
-    }
-
-    public TextField getMovieDurationInput() {
-        return movieDurationInput;
-    }
-
-    public CheckBox[] getMovieScreeningBoxes() {
-        return movieScreeningBoxes;
-    }
-
-    public ChoiceBox[] getMovieScreeningTimesDropdowns() {
-        return movieScreeningTimesDropdowns;
-    }
-
-    public Label getScreenOnceText() {
-        return screenOnceText;
-    }
-
-    public CheckBox getScreenOnceCheckBox() {
-        return screenOnceCheckBox;
-    }
-
     public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton, Label screenOnceText, CheckBox screenOnceCheckBox) {
         this.inputHolder = inputHolder;
         this.movieTitleInput = (TextField) inputFields[0];
