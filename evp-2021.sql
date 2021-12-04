@@ -77,17 +77,18 @@ CREATE TABLE `movie` (
   `director` varchar(256) DEFAULT NULL,
   `cast` varchar(1024) DEFAULT NULL,
   `description` text DEFAULT NULL,
-  `duration_min` int(11) DEFAULT NULL
+  `rating` int(11) NOT NULL,
+  `duration_min` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- A tábla adatainak kiíratása `movie`
 --
 
-INSERT INTO `movie` (`id`, `title`, `director`, `cast`, `description`, `duration_min`) VALUES
-(2, 'Elk*rtuk', 'Keith English', 'Vivianne Bánovits,András Mózes,Barna Bokor', 'When a young, ambitious market researcher finds out her boss is involved in the leaking of a scandalous Prime Minister speech, she decides to investigate the case to gain a position among the big-shots. Based on actual events.', 125),
-(3, 'Dune', 'Denis Villeneuve', 'Timothée Chalamet,Rebecca Ferguson,Oscar Isaac,Jason Momoa', 'Feature adaptation of Frank Herbert\'s science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.', 155),
-(4, 'Blade Runner 2049', 'Denis Villeneuve', 'Ryan Gosling,Dave Bautista,Robin Wright,Mark Arnold', 'Young Blade Runner K\'s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who\'s been missing for thirty years.', 204);
+INSERT INTO `movie` VALUES
+(2, 'Elk*rtuk', 'Keith English', 'Vivianne Bánovits,András Mózes,Barna Bokor', 'When a young, ambitious market researcher finds out her boss is involved in the leaking of a scandalous Prime Minister speech, she decides to investigate the case to gain a position among the big-shots. Based on actual events.', 16, 125),
+(3, 'Dune', 'Denis Villeneuve', 'Timothée Chalamet,Rebecca Ferguson,Oscar Isaac,Jason Momoa', 'Feature adaptation of Frank Herbert\'s science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.', 16, 155),
+(4, 'Blade Runner 2049', 'Denis Villeneuve', 'Ryan Gosling,Dave Bautista,Robin Wright,Mark Arnold', 'Young Blade Runner K\'s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who\'s been missing for thirty years.', 18, 204);
 
 -- --------------------------------------------------------
 
