@@ -23,13 +23,13 @@ public class LandingPageController{
     @FXML private Text current_date;
     @FXML private DatePicker date_picker;
     @FXML private ScrollPane movie_scroll;
-    @FXML private Label once_text;
-    @FXML private CheckBox once_checkbox;
     @FXML private VBox movie_inputs;
     @FXML private Text input_title;
     @FXML private Button save_movie;
     @FXML private Button delete_movie;
     @FXML private HBox audit_btn_holder;
+    @FXML private Text fromToDate;
+    @FXML private GridPane screening_holder_grid;
 
     @FXML private TextField movie_title_input;
     @FXML private TextField director_input;
@@ -55,6 +55,7 @@ public class LandingPageController{
     private CheckBox[] screening_day_boxes;
     private ChoiceBox[] screening_day_times;
     private boolean new_movie;
+    private int editMovieId;
     private MovieInputsController movieInputsController = null;
 
 
@@ -103,6 +104,11 @@ public class LandingPageController{
         }
     }
 
+    @FXML
+    private void onScreeningCheckBoxClicked(MouseEvent event) {
+        movieInputsController.fillScreeningTimes();
+    }
+
 
     @FXML
     void logoutAdmin(MouseEvent event) throws Exception{
@@ -115,6 +121,11 @@ public class LandingPageController{
     void addMovie(MouseEvent event) {
         movieInputsController.addNewMovie();
         new_movie = true;
+    }
+
+    @FXML
+    void deleteMovie(MouseEvent event) {
+
     }
 
     @FXML
@@ -212,7 +223,29 @@ public class LandingPageController{
                 LandingPage.refresh();
             }
         }else{
-            //edited movie save
+            Object[] validationValues = movieInputsController.validateInputFields();
+
+            if(validationValues != null){
+                MySQLConnect dbConnection = new MySQLConnect();
+                try{
+                    dbConnection.establishConnection();
+                }catch (SQLException err) {
+                    err.printStackTrace();
+                }
+
+                dbConnection.updateMovie(
+                        editMovieId,
+                        (String) validationValues[0],
+                        (String) validationValues[1],
+                        (String) validationValues[2],
+                        (String) validationValues[3],
+                        (String) validationValues[4],
+                        (String) validationValues[6]
+                );
+
+                movieInputsController.closeInputFields();
+                LandingPage.refresh();
+            }
         }
     }
 
@@ -241,6 +274,7 @@ public class LandingPageController{
 
                 movieButton.setOnMouseClicked(event -> {
                     movieInputsController.editExistingMovie(movies[rowIndex]);
+                    editMovieId = (Integer) movies[rowIndex][1];
                 });
             }
         }catch (SQLException err){
@@ -281,12 +315,17 @@ public class LandingPageController{
         }
     }
     //set up initial things
-    public void initializeAdminView() {
+    public void initializeAdminView() throws Exception {
         if(movieInputsController == null) {
             screening_day_boxes = new CheckBox[]{check_1, check_2, check_3, check_4, check_5, check_6, check_7};
             screening_day_times = new ChoiceBox[]{choice_1, choice_2, choice_3, choice_4, choice_5, choice_6, choice_7};
             Object[] inputFields = {movie_title_input, director_input, cast_input, description_input, rating_drop, movie_room, duration_input, screening_day_boxes, screening_day_times};
-            movieInputsController = new MovieInputsController(movie_inputs, inputFields, input_title, save_movie, delete_movie, once_text, once_checkbox);
+            try {
+                movieInputsController = new MovieInputsController(movie_inputs, inputFields, input_title, save_movie, delete_movie, fromToDate, screening_holder_grid);
+            }catch (Exception err){
+                err.printStackTrace();
+            }
+
         }
     }
 }
