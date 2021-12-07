@@ -194,6 +194,57 @@ public class MySQLConnect {
     }
 
     /**
+     * Updates an existing movie based on the movieId. If a parameter is null, the corresponding column will not be updated.
+     * @param movieId int, not null nad required to perform update
+     * @param title varchar(128) NOTNULL
+     * @param director varchar(256)
+     * @param cast varchar(1024)
+     * @param description text
+     * @param duration_min int(11)
+     * @return boolean true if the update succeded, and false if not
+     */
+    public boolean updateMovie(int movieId, String title, String director, String cast, String description, String rating, String duration_min) {
+        if(movieId < 0) {
+            return false;
+        }else{
+            String query = "UPDATE movie SET " +
+                    "title = IF(? IS NULL, title, ?), " +
+                    "director = IF(? IS NULL, title, ?), " +
+                    "cast = IF(? IS NULL, title, ?), " +
+                    "description = IF(? IS NULL, title, ?), " +
+                    "rating = IF(? IS NULL, title, ?), " +
+                    "duration_min = IF(? IS NULL, title, ?) WHERE id = ?";
+
+            try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                preparedStatement.setString(1,title);
+                preparedStatement.setString(2,title);
+                preparedStatement.setString(3,director);
+                preparedStatement.setString(4,director);
+                preparedStatement.setString(5,cast);
+                preparedStatement.setString(6,cast);
+                preparedStatement.setString(7,description);
+                preparedStatement.setString(8,description);
+                preparedStatement.setString(9, rating);
+                preparedStatement.setString(10, rating);
+                preparedStatement.setString(11,duration_min);
+                preparedStatement.setString(12,duration_min);
+                preparedStatement.setString(13, String.valueOf(movieId));
+
+                int result = preparedStatement.executeUpdate();
+
+                if (result > 0) {
+                    System.out.println("Movie (ID:" + movieId + ") updated!");
+                    return true;
+                } else {
+                    System.out.println("Error! Incorrect parameters!");
+                    return false;
+                }
+            } catch (SQLException e) {e.printStackTrace(); return false; }
+        }
+    }
+
+    /**
      * Deletes a movie with the given title and release_date combination
      * @param title title of the movie VARCHAR(128)
      */
@@ -491,8 +542,8 @@ public class MySQLConnect {
      * @param screening_start Timestamp of the screening as [YYYY-MM-DD hh:mm:ss]. Can be null
      * @return An Object[] starting from 1 containing in sequence every data of all rows where at least one given parameter is met.
      */
-    public Object[] getScreening (Object id, Object movie_id, Object auditorium_id, Timestamp screening_start) {
-        Object[] resultSetObject = null;
+    public Object[][] getScreening (Object id, Object movie_id, Object auditorium_id, Timestamp screening_start) {
+        Object[][] resultSetObject = null;
         String query = "SELECT * FROM screening WHERE " +
                 "(? IS NULL OR ? = id) " +
                 "AND " +
@@ -502,7 +553,8 @@ public class MySQLConnect {
                 "AND " +
                 "(? IS NULL OR ? = screening_start)";
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, id);
             preparedStatement.setObject(3, movie_id);
@@ -513,14 +565,21 @@ public class MySQLConnect {
             preparedStatement.setTimestamp(8, screening_start);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                resultSetObject = new Object[rsmd.getColumnCount()];
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
 
-                for (int i = 1; i < rsmd.getColumnCount(); ++i) {
-                    resultSetObject[i] = resultSet.getObject(i);
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
                 }
-            } else {return null;}
+
+                j++;
+            }
         } catch (SQLException e) {e.printStackTrace();}
         return resultSetObject;
     }
