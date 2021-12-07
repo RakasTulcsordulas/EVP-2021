@@ -3,11 +3,16 @@ package com.app.evp2021.services;
 import com.app.sql.MySQLConnect;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MovieInputsController {
     private final VBox inputHolder;
@@ -28,10 +33,10 @@ public class MovieInputsController {
     private final Text inputSectionTitle;
     private final Button confirmButton;
     private final Button deleteButton;
-    private final Label screenOnceText;
-    private final CheckBox screenOnceCheckBox;
+    private final Text fromToDate;
+    private final GridPane holderGrid;
 
-    public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton, Label screenOnceText, CheckBox screenOnceCheckBox) {
+    public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton, Text fromToDate, GridPane holderGrid) throws Exception {
         this.inputHolder = inputHolder;
         this.movieTitleInput = (TextField) inputFields[0];
         this.movieDirectorInput = (TextField) inputFields[1];
@@ -43,11 +48,69 @@ public class MovieInputsController {
         this.inputSectionTitle = inputSectionTitle;
         this.confirmButton = confirmButton;
         this.deleteButton = deleteButton;
-        this.screenOnceText = screenOnceText;
-        this.screenOnceCheckBox = screenOnceCheckBox;
+        this.fromToDate = fromToDate;
+        this.holderGrid = holderGrid;
 
         this.movieScreeningBoxes = (CheckBox[]) inputFields[7];
         this.movieScreeningTimesDropdowns = (ChoiceBox[]) inputFields[8];
+
+        this.initializeScreeningInputs();
+    }
+
+    private void initializeScreeningInputs() throws Exception {
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+        Date currentDate = new Date();
+        fromToDate.setText(dateFormat.format(currentDate));
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+
+        for(int i = 0; i < 7; i++) {
+            c.add(Calendar.DATE, 1);
+            setLabelsDate(c, i);
+        }
+
+        Date currentDatePlusOne = c.getTime();
+
+        fromToDate.setText(fromToDate.getText() + " - " + dateFormat.format(currentDatePlusOne));
+    }
+
+    private void setLabelsDate(Calendar calendar, int index) throws Exception {
+        DateFormat labelDateFormat = new SimpleDateFormat("MM.dd");
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        Label labelDayOfWeek;
+        if(index == 0) {
+            labelDayOfWeek = (Label)holderGrid.getChildren().get(index);
+        }else{
+            labelDayOfWeek = (Label)holderGrid.getChildren().get(index+2);
+        }
+
+
+        switch (day) {
+            case Calendar.MONDAY:
+                labelDayOfWeek.setText("H: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.TUESDAY:
+                labelDayOfWeek.setText("K: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.WEDNESDAY:
+                labelDayOfWeek.setText("SZ: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.THURSDAY:
+                labelDayOfWeek.setText("CS: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.FRIDAY:
+                labelDayOfWeek.setText("P: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.SATURDAY:
+                labelDayOfWeek.setText("SZO: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            case Calendar.SUNDAY:
+                labelDayOfWeek.setText("V: (" + labelDateFormat.format(calendar.getTime()) + ")");
+                break;
+            default: throw new Exception("Nem megfelelő nap!");
+        }
     }
 
     private Tooltip setTooltip(Node node, String text) {
@@ -140,8 +203,6 @@ public class MovieInputsController {
     }
 
     private void setUpInputFields() {
-        setTooltip(screenOnceText, "Ez a funkció hasznos ha egy filmet csakis EGYSZER szeretnénk játszani, a jelőlő négyzeteknél egyet bepipálva adhatjuk meg mikor legyen játszva a film, ha már ay a nap elmúlt, a következő hátre fog csúszni. Ha több van bejelölve, akkor is csak egy időpont lesz kiválasztva.");
-
         setRatingsInDropdown(null);
         setAuditoriumsInDropdown(null);
 
@@ -152,7 +213,6 @@ public class MovieInputsController {
     }
 
     public void setUpInputs(Object movieTitle, Object movieDirectors, Object movieCast, Object movieDescription, Object movieRating, Object movieAuditorium, Object movieDuration, Object[] movieScreening, boolean screeningOnlyOnce) {
-        setTooltip(screenOnceText, "Ez a funkció hasznos ha egy filmet csakis EGYSZER szeretnénk játszani, a jelőlő négyzeteknél egyet bepipálva adhatjuk meg mikor legyen játszva a film, ha már ay a nap elmúlt, a következő hátre fog csúszni. Ha több van bejelölve, akkor is csak egy időpont lesz kiválasztva.");
         inputSectionTitle.setText(movieTitle + " című film szerkesztése");
 
         setRatingsInDropdown(movieRating);
@@ -316,9 +376,42 @@ public class MovieInputsController {
                     (movieDescriptionInput.getText().isEmpty()) ? null : movieDescriptionInput.getText(),
                     (movieRatingDropdown.getValue() == null) ? null : movieRatingDropdown.getValue().toString(),
                     (movieAuditoriumDropdown.getValue() == null) ? null : movieAuditoriumDropdown.getValue().toString(),
-                    (movieDurationInput.getText().isEmpty()) ? null : movieDurationInput.getText(),
-                    (screenOnceCheckBox.isSelected())
+                    (movieDurationInput.getText().isEmpty()) ? null : movieDurationInput.getText()
             };
         }else return null;
+    }
+
+    public void fillScreeningTimes() {
+        for(int i = 0; i < movieScreeningBoxes.length; i++) {
+            if(movieScreeningBoxes[i].isSelected()){
+                System.out.println("checkbox" + i+1 + "selected");
+                generateScreeningTimes(movieScreeningTimesDropdowns[i]);
+            }else{
+                movieScreeningTimesDropdowns[i].getItems().clear();
+            }
+        }
+    }
+
+    private void generateScreeningTimes(ChoiceBox screeningDropdown) {
+        screeningDropdown.getItems().clear();
+        //get aznapi screening times, adjuk hozza a film hosszokat, es kezdes screening es end screening+15p nem lehet benne
+
+        MySQLConnect sqlConnection = new MySQLConnect();
+        try{
+            sqlConnection.establishConnection();
+            Object[][] screenings = sqlConnection.getScreening(null,null,null,null);
+
+            if(screenings[0] == null){
+                for(int i = 10; i < 23; i++) {
+                    screeningDropdown.getItems().add(i + ":00");
+                }
+            }else{
+
+                //ha van akkor kell a hokusz pokusz
+            }
+
+        }catch (SQLException err) {
+            err.printStackTrace();
+        }
     }
 }
