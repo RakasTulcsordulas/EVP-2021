@@ -121,7 +121,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" visible="false" VBox.vgrow="ALWAYS">
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="TOP_CENTER" maxWidth="600.0">
                                  <children>
@@ -206,7 +206,7 @@
                               </HBox>
                               <VBox alignment="CENTER" maxWidth="400.0">
                                  <children>
-                                    <GridPane hgap="10.0" vgap="15.0">
+                                    <GridPane id="screening_holder_grid" fx:id="screening_holder_grid" hgap="10.0" vgap="15.0">
                                       <columnConstraints>
                                         <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
@@ -227,7 +227,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <CheckBox fx:id="check_1" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" />
+                                          <CheckBox fx:id="check_1" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" />
                                           <ChoiceBox fx:id="choice_1" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" />
                                           <Label alignment="CENTER" style="-fx-font-weight: 700;" text="K:" GridPane.rowIndex="1">
                                              <font>
@@ -259,12 +259,12 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <CheckBox fx:id="check_2" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <CheckBox fx:id="check_3" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <CheckBox fx:id="check_4" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <CheckBox fx:id="check_5" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <CheckBox fx:id="check_6" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                          <CheckBox fx:id="check_7" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <CheckBox fx:id="check_2" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <CheckBox fx:id="check_3" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <CheckBox fx:id="check_4" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <CheckBox fx:id="check_5" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <CheckBox fx:id="check_6" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <CheckBox fx:id="check_7" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                           <ChoiceBox fx:id="choice_2" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                           <ChoiceBox fx:id="choice_3" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                           <ChoiceBox fx:id="choice_4" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
@@ -279,17 +279,16 @@
                                  </VBox.margin>
                               </VBox>
                               <HBox alignment="CENTER" maxWidth="400.0" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <CheckBox id="once_checkbox" fx:id="once_checkbox" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" maxHeight="60.0" maxWidth="400.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="47.0" text="Egy időpont" underline="true" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </CheckBox>
-                                    <Label id="once_text" fx:id="once_text" prefHeight="16.0" prefWidth="216.0" text="Egy időpontban" underline="true" />
-                                 </children>
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <children>
+                                    <Text id="fromToDate" fx:id="fromToDate" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="MettolMeddigIdopont">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
                               </HBox>
                               <HBox alignment="BOTTOM_CENTER" maxWidth="600.0" prefHeight="39.0" prefWidth="238.0" spacing="15.0" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
