@@ -209,8 +209,8 @@
                                     <GridPane id="screening_holder_grid" fx:id="screening_holder_grid" hgap="10.0" vgap="15.0">
                                       <columnConstraints>
                                         <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                                          <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="75.0" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="75.0" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
@@ -228,7 +228,7 @@
                                              </font>
                                           </Label>
                                           <CheckBox fx:id="check_1" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" />
-                                          <ChoiceBox fx:id="choice_1" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" />
+                                          <ChoiceBox fx:id="choice_1" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" />
                                           <Label alignment="CENTER" style="-fx-font-weight: 700;" text="K:" GridPane.rowIndex="1">
                                              <font>
                                                 <Font size="18.0" />
@@ -265,12 +265,12 @@
                                           <CheckBox fx:id="check_5" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                           <CheckBox fx:id="check_6" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                           <CheckBox fx:id="check_7" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#onScreeningCheckBoxClicked" prefHeight="37.0" prefWidth="31.0" text="CheckBox" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                          <ChoiceBox fx:id="choice_2" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                          <ChoiceBox fx:id="choice_3" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                          <ChoiceBox fx:id="choice_4" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                          <ChoiceBox fx:id="choice_5" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                                          <ChoiceBox fx:id="choice_6" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                          <ChoiceBox fx:id="choice_7" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                          <ChoiceBox fx:id="choice_2" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                          <ChoiceBox fx:id="choice_3" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="choice_4" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                          <ChoiceBox fx:id="choice_5" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                          <ChoiceBox fx:id="choice_6" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                          <ChoiceBox fx:id="choice_7" maxWidth="75.0" prefHeight="34.0" prefWidth="91.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                        </children>
                                     </GridPane>
                                  </children>
