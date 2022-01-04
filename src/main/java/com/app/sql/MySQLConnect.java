@@ -171,10 +171,10 @@ public class MySQLConnect {
      * @param description text
      * @param duration_min int(11)
      */
-    public void insertNewMovie(String title, String director, String cast, String description, String rating, String duration_min) {
+    public int insertNewMovie(String title, String director, String cast, String description, String rating, String duration_min) {
         String query = "INSERT INTO movie (id, title, director, cast, description, rating, duration_min) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1,title);
             preparedStatement.setString(2,director);
@@ -186,11 +186,18 @@ public class MySQLConnect {
             int result = preparedStatement.executeUpdate();
 
             if (result > 0) {
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
+
                 System.out.println("New movie " + title + " is inserted into the database!");
+
+                return resultSet.getInt(1);
             } else {
                 System.out.println("Error! Incorrect parameters!");
+                return -1;
             }
         } catch (SQLException e) {e.printStackTrace();}
+        return -1;
     }
 
     /**
@@ -209,11 +216,11 @@ public class MySQLConnect {
         }else{
             String query = "UPDATE movie SET " +
                     "title = IF(? IS NULL, title, ?), " +
-                    "director = IF(? IS NULL, title, ?), " +
-                    "cast = IF(? IS NULL, title, ?), " +
-                    "description = IF(? IS NULL, title, ?), " +
-                    "rating = IF(? IS NULL, title, ?), " +
-                    "duration_min = IF(? IS NULL, title, ?) WHERE id = ?";
+                    "director = IF(? IS NULL, director, ?), " +
+                    "cast = IF(? IS NULL, cast, ?), " +
+                    "description = IF(? IS NULL, description, ?), " +
+                    "rating = IF(? IS NULL, rating, ?), " +
+                    "duration_min = IF(? IS NULL, duration_min, ?) WHERE id = ?";
 
             try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
 
@@ -246,14 +253,14 @@ public class MySQLConnect {
 
     /**
      * Deletes a movie with the given title and release_date combination
-     * @param title title of the movie VARCHAR(128)
+     * @param id id of the movie INT
      */
-    public void deleteMovie(String title) {
-        String query = "DELETE FROM movie WHERE title = ?";
+    public void deleteMovie(int id) {
+        String query = "DELETE FROM movie WHERE id = ?";
 
         System.out.println("Deleting movie...");
         try (PreparedStatement preparedStatement = con.prepareStatement(query)){
-            preparedStatement.setString(1, title);
+            preparedStatement.setInt(1, id);
             int result = preparedStatement.executeUpdate();
 
             if (result > 0) {
@@ -582,6 +589,37 @@ public class MySQLConnect {
             }
         } catch (SQLException e) {e.printStackTrace();}
         return resultSetObject;
+    }
+
+    /**
+     * Executes an DELETE on the screening table with the given parameters.
+     * @param movie_id Id of the inserted movie FK of movie int(11).
+     * @param auditorium_id Id of the auditorium having the screening FK of auditorium int(11).
+     * Must provide all two parameters in order to delete specific screening, screening removal will be used to update existing screening. One movie can be screened
+     * once a day, in the same auditorium so in deleting by the movie_id and auditorium_id and without an exact timestamp it deletes the screening on that day.
+     */
+    public void deleteScreening (Object movie_id, Object auditorium_id, Timestamp timestamp) {
+        String query = "DELETE FROM screening WHERE (? IS NULL OR ? = movie_id) AND (? IS NULL OR ? = auditorium_id) AND (? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 22 HOUR)))";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setObject(1, movie_id);
+            preparedStatement.setObject(2, movie_id);
+            preparedStatement.setObject(3, auditorium_id);
+            preparedStatement.setObject(4, auditorium_id);
+            preparedStatement.setTimestamp(5, timestamp);
+            preparedStatement.setTimestamp(6, timestamp);
+            preparedStatement.setTimestamp(7, timestamp);
+
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Screening was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     //**************************
