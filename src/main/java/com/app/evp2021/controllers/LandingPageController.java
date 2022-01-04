@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class LandingPageController{
     @FXML private VBox movie_holder;
@@ -105,12 +106,6 @@ public class LandingPageController{
     }
 
     @FXML
-    private void onScreeningCheckBoxClicked(MouseEvent event) {
-        movieInputsController.fillScreeningTimes();
-    }
-
-
-    @FXML
     void logoutAdmin(MouseEvent event) throws Exception{
         UserSession.getSession().logout();
         LandingPage.refresh();
@@ -124,8 +119,17 @@ public class LandingPageController{
     }
 
     @FXML
-    void deleteMovie(MouseEvent event) {
-
+    void deleteMovie(MouseEvent event) throws Exception {
+        try {
+            MySQLConnect connection = new MySQLConnect();
+            connection.establishConnection();
+            connection.deleteScreening(editMovieId, null, null);
+            connection.deleteMovie(editMovieId);
+        } catch (SQLException err){
+            err.printStackTrace();
+        } finally {
+            LandingPage.refresh();
+        }
     }
 
     @FXML
@@ -210,13 +214,13 @@ public class LandingPageController{
                     err.printStackTrace();
                 }
 
-                dbConnection.insertNewMovie(
+                int insertId = dbConnection.insertNewMovie(
                         (String) validationValues[0],
                         (String) validationValues[1],
                         (String) validationValues[2],
                         (String) validationValues[3],
                         (String) validationValues[4],
-                        (String) validationValues[6]
+                        (String) validationValues[5]
                 );
 
                 movieInputsController.closeInputFields();
@@ -233,6 +237,10 @@ public class LandingPageController{
                     err.printStackTrace();
                 }
 
+                for(int i = 0; i < 6; i++) {
+                    System.out.println(validationValues[i]);
+                }
+
                 dbConnection.updateMovie(
                         editMovieId,
                         (String) validationValues[0],
@@ -240,7 +248,7 @@ public class LandingPageController{
                         (String) validationValues[2],
                         (String) validationValues[3],
                         (String) validationValues[4],
-                        (String) validationValues[6]
+                        (String) validationValues[5]
                 );
 
                 movieInputsController.closeInputFields();
@@ -317,11 +325,9 @@ public class LandingPageController{
     //set up initial things
     public void initializeAdminView() throws Exception {
         if(movieInputsController == null) {
-            screening_day_boxes = new CheckBox[]{check_1, check_2, check_3, check_4, check_5, check_6, check_7};
-            screening_day_times = new ChoiceBox[]{choice_1, choice_2, choice_3, choice_4, choice_5, choice_6, choice_7};
-            Object[] inputFields = {movie_title_input, director_input, cast_input, description_input, rating_drop, movie_room, duration_input, screening_day_boxes, screening_day_times};
+            Object[] inputFields = {movie_title_input, director_input, cast_input, description_input, rating_drop, duration_input};
             try {
-                movieInputsController = new MovieInputsController(movie_inputs, inputFields, input_title, save_movie, delete_movie, fromToDate, screening_holder_grid);
+                movieInputsController = new MovieInputsController(movie_inputs, inputFields, input_title, save_movie, delete_movie);
             }catch (Exception err){
                 err.printStackTrace();
             }
