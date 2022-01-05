@@ -23,3 +23,5 @@ Csapattagok:
 📜 [Weboldal](http://zsoltgombocz.web.elte.hu/EVP/)
 
 🖥️ [GD Szoftverek összehasonlítása](https://docs.google.com/document/d/1s8aZLjhlIdZWnpkSlG8ZHot3lrOqgP_GVSfPCtMIfyM/edit)
+
+[Javadoc]()
