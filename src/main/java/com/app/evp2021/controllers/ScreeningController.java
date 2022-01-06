@@ -24,7 +24,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
+/**
+ * Screening window controller.
+ */
 public class ScreeningController {
     @FXML AnchorPane screening;
     @FXML Button next_btn;
@@ -51,7 +53,10 @@ public class ScreeningController {
 
     private String selectedTime = "";
     private Stage parentStage;
-
+    /**
+     * Next button = Step forward
+     * @param event
+     */
     @FXML void onNextButtonClicked(MouseEvent event) {
         if(this.stepCount <= 4) {
             this.stepCount++;
@@ -59,7 +64,10 @@ public class ScreeningController {
 
         setStep(this.stepCount);
     }
-
+    /**
+     * Back button = Step backward
+     * @param event
+     */
     @FXML void onBackButtonClicked(MouseEvent event) {
         if(this.stepCount >= 2 && this.stepCount <= 4) {
             this.stepCount--;
@@ -67,14 +75,20 @@ public class ScreeningController {
 
         setStep(this.stepCount);
     }
-
+    /**
+     * Hide all the boxes.
+     */
     private void hideAllBox(){
         step1_box.setVisible(false);
         step2_box.setVisible(false);
         step3_box.setVisible(false);
         step4_box.setVisible(false);
     }
-
+    /**
+     * Initialize before showing the window.
+     * @param auditoriumId Id of the auditorium.
+     * @param parentStage Parent of the window stage.
+     */
     public void initialize(int auditoriumId, Stage parentStage) {
         this.circles = new Circle[]{circle1, circle2, circle3, circle4};
         this.lines = new Line[]{line1, line2, line3};
@@ -83,7 +97,10 @@ public class ScreeningController {
         this.parentStage = parentStage;
         setStep(this.stepCount);
     }
-
+    /**
+     * Calls the corresponding function based on the argument.
+     * @param i number of the xth step
+     */
     private void setStep(int i) {
         switch (i) {
             case 1:
@@ -103,7 +120,9 @@ public class ScreeningController {
                 break;
         }
     }
-
+    /**
+     * Saves the screening of an auditorium.
+     */
     private void saveScreening() {
         try{
             MySQLConnect dbConnection = new MySQLConnect();
@@ -117,7 +136,10 @@ public class ScreeningController {
 
         parentStage.close();
     }
-
+    /**
+     * Switch between next and finish button.
+     * @param toggle True / False
+     */
     private void setButtonToFinish(boolean toggle){
         if(toggle) {
             next_btn.setDisable(false);
@@ -130,7 +152,9 @@ public class ScreeningController {
             next_btn.getStyleClass().add("btn-primary");
         }
     }
-
+    /**
+     * Shows summary of the selected data.
+     */
     private void step4() {
         this.setButtonToFinish(true);
         fillToStep(4);
@@ -150,7 +174,9 @@ public class ScreeningController {
         step4_date.setText(this.selectedDate.toString());
         step4_time.setText(this.selectedTime);
     }
-
+    /**
+     * Generates date times to the movies based on previous screenings.
+     */
     private void step3(){
         this.setButtonToFinish(false);
         fillToStep(3);
@@ -179,7 +205,9 @@ public class ScreeningController {
             setSelectedTime(this.selectedTime);
         }
     }
-
+    /**
+     * Generates the date times for the movies.
+     */
     private void generateIdealSchedule(Object[][] resultScreenings) {
         MySQLConnect dbCon = new MySQLConnect();
         try{
@@ -212,7 +240,9 @@ public class ScreeningController {
             error.printStackTrace();
         }
     }
-
+    /**
+     * Generates the date times for the movies at each 30 min.
+     */
     private void generateEmptySchedule() {
         if(step3_time_list.getChildren().size() == 26) {
             step3_time_list.getChildren().clear();
@@ -248,7 +278,9 @@ public class ScreeningController {
             this.setSelectedTime(this.selectedTime);
         }
     }
-
+    /**
+     * Adds a button to the scroll pane in step3.
+     */
     private void addTimeToSchedule(String time) {
         Button timeButton = new Button(time);
         timeButton.getStyleClass().add("btn");
@@ -262,7 +294,9 @@ public class ScreeningController {
         });
         step3_time_list.getChildren().add(timeButton);
     }
-
+    /**
+     * Generates date picker.
+     */
     private void step2() {
         this.setButtonToFinish(false);
         fillToStep(2);
@@ -294,7 +328,9 @@ public class ScreeningController {
             next_btn.setDisable(false);
         }
     }
-
+    /**
+     * List all movies.
+     */
     private void step1() {
         this.setButtonToFinish(false);
         fillToStep(1);
@@ -337,7 +373,11 @@ public class ScreeningController {
             setSelectedMovie(this.selectedMovieNodeId, this.selectedMovieId);
         }
     }
-
+    /**
+     * Saves selected movies.
+     * @param nodeId Index of the children element in scroll pane.
+     * @param movieId Id of the movies.
+     */
     private void setSelectedMovie(int nodeId, int movieId) {
         if(this.selectedMovieNodeId != -1 && this.selectedMovieId != -1) {
             Button oldButton = (Button) step1_movie_list.getChildren().get(this.selectedMovieNodeId);
@@ -355,7 +395,10 @@ public class ScreeningController {
             next_btn.setDisable(false);
         }
     }
-
+    /**
+     * Saves selected time.
+     * @param time Date time of the movies.
+     */
     private void setSelectedTime(String time) {
         if(this.selectedTime != "") {
             for(Node element : step3_time_list.getChildren()){
@@ -378,7 +421,10 @@ public class ScreeningController {
             next_btn.setDisable(false);
         }
     }
-
+    /**
+     * Indicates the amount of steps.
+     * @param step Step.
+     */
     private void fillToStep(int step) {
         Color primary = Color.web("#337ab7");
 

@@ -12,6 +12,10 @@ public class ScreeningSetup {
     private static Scene scene = null;
     private static Stage modal = null;
 
+    /**
+     * Create screening window.
+     * @param screeningView Node from fxml.
+     */
     public static void createWindow(Node screeningView) throws Exception
     {
         scene = new Scene((Parent) screeningView);
@@ -30,7 +34,9 @@ public class ScreeningSetup {
 
         modal.setScene(scene);
     }
-
+    /**
+     * Display created screening window.
+     */
     public static void display() {
         modal.showAndWait();
     }
