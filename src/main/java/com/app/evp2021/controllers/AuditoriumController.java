@@ -1,8 +1,8 @@
 package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
+import com.app.evp2021.views.ScreeningSetup;
 import com.app.sql.MySQLConnect;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -10,8 +10,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -20,9 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
 
 
 public class AuditoriumController {
@@ -35,6 +31,7 @@ public class AuditoriumController {
     @FXML private GridPane rootGridPane = null;
     @FXML private AnchorPane auditorium;
     @FXML private Button audit_btn;
+    @FXML private Button audit_btn1;
     @FXML private String title = null;
 
     @FXML private int _button_action = 0;
@@ -214,6 +211,8 @@ public class AuditoriumController {
     void setButtonText(String text){
         audit_btn.setText(text);
     }
+    void setSecondButtonText(String text) { audit_btn1.setText(text); }
+    void setSecondButtonVisible(boolean toggle) { audit_btn1.setVisible(toggle); }
 
     void showSelf(boolean b){
         auditorium.setVisible(b);
@@ -222,11 +221,11 @@ public class AuditoriumController {
     void setActionButtonType(int actionId) {
         switch (actionId) {
             case 0: _button_action = 0; break;
-            case 1:
+            case 1: //terem letrohzas
                 _button_action = 1;
                 audit_btn.setDisable(false);
                 break;
-            case 2:
+            case 2: //terem torles
                 _button_action = 2;
                 audit_btn.setDisable(false);
                 removeClass(audit_btn, "btn-primary");
@@ -284,6 +283,24 @@ public class AuditoriumController {
             audit_btn.setDisable(true);
             parentStage.close();
         }
+    }
+
+    @FXML
+    void onSecondButtonClicked() throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-setup-view.fxml"));
+        AnchorPane rootAnchorPane = fxmlLoader.load();
+
+        ScreeningSetup.createWindow(rootAnchorPane);
+        ScreeningController Controller = fxmlLoader.getController();
+
+        Controller.initialize((Integer) actionParams[0], ScreeningSetup.getStage());
+
+        ScreeningSetup.display();
+
+
+
+
+
     }
 
     public void setActionButtonParams(Object[] params) {
