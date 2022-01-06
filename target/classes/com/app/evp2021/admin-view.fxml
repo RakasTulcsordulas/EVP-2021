@@ -120,7 +120,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" VBox.vgrow="ALWAYS">
+                        <VBox id="movie_inputs" fx:id="movie_inputs" alignment="TOP_CENTER" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1px;" visible="false" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="TOP_CENTER" maxWidth="600.0">
                                  <children>
