@@ -73,6 +73,7 @@ public class LandingPage extends Application {
         }
 
         DatePicker datePicker = (DatePicker) active_scene.lookup("#datepicker");
+        datePicker.setShowWeekNumbers(false);
         DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
 
         HBox dateHolderHbox = (HBox) active_scene.lookup("#dateholder");
