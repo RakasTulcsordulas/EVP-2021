@@ -171,6 +171,9 @@ public class LandingPageController{
         Controller.setActionButtonType(2);
         Controller.setActionButtonParams(new Object[]{id});
 
+        Controller.setSecondButtonText("Műsor beállítás");
+        Controller.setSecondButtonVisible(true);
+
         Controller.toggleLegend(false);
 
         MySQLConnect dbConnection = new MySQLConnect();
