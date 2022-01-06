@@ -27,7 +27,14 @@ public class MovieInputsController {
     private final Text inputSectionTitle;
     private final Button confirmButton;
     private final Button deleteButton;
-
+    /**
+     * Setter of the movie input controller.
+     * @param inputHolder View box, contains the elements.
+     * @param inputFields An array of objects.
+     * @param inputSectionTitle Text input.
+     * @param confirmButton Button of confirmation.
+     * @param deleteButton Button of deleting.
+     */
     public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton) throws Exception {
         this.inputHolder = inputHolder;
         this.movieTitleInput = (TextField) inputFields[0];
@@ -41,7 +48,11 @@ public class MovieInputsController {
         this.deleteButton = deleteButton;
 
     }
-
+    /**
+     * Setter of the Tooltip.
+     * @param node View box, contains the elements.
+     * @param text String of texts.
+     */
     private Tooltip setTooltip(Node node, String text) {
         Tooltip tooltip = new Tooltip();
         tooltip.setShowDelay(Duration.millis(100));
@@ -53,20 +64,31 @@ public class MovieInputsController {
 
         return tooltip;
     }
-
+    /**
+     * Destructor of the Tooltip.
+     * @param node View box, contains the elements.
+     * @param tooltip An array of objects.
+     */
     private void removeTooltip(Node node, Tooltip tooltip) {
         Tooltip.uninstall(node, tooltip);
     }
-
+    /**
+     * Sets the visibility of the inputHolder.
+     * @param toggle Boolean.
+     */
     private void showInputFields(boolean toggle){
         inputHolder.setVisible(toggle);
     }
-
+    /**
+     * Close input fields.
+     */
     public void closeInputFields(){
         showInputFields(false);
         resetInputFields();
     }
-
+    /**
+     * Resets the input fields.
+     */
     private void resetInputFields() {
         movieTitleInput.setText("");
         movieDirectorInput.setText("");
@@ -76,7 +98,10 @@ public class MovieInputsController {
         setRatingsInDropdown(null);
         resetErrors();
     }
-
+    /**
+     * Sets the rating of the movies.
+     * @param rating Array of the ratings.
+     */
     private void setRatingsInDropdown(Object rating) {
         movieRatingDropdown.getItems().clear();
 
@@ -91,21 +116,28 @@ public class MovieInputsController {
             movieRatingDropdown.setValue(6);
         }
     }
-
+    /**
+     * Adds new movies.
+     */
     public void addNewMovie() {
         showInputFields(true);
         deleteButton.setDisable(true);
         resetInputFields();
         setUpInputFields();
     }
-
+    /**
+     * Editing existing movies.
+     * @param resultMovie Array of the result movies.
+     */
     public void editExistingMovie(Object[] resultMovie){
         showInputFields(true);
         resetInputFields();
         deleteButton.setDisable(false);
         setUpInputs(resultMovie[2], resultMovie[3], resultMovie[4], resultMovie[5], resultMovie[6], resultMovie[7]);
     }
-
+    /**
+     * Adds a new movie and initialize dropdown field.
+     */
     private void setUpInputFields() {
         setRatingsInDropdown(null);
 
@@ -114,7 +146,15 @@ public class MovieInputsController {
         confirmButton.setStyle("-fx-cursor: hand;");
         deleteButton.setStyle("-fx-cursor: none;");
     }
-
+    /**
+     * Editing existing movie and setup input fields from database.
+     * @param movieTitle Movies' title.
+     * @param movieDirectors Movies' directors.
+     * @param movieCast Movies' casts.
+     * @param movieDescription Movies' descriptions.
+     * @param movieRating Movies' ratings.
+     * @param movieDuration Movies' durations.
+     */
     public void setUpInputs(Object movieTitle, Object movieDirectors, Object movieCast, Object movieDescription, Object movieRating, Object movieDuration) {
         inputSectionTitle.setText(movieTitle + " című film szerkesztése");
 
@@ -126,7 +166,9 @@ public class MovieInputsController {
         movieDescriptionInput.setText((movieDescription != null) ? movieDescription.toString() : "");
         movieDurationInput.setText((movieDuration != null) ? movieDuration.toString() : "");
     }
-
+    /**
+     * Resetting all the errors.
+     */
     private void resetErrors() {
         removeErrorClass(movieTitleInput);
         removeErrorClass(movieDurationInput);
@@ -135,7 +177,10 @@ public class MovieInputsController {
         removeTooltip(movieTitleInput, tooltip);
         removeTooltip(movieDurationInput, tooltip);
     }
-
+    /**
+     * Adds an Error class to the node.
+     * @param node UI element.
+     */
     private void setErrorClass(Node node){
         if(node instanceof TextField && !(node.getStyleClass().contains("input-error"))){
             node.getStyleClass().add("input-error");
@@ -143,7 +188,10 @@ public class MovieInputsController {
             node.getStyleClass().add("choice-error");
         }
     }
-
+    /**
+     * Removes an Error class to the node.
+     * @param node UI element.
+     */
     private void removeErrorClass(Node node) {
         if(node instanceof TextField && (node.getStyleClass().contains("input-error"))){
             node.getStyleClass().remove("input-error");
@@ -153,7 +201,7 @@ public class MovieInputsController {
     }
 
     /**
-     INPUT FIELD VALIDATIONS
+     * Input fields validations
      */
     private boolean checkInputs() {
         boolean errorFound = true;
@@ -196,7 +244,9 @@ public class MovieInputsController {
 
         return errorFound;
     }
-
+    /**
+     * Gives back the database ready object.
+     */
     public Object[] validateInputFields() {
         if(checkInputs()){
                 Object[] returnValues;

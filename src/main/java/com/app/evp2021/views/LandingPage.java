@@ -32,6 +32,10 @@ public class LandingPage extends Application {
     private static LandingPageController active_controller = null;
 
     @Override
+    /**
+     * Entry point.
+     * @param stage Employee name.
+     */
     public void start(Stage stage) throws Exception{
         _stage = stage;
 
@@ -41,7 +45,10 @@ public class LandingPage extends Application {
 
         showStage(active_scene);
     }
-
+    /**
+     * Changes the scene.
+     * @param scene Scene that contains UI elements.
+     */
     public static void showStage (Scene scene) {
         _stage.setMinWidth(1124);
         _stage.setMinHeight(868);
@@ -56,12 +63,16 @@ public class LandingPage extends Application {
             }
         });
     }
-
+    /**
+     * Refresh the views(User / Admin).
+     */
     public static void refresh() throws Exception{
         boolean loggedIn = UserSession.getSession().getLoggedIn();
         if(loggedIn == true) { setLoggedInScene(); }else{ setLoggedOutScene(); }
     }
-
+    /**
+     * Sets the user scene.
+     */
     public static void setLoggedOutScene() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("landing-view.fxml"));
         _stage.setTitle("CinemApp - Főoldal");
@@ -87,7 +98,9 @@ public class LandingPage extends Application {
         active_scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
         active_controller = fxmlLoader.getController();
     }
-
+    /**
+     * Sets the admin scene.
+     */
     public static void setLoggedInScene() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("admin-view.fxml"));
         _stage.setTitle("CinemApp - Admin");
@@ -108,21 +121,28 @@ public class LandingPage extends Application {
         active_scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
         active_controller = fxmlLoader.getController();
 
-        getAuditoriums(active_scene);
-        getMovies(active_scene);
+        getAuditoriums();
+        getMovies();
         active_controller.initializeAdminView();
     }
-
-    private static void getAuditoriums(Scene sc) {
+    /**
+     * Calls the controller method.
+     */
+    private static void getAuditoriums() {
         active_controller.setAuditoriumsOnAdminView();
     }
-
-    private static void getMovies(Scene sc) {
+    /**
+     * Calls the controller method.
+     */
+    private static void getMovies() {
         active_controller.setMoviesOnAdminView();
     }
 
 
-
+    /**
+     * Sets the logo visible.
+     * @param b True / False.
+     */
     public static void setLogoVisible(boolean b) {
         try{
             HBox logoHolderHbox = (HBox) active_scene.lookup("#logo_holder");
@@ -132,7 +152,9 @@ public class LandingPage extends Application {
         }
 
     }
-
+    /**
+     * Checks SQL connection.
+     */
     public static void checkConnection() {
         try {
             MySQLConnect dbConnection = new MySQLConnect();

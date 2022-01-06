@@ -41,7 +41,11 @@ public class AuditoriumController {
     @FXML private Stage parentStage;
 
     @FXML private Object[] actionParams;
-
+    /**
+     * It generates auditorium rooms where you can reserve seats.
+     * @param addSeatClass It adds seats to the auditorium.
+     * @param startHidden All seats starts hidden as default.
+     */
     void createAuditorium(boolean addSeatClass, boolean startHidden) {
         rootGridPane = new GridPane();
         rootGridPane.setHgap(12);
@@ -105,18 +109,29 @@ public class AuditoriumController {
         seat_holder.setTopAnchor(rootGridPane, 0.0);
         seat_holder.setBottomAnchor(rootGridPane, 0.0);
     }
-
+    /**
+     * Setter of the parent stage.
+     * @param parentStage It adds seats to the auditorium.
+     */
     void setParentStage(Stage parentStage) {
         this.parentStage = parentStage;
     }
-
+    /**
+     * It generates auditorium rooms' seats into an array.
+     * @param seats It adds seats to the auditorium.
+     * @return An array of objects .
+     */
     void setAllSeat(Object[][] seats) throws Exception {
         for(int i = 1; i < seats.length; i++) {
             setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
         }
 
     }
-
+    /**
+     * It generates auditorium rooms' seats into an array.
+     * @param index It adds seats to the auditorium.
+     * @return An array of objects.
+     */
     private void paneClick(int index) {
         if(_button_action == 1) {
             try {
@@ -132,15 +147,26 @@ public class AuditoriumController {
             }
         }
     }
-
+    /**
+     * Sets the visibility of the legends.
+     * @param t Boolean type, Visibility.
+     */
     void toggleLegend(boolean t) {
         legends.setVisible(t);
     }
-
+    /**
+     * Sets the title of the movie.
+     * @param s Movie title.
+     */
     void setTitle(String s){
         movie_title.setText(s);
     }
-
+    /**
+     * Sets the rows and columns of the auditorium(s).
+     * @param row Seat rows of the auditorium(s).
+     * @param col Seat column of the auditorium(s).
+     * @param status Checks the reservation status of the seats.
+     */
     void setSeat(int row, int col, int status) throws Exception{
         if(row <= 0 || col <= 0) throw new Exception("0-nál nagyobb szám elvárt!");
 
@@ -166,7 +192,11 @@ public class AuditoriumController {
                 break;
         }
     }
-
+    /**
+     * Sets the title of the movie.
+     * @param index Determines the number of seats for each auditorium.
+     * @param status Checks the reservation status of the seats.
+     */
     void setSeat(int index, int status) throws Exception{
         if(index <= 0 || index > 342) throw new Exception("0-nál nagyobb szám elvárt!");
 
@@ -191,23 +221,39 @@ public class AuditoriumController {
                 break;
         }
     }
-
+    /**
+     * Creates a Node, if it's not existing.
+     * @param node
+     * @param className
+     */
     private void addClass(Node node, String className){
         if(!node.getStyleClass().contains(className)){
             node.getStyleClass().add(className);
         }
     }
-
+    /**
+     * Removes a Node, if it's existing.
+     * @param node
+     * @param className
+     */
     private void removeClass(Node node, String className){
         if(node.getStyleClass().contains(className)){
             node.getStyleClass().remove(className);
         }
     }
-
+    /**
+     * Returns the type of the class.
+     * @param node
+     * @param className
+     * @return
+     */
     private boolean hasClass(Node node, String className){
         return node.getStyleClass().contains(className);
     }
-
+    /**
+     * Sets the button texts in the auditorium(s).
+     * @param text String of the button(s).
+     */
     void setButtonText(String text){
         audit_btn.setText(text);
     }
@@ -217,7 +263,10 @@ public class AuditoriumController {
     void showSelf(boolean b){
         auditorium.setVisible(b);
     }
-
+    /**
+     * Sets the buttons' types.
+     * @param actionId Integer.
+     */
     void setActionButtonType(int actionId) {
         switch (actionId) {
             case 0: _button_action = 0; break;
@@ -233,7 +282,10 @@ public class AuditoriumController {
                 break;
         }
     }
-
+    /**
+     * Sets the buttons' types.
+     * @param event MouseEvent.
+     */
     @FXML
     void onActionButtonClicked(MouseEvent event) {
         if(_button_action == 0){
@@ -283,24 +335,6 @@ public class AuditoriumController {
             audit_btn.setDisable(true);
             parentStage.close();
         }
-    }
-
-    @FXML
-    void onSecondButtonClicked() throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-setup-view.fxml"));
-        AnchorPane rootAnchorPane = fxmlLoader.load();
-
-        ScreeningSetup.createWindow(rootAnchorPane);
-        ScreeningController Controller = fxmlLoader.getController();
-
-        Controller.initialize((Integer) actionParams[0], ScreeningSetup.getStage());
-
-        ScreeningSetup.display();
-
-
-
-
-
     }
 
     public void setActionButtonParams(Object[] params) {

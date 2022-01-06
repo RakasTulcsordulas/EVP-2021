@@ -60,11 +60,16 @@ public class LandingPageController{
     private MovieInputsController movieInputsController = null;
 
 
-
+    /**
+     * Sets the buttons' parameters.
+     * @param event ActionEvent.
+     */
     @FXML private void onActionPerformed(ActionEvent event) {
         current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
     }
-
+    /**
+     * Lists all the currently available movies.
+     */
     @FXML private void listMovies() {
         /**
          * LISTAZAS UTAN, UGYE MEGVAN AZ ADOTT SCREENING ID, MELYIK TEREM, FILM ID, UTANA HA NYOMUNK A FILMRE AKKOR TEREMID ALAPJAN
@@ -97,6 +102,9 @@ public class LandingPageController{
     }
 
     @FXML
+    /**
+     * Opens up the admin interface.
+     */
     private void openAdminModal() {
         try {
             LoginModal.displayWindow();
@@ -106,6 +114,10 @@ public class LandingPageController{
     }
 
     @FXML
+    /**
+     * Log out the admin interface.
+     * @param MouseEvent event
+     */
     void logoutAdmin(MouseEvent event) throws Exception{
         UserSession.getSession().logout();
         LandingPage.refresh();
@@ -113,12 +125,20 @@ public class LandingPageController{
 
 
     @FXML
+    /**
+     * Adds a new movie to the list.
+     * @param MouseEvent event
+     */
     void addMovie(MouseEvent event) {
         movieInputsController.addNewMovie();
         new_movie = true;
     }
 
     @FXML
+    /**
+     * Deletes a movie from the list.
+     * @param MouseEvent event
+     */
     void deleteMovie(MouseEvent event) throws Exception {
         try {
             MySQLConnect connection = new MySQLConnect();
@@ -133,11 +153,19 @@ public class LandingPageController{
     }
 
     @FXML
+    /**
+     * Refreshes the admin interface.
+     * @param MouseEvent event
+     */
     void refreshAdminView(MouseEvent event) throws Exception {
         LandingPage.refresh();
     }
 
     @FXML
+    /**
+     * Creates a new auditorium.
+     * @param MouseEvent event
+     */
     void addNewAuditorium(MouseEvent event) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
         AnchorPane rootAnchorPane = fxmlLoader.load();
@@ -159,7 +187,10 @@ public class LandingPageController{
         LandingPage.refresh();
 
     }
-
+    /**
+     * Fetches the seats from the database and creates a display of them.
+     * @param id event
+     */
     public static void showAuditorium(int id) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
         AnchorPane root = fxmlLoader.load();
@@ -198,6 +229,10 @@ public class LandingPageController{
     }
 
     @FXML
+    /**
+     * Disables the displays of the movie controllers.
+     * @param MouseEvent event
+     */
     void closeInputs(MouseEvent event) {
         movieInputsController.closeInputFields();
     }
@@ -205,6 +240,10 @@ public class LandingPageController{
 
 
     @FXML
+    /**
+     * Saves movies to the database.
+     * @param MouseEvent event
+     */
     void saveMovie(MouseEvent event) throws Exception {
         if(new_movie){
             Object[] validationValues = movieInputsController.validateInputFields();
@@ -259,7 +298,9 @@ public class LandingPageController{
             }
         }
     }
-
+    /**
+     * Shows the movies from the database at the admin interface.
+     */
     public void setMoviesOnAdminView() {
         Object[][] resultMovies = null;
         MySQLConnect dbConnection = new MySQLConnect();
@@ -294,7 +335,9 @@ public class LandingPageController{
             err.printStackTrace();
         }
     }
-
+    /**
+     * Set the auditoriums on the admin view.
+     */
     public void setAuditoriumsOnAdminView() {
         Object[][] resultAuditoriums = null;
         MySQLConnect dbConnection = new MySQLConnect();
@@ -325,6 +368,9 @@ public class LandingPageController{
             err.printStackTrace();
         }
     }
+    /**
+     * Initializes the admin view.
+     */
     //set up initial things
     public void initializeAdminView() throws Exception {
         if(movieInputsController == null) {

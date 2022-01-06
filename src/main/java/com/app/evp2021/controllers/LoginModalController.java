@@ -15,6 +15,9 @@ public class LoginModalController {
     @FXML private Text errormsg;
 
     @FXML
+    /**
+     * Username and password verification.
+     */
     private void onLoginAttempt() throws Exception{
         if(username.getText().isEmpty() || psw.getText().isEmpty()) {
             errormsg.setText("Minden mező kitöltése kötelező!");

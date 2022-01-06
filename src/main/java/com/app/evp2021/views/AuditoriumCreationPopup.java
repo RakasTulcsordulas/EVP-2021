@@ -19,12 +19,17 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-
+/**
+ * Class that handles the PopUp of the auditorium.
+ */
 public class AuditoriumCreationPopup {
 
     private static Scene scene = null;
     private static Stage modal = null;
-
+    /**
+     * Creates window with Node that contains generated grid.
+     * @param auditoriumView Fix grid.
+     */
     public static void createWindow(Node auditoriumView) throws Exception
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("popup-audit-creator.fxml"));
@@ -47,15 +52,22 @@ public class AuditoriumCreationPopup {
         attachAuditorium(auditoriumView);
 
     }
-
+    /**
+     * Display window.
+     */
     public static void display() {
         modal.showAndWait();
     }
-
+    /**
+     * Returns stage.
+     */
     public Stage getStage() {
         return modal;
     }
-
+    /**
+     * Attaches the node to the window.
+     * @param auditoriumView Fix grid.
+     */
     private static void attachAuditorium(Node auditoriumView){
         AnchorPane auditoriumHolder = (AnchorPane) scene.lookup("#holder");
 

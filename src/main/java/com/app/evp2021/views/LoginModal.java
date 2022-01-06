@@ -13,12 +13,17 @@ import javafx.stage.Modality;
 
 import javafx.stage.Stage;
 
-
+/**
+ * Create login window.
+ */
 public class LoginModal {
 
         private static Scene scene = null;
         private static Stage modal = null;
 
+    /**
+     * Creates login display view from fxml.
+     */
         public static void displayWindow() throws Exception
         {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-modal.fxml"));
@@ -40,7 +45,9 @@ public class LoginModal {
             modal.setScene(scene);
             modal.showAndWait();
         }
-
+    /**
+     * Closes the window.
+     */
         public static void closeWindow() {
             if(modal != null) {
                 modal.close();
