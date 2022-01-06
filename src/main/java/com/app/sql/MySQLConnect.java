@@ -558,7 +558,7 @@ public class MySQLConnect {
                 "AND " +
                 "(? IS NULL OR ? = auditorium_id) " +
                 "AND " +
-                "(? IS NULL OR ? = screening_start)";
+                "(? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 22 HOUR)))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_READ_ONLY)) {
@@ -570,6 +570,7 @@ public class MySQLConnect {
             preparedStatement.setObject(6, auditorium_id);
             preparedStatement.setTimestamp(7, screening_start);
             preparedStatement.setTimestamp(8, screening_start);
+            preparedStatement.setTimestamp(9, screening_start);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.last();
