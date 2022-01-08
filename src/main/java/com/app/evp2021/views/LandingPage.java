@@ -21,9 +21,6 @@ import javafx.stage.WindowEvent;
 
 import java.sql.SQLException;
 
-/**
- * This is the Main page/window.
- */
 public class LandingPage extends Application {
 
     public static void main(String[] args) {

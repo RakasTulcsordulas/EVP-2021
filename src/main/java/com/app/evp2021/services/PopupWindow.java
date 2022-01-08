@@ -10,22 +10,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
+/*
  * Generic class for handling popup windows.
  */
-
 public class PopupWindow {
     private Scene scene = null;
     private Stage window = null;
     private TYPE type = null;
     private int onCloseValue = -1;
 
-		/**
+		/*
 		 * Basic types of the popup windows.
 		 */
     public enum TYPE {PRIMARY, SUCCESS, ERROR, YESNO};
 
-		/**
+		/*
 		 * Setter of the popup window.
 		 * @param type enum {PRIMARY, SUCCESS, ERROR, YESNO}
 		 * @param windowTitle display title of the window
@@ -50,11 +49,11 @@ public class PopupWindow {
         }
     }
 
-		/**
+		/*
 		 * Setter for primary window
 		 * @param windowTitle display title of the window
 		 * @param message string body of the popup window
-         * @param reservationInfo can only be given on TYPE PRIMARY
+     * @param reservationInfo can only be given on TYPE PRIMARY
 		 */
     private void createPrimaryWindow(String windowTitle, String message, Object[] reservationInfo) {
         loadFXML("primary-popup.fxml");
@@ -73,7 +72,7 @@ public class PopupWindow {
         okButton.setOnAction(e -> closeWindow());
     }
 
-		/**
+		/*
 		 * Setter for Success Window
 		 * @param windowTitle display title of the window
 		 * @param message string body of the popup window
@@ -93,7 +92,7 @@ public class PopupWindow {
         okButton.setOnAction(e -> closeWindow());
     }
 
-    /**
+    /*
 		 * Setter for Error Window
 		 * @param windowTitle display title of the window
 		 * @param message string body of the popup window
@@ -113,7 +112,7 @@ public class PopupWindow {
         okButton.setOnAction(e -> closeWindow());
     }
 
-    /**
+    /*
 		 * Setter for YesNo Window
 		 * @param windowTitle display title of the window
 		 * @param message string body of the popup window
@@ -136,7 +135,7 @@ public class PopupWindow {
         noButton.setOnAction(e -> { onCloseValue = 0; closeWindow(); });
     }
 
-		/**
+		/*
 		 * Setter for Message body
 		 * @param message content of the message
 		 */
@@ -145,7 +144,7 @@ public class PopupWindow {
         messageField.setText(message);
     }
 
-		/**
+		/*
 		 * Loads FXML element
 		 * @param fxmlFileName name of the element to be loaded
 		 */
@@ -163,7 +162,7 @@ public class PopupWindow {
         }
     }
 
-		/**
+		/*
 		 * Shows the display window
 		 */
     public int displayWindow()
@@ -173,7 +172,7 @@ public class PopupWindow {
         return onCloseValue;
     }
 
-		/**
+		/* 
 		 * Closes the display window
 		 */
     public void closeWindow() {
