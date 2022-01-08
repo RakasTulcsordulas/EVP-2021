@@ -24,4 +24,4 @@ Csapattagok:
 
 🖥️ [GD Szoftverek összehasonlítása](https://docs.google.com/document/d/1s8aZLjhlIdZWnpkSlG8ZHot3lrOqgP_GVSfPCtMIfyM/edit)
 
-📖 [Javadoc]()
+📖 [Javadoc](https://zsoltgombocz.web.elte.hu/EVP/javadoc/)
