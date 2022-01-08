@@ -7,13 +7,16 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Creates and displays screening window.
+ */
 public class ScreeningSetup {
 
     private static Scene scene = null;
     private static Stage modal = null;
 
     /**
-     * Create screening window.
+     * Creates screening window.
      * @param screeningView Node from fxml.
      */
     public static void createWindow(Node screeningView) throws Exception

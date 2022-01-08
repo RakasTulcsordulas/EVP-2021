@@ -20,7 +20,9 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-
+/**
+ * Controls the auditoriums.
+ */
 public class AuditoriumController {
 
 

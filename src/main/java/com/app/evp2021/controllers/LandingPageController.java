@@ -18,6 +18,9 @@ import javafx.scene.text.Text;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * Controls the Landing page (Main page/window)
+ */
 public class LandingPageController{
     @FXML private VBox movie_holder;
 
