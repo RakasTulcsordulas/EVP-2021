@@ -14,7 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Create login window.
+ * Creates login window.
  */
 public class LoginModal {
 
