@@ -22,11 +22,11 @@
 
    <children>
       <HBox alignment="CENTER" prefHeight="768.0" prefWidth="661.0" style="-fx-background-color: #8a898c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <VBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="125.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+      <VBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="125.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="54.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="show_screening_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onScreeningShowButtonClicked" prefHeight="45.0" prefWidth="95.0" style="-fx-focus-color: transparent;" text="Műsor" textAlignment="CENTER">
+                  <Button fx:id="back_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent; -fx-cursor: hand;" text="Vissza" textAlignment="CENTER">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-primary" />
@@ -35,27 +35,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-               </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
-         </children>
-      </VBox>
-      <VBox alignment="CENTER_LEFT" layoutX="189.0" maxHeight="60.0" prefHeight="60.0" prefWidth="411.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="189.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Button fx:id="back_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent;" text="Vissza" textAlignment="CENTER">
-                     <styleClass>
-                        <String fx:value="btn" />
-                        <String fx:value="btn-primary" />
-                     </styleClass>
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="next_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onMouseClicked="#onNextButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent;" text="Tovább" textAlignment="CENTER">
+                  <Button fx:id="next_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onNextButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent; -fx-cursor: hand;" text="Tovább" textAlignment="CENTER">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-primary" />

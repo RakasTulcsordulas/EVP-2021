@@ -22,11 +22,11 @@
 
    <children>
       <HBox alignment="CENTER" prefHeight="768.0" prefWidth="661.0" style="-fx-background-color: #8a898c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <VBox alignment="CENTER" maxHeight="50.0" prefHeight="68.0" prefWidth="468.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="54.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="back_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent;" text="Vissza" textAlignment="CENTER">
+                  <Button fx:id="back_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onBackButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent; -fx-cursor: hand;" text="Vissza" textAlignment="CENTER">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-primary" />
@@ -35,7 +35,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="next_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onMouseClicked="#onNextButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent;" text="Tovább" textAlignment="CENTER">
+                  <Button fx:id="next_btn" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onNextButtonClicked" prefHeight="18.0" prefWidth="91.0" style="-fx-focus-color: transparent; -fx-cursor: hand;" text="Tovább" textAlignment="CENTER">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="btn-primary" />
@@ -209,7 +209,7 @@
             </ScrollPane>
          </children>
       </VBox>
-      <VBox fx:id="step4_box" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="365.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+      <VBox fx:id="step4_box" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="365.0" prefWidth="600.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
          <padding>
             <Insets bottom="10.0" left="100.0" right="100.0" top="10.0" />
          </padding>
