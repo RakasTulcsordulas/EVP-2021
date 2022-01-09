@@ -321,7 +321,7 @@ public class AuditoriumController {
             audit_btn.setDisable(true);
             parentStage.close();
 
-        }else if(_button_action == 2 && (actionParams[0] != null &&  (Integer) actionParams[0] == actionParams[0])) {
+        }else if(_button_action == 2 && actionParams[0] != null) {
             MySQLConnect dbConnection = null;
             try{
                 dbConnection = new MySQLConnect();
@@ -337,6 +337,19 @@ public class AuditoriumController {
             audit_btn.setDisable(true);
             parentStage.close();
         }
+    }
+
+    @FXML
+    void onSecondButtonClicked() throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-setup-view.fxml"));
+        AnchorPane rootAnchorPane = fxmlLoader.load();
+
+        ScreeningSetup.createWindow(rootAnchorPane);
+        ScreeningController Controller = fxmlLoader.getController();
+
+        Controller.initialize((Integer) actionParams[0], ScreeningSetup.getStage());
+
+        ScreeningSetup.display();
     }
 
     public void setActionButtonParams(Object[] params) {
