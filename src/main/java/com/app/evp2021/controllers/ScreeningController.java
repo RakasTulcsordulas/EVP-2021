@@ -8,10 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -24,6 +21,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Screening window controller.
  */
@@ -161,12 +162,17 @@ public class ScreeningController {
         this.hideAllBox();
         step4_box.setVisible(true);
 
-        step4_auditorium.setText("T" + this.selectedAuditoriumId);
         try {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
             Object[][] movie = dbConnection.getMovie(this.selectedMovieId, null, null);
             step4_title.setText((String) movie[1][2]);
+
+            String auditoriumName = dbConnection.getAuditorium(this.selectedAuditoriumId)[1][2].toString();
+
+            step4_auditorium.setText(auditoriumName);
+
+            dbConnection.closeConnection();
         }catch (SQLException error) {
             error.printStackTrace();
         }
