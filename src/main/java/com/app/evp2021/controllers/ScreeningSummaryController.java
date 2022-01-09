@@ -97,7 +97,7 @@ public class ScreeningSummaryController {
                     Tab tab = new Tab(auditoriumName, tabBody);
                     tab.setStyle("-fx-focus-color: transparent;");
                     tab.getContent().setFocusTraversable(false);
-                    
+
                     screening_tabpane.setFocusTraversable(false);
                     screening_tabpane.getTabs().add(tab);
                 }
