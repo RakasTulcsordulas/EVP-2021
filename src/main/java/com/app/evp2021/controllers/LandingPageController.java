@@ -3,9 +3,7 @@ package com.app.evp2021.controllers;
 import com.app.evp2021.Main;
 import com.app.evp2021.services.MovieInputsController;
 import com.app.evp2021.services.UserSession;
-import com.app.evp2021.views.AuditoriumCreationPopup;
-import com.app.evp2021.views.LandingPage;
-import com.app.evp2021.views.LoginModal;
+import com.app.evp2021.views.*;
 import com.app.sql.MySQLConnect;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -62,6 +60,14 @@ public class LandingPageController{
     private int editMovieId;
     private MovieInputsController movieInputsController = null;
 
+    @FXML private void openScreeningWindow(MouseEvent event) throws Exception {
+
+        ScreeningSummaryController Controller = ScreeningSummary.createWindow();
+
+        //Controller.initialize();
+
+        ScreeningSummary.display();
+    }
 
     /**
      * Sets the buttons' parameters.
