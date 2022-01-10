@@ -1,6 +1,8 @@
 package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
+import com.app.evp2021.services.PopupWindow;
+import com.app.evp2021.services.UserSession;
 import com.app.evp2021.views.ScreeningSetup;
 import com.app.sql.MySQLConnect;
 import javafx.fxml.FXML;
@@ -19,6 +21,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controls the auditoriums.
@@ -43,6 +49,12 @@ public class AuditoriumController {
     @FXML private Stage parentStage;
 
     @FXML private Object[] actionParams;
+
+    @FXML private Text reserved_text;
+
+    @FXML private List<String> reservedSeats = new ArrayList<>();
+
+
     /**
      * It generates auditorium rooms where you can reserve seats.
      * @param addSeatClass It adds seats to the auditorium.
@@ -90,8 +102,10 @@ public class AuditoriumController {
                 }
 
                 int seatIndex = ((row)*19)+col;
+                int finalRow = row+1;
+                int finalCol = col;
                 seatPane.setOnMouseClicked(event ->  {
-                    paneClick(seatIndex);
+                    paneClick(seatIndex, finalRow, finalCol);
                 });
 
                 rootGridPane.add(seatPane, col, row);
@@ -127,14 +141,42 @@ public class AuditoriumController {
         for(int i = 1; i < seats.length; i++) {
             setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
         }
+    }
 
+    void setAllSeatBasedOnreservation(Object[][] seats, Object screeningId) throws Exception {
+        Object[][] reservedSeats = null;
+        try{
+            MySQLConnect dbConn = new MySQLConnect();
+            dbConn.establishConnection();
+
+           reservedSeats = dbConn.getSeatReserved(null, null, screeningId);
+        }catch (SQLException error) {
+            error.printStackTrace();
+        }
+
+        for(int i = 1; i < seats.length; i++) {
+            if(reservedSeats.length > 1) {
+                for(int j = 1; j < reservedSeats.length; j++) {
+                    int seatId = (int) seats[i][1];
+                    int reservedSeatId = (int) reservedSeats[j][2];
+                    if(seatId == reservedSeatId) {
+                        setSeat((Integer) seats[i][2], (Integer) seats[i][3], 1);
+                    }
+                    else{
+                        setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
+                    }
+                }
+            }else{
+                setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
+            }
+        }
     }
     /**
      * It generates auditorium rooms' seats into an array.
      * @param index It adds seats to the auditorium.
      * @return An array of objects.
      */
-    private void paneClick(int index) {
+    private void paneClick(int index, int row, int col) {
         if(_button_action == 1) {
             try {
                 StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
@@ -143,7 +185,25 @@ public class AuditoriumController {
                 }else{
                     setSeat(index, 0);
                 }
+            }catch (Exception err){
+                System.out.println(err);
+            }
+        }else if(_button_action == 0) {
+            try {
+                StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+                if(!hasClass(seatPane, "btn-warning") && !hasClass(seatPane, "btn-danger")){
+                    reservedSeats.add(row + ";" + col);
+                    setSeat(index, 3);
+                }else{
+                    reservedSeats.remove(row + ";" + col);
+                    setSeat(index, 4);
+                }
 
+                if(reservedSeats.size() >= 1) {
+                    audit_btn.setDisable(false);
+                }else{
+                    audit_btn.setDisable(true);
+                }
             }catch (Exception err){
                 System.out.println(err);
             }
@@ -163,6 +223,13 @@ public class AuditoriumController {
     void setTitle(String s){
         movie_title.setText(s);
     }
+
+    private String getSeatLabel(int row, int col) {
+        int index = ((row-1)*19)+col;
+        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+        Label seatLabel = (Label) seatPane.getChildren().get(0);
+        return seatLabel.getText();
+    }
     /**
      * Sets the rows and columns of the auditorium(s).
      * @param row Seat rows of the auditorium(s).
@@ -174,6 +241,7 @@ public class AuditoriumController {
 
         int index = ((row-1)*19)+col;
         StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+
         switch (status){
             case -1:
                 seatPane.setVisible(false);
@@ -183,14 +251,26 @@ public class AuditoriumController {
             case 0:
                 seatPane.setVisible(true);
                 addClass(seatPane, "btn-success");
+                seatPane.setCursor(Cursor.HAND);
                 break;
             case 1:
                 seatPane.setVisible(true);
-               addClass(seatPane, "btn-danger");
+                addClass(seatPane, "btn-danger");
                 break;
             case 2:
                 seatPane.setVisible(true);
                 removeClass(seatPane, "btn-success");
+                break;
+            case 3:
+                seatPane.setVisible(true);
+                seatPane.getStyleClass().removeAll();
+                addClass(seatPane, "btn-warning");
+                seatPane.setCursor(Cursor.HAND);
+                break;
+            case 4:
+                seatPane.setVisible(true);
+                removeClass(seatPane, "btn-warning");
+                seatPane.setCursor(Cursor.HAND);
                 break;
         }
     }
@@ -203,6 +283,7 @@ public class AuditoriumController {
         if(index <= 0 || index > 342) throw new Exception("0-nál nagyobb szám elvárt!");
 
         StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
+
         switch (status){
             case -1:
                 seatPane.setVisible(false);
@@ -212,6 +293,7 @@ public class AuditoriumController {
             case 0:
                 seatPane.setVisible(true);
                 addClass(seatPane, "btn-success");
+                seatPane.setCursor(Cursor.HAND);
                 break;
             case 1:
                 seatPane.setVisible(true);
@@ -220,6 +302,16 @@ public class AuditoriumController {
             case 2:
                 seatPane.setVisible(true);
                 removeClass(seatPane, "btn-success");
+                break;
+            case 3:
+                seatPane.setVisible(true);
+                addClass(seatPane, "btn-warning");
+                seatPane.setCursor(Cursor.HAND);
+                break;
+            case 4:
+                seatPane.setVisible(true);
+                removeClass(seatPane, "btn-warning");
+                seatPane.setCursor(Cursor.HAND);
                 break;
         }
     }
@@ -291,7 +383,45 @@ public class AuditoriumController {
     @FXML
     void onActionButtonClicked(MouseEvent event) {
         if(_button_action == 0){
-            //reserv
+            String reservationInfo = "Székek: \n";
+            for(int i = 0; i < reservedSeats.size(); i++) {
+                int row = Integer.parseInt(reservedSeats.get(i).split(";")[0]);
+                int col = Integer.parseInt(reservedSeats.get(i).split(";")[1]);
+                reservationInfo = reservationInfo  + "["+ row + ".sor " + getSeatLabel(row, col) + "]; ";
+            }
+
+            PopupWindow confirmWindow =
+                    new PopupWindow(PopupWindow.TYPE.YESNO, "Foglalás megerősítése",
+                            "Szeretnéd biztosan lefoglalni az alábbi székeket?\n\n" + reservationInfo, null);
+
+            int confirm = confirmWindow.displayWindow();
+            if(confirm == 1) {
+                try {
+                    MySQLConnect dbConnection = new MySQLConnect();
+                    dbConnection.establishConnection();
+                    String generatedToken = generateReservationToken();
+                    int idOfReservation = dbConnection.insertReservation(actionParams[0], null, generatedToken);
+
+                    if(idOfReservation != -1) {
+                        for(int i = 0; i < reservedSeats.size(); i++) {
+                            int row = Integer.parseInt(reservedSeats.get(i).split(";")[0]);
+                            int col = Integer.parseInt(reservedSeats.get(i).split(";")[1]);
+                            Object[][] seat = dbConnection.getSeat(null, row, col, actionParams[1]);
+                            dbConnection.insertSeatReserved(seat[1][1], idOfReservation, actionParams[0]);
+                        }
+
+                        PopupWindow successWindow =
+                                new PopupWindow(PopupWindow.TYPE.SUCCESS, "Foglalás sikeres!",
+                                        "Foglalásod sikeresen végbement! Kérlek az alábbi azonosítót hozd magaddal a film kezdete előtt:\n\n" + generatedToken, null);
+                        parentStage.close();
+
+                        successWindow.displayWindow();
+                    }
+                }catch (SQLException error) {
+                    error.printStackTrace();
+                }
+            }
+
         }else if(_button_action == 1) {
             MySQLConnect dbConnection = null;
             try{
@@ -337,6 +467,30 @@ public class AuditoriumController {
             audit_btn.setDisable(true);
             parentStage.close();
         }
+    }
+
+    private String generateReservationToken() {
+        String returnString = "";
+        List<String> finalString = new ArrayList<>();
+        List<String> letterUpper =
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                        "R", "S", "T", "U", "V", "W", "X", "Y", "Z"));
+        List<String> letterLower = new ArrayList<>();
+        for(String letter : letterUpper) {
+            letterLower.add(letter.toLowerCase());
+        }
+        List<String> numbers =  new ArrayList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
+
+        letterUpper.addAll(letterLower);
+        letterUpper.addAll(numbers);
+        finalString.addAll(letterUpper);
+
+        Collections.shuffle(finalString);
+        for(int i = 10; i <= 25; i++) {
+            returnString += finalString.get(i);
+        }
+
+        return returnString;
     }
 
     @FXML
