@@ -195,7 +195,7 @@ public class ScreeningController {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
 
-            Object[][] resultScreenings = dbConnection.getScreening(null,null, this.selectedAuditoriumId, selectedDateTs);
+            Object[][] resultScreenings = dbConnection.getScreening(null,null, this.selectedAuditoriumId, selectedDateTs, null);
             if(resultScreenings.length > 1) {
 
                 this.generateIdealSchedule(resultScreenings);
