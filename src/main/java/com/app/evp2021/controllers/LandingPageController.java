@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 /**
  * Controls the Landing page (First page)
@@ -38,76 +39,74 @@ public class LandingPageController{
     @FXML private TextField cast_input;
     @FXML private TextArea description_input;
     @FXML private ChoiceBox rating_drop;
-    @FXML private ChoiceBox movie_room;
+
     @FXML private TextField duration_input;
-    @FXML private CheckBox check_1;
-    @FXML private CheckBox check_2;
-    @FXML private CheckBox check_3;
-    @FXML private CheckBox check_4;
-    @FXML private CheckBox check_5;
-    @FXML private CheckBox check_6;
-    @FXML private CheckBox check_7;
-    @FXML private ChoiceBox choice_1;
-    @FXML private ChoiceBox choice_2;
-    @FXML private ChoiceBox choice_3;
-    @FXML private ChoiceBox choice_4;
-    @FXML private ChoiceBox choice_5;
-    @FXML private ChoiceBox choice_6;
-    @FXML private ChoiceBox choice_7;
-    private CheckBox[] screening_day_boxes;
-    private ChoiceBox[] screening_day_times;
+
     private boolean new_movie;
     private int editMovieId;
+    @FXML private Button list_movies_btn;
     private MovieInputsController movieInputsController = null;
 
     @FXML private void openScreeningWindow(MouseEvent event) throws Exception {
 
         ScreeningSummaryController Controller = ScreeningSummary.createWindow();
 
-        //Controller.initialize();
-
         ScreeningSummary.display();
     }
 
     /**
-     * Sets the buttons' parameters.
+     * Listens whenever the datepicker changes value.
      * @param event ActionEvent.
      */
     @FXML private void onActionPerformed(ActionEvent event) {
         current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
+        movie_holder.getChildren().clear();
+
+        if(date_picker.getValue().isBefore(LocalDate.now())) {
+            list_movies_btn.setDisable(true);
+        }else{
+            list_movies_btn.setDisable(false);
+        }
     }
     /**
      * Lists all the currently available movies.
      */
     @FXML private void listMovies() {
-        /**
-         * LISTAZAS UTAN, UGYE MEGVAN AZ ADOTT SCREENING ID, MELYIK TEREM, FILM ID, UTANA HA NYOMUNK A FILMRE AKKOR TEREMID ALAPJAN
-         * LEKERJUK HANY SZEKES A TEREM, ES HOL VANNAK SZEKEK, BEADJUK A FUGGVENYNEK EGY ARRAYLISTET AMI TARTALMAZ 2 INDEXES OBJECTETKET AMI A SOR, OSZLOPA A SZEKNEK
-         * HA MEGVANNAK A SZEKEK, SCREENING ID ALAPJAN LEKERJUK A RESERVATIONOKET ES OTT A setSEAT-el ATRAKJUK FOGLALTRA OKET, MAJD EZEK UTAN MUTATJUK CSAK MEG A TERMET
-         */
-        /** -------------------------DUMMY DATA--------------------------------------------------------- */
         movie_holder.getChildren().clear();
-        String[][] res = {{"Elkurtuk", "Terem1", "2021-11-04 11:09:23"}, {"Dune", "Terem2", "2021-11-04 20:09:23"}, {"Elkurtuk", "Terem1", "2021-11-04 15:09:23"}};
-        for(int i=0; i< res.length; i++){
-            Button b = new Button(res[i][0] + " | " + res[i][1] + " | " + res[i][2].substring(11,res[i][2].length()));
-            b.getStyleClass().add("btn-primary");
-            System.out.println(movie_scroll.getWidth()-25);
-            b.setMinWidth(movie_scroll.getWidth()-25);
-            movie_holder.getChildren().add(b);
+        try{
+            MySQLConnect dbConnection = new MySQLConnect();
+            dbConnection.establishConnection();
+
+            Object[][] screenings = dbConnection.getScreening(null,null,null, Timestamp.valueOf(date_picker.getValue().toString() + " 00:00:00"), "ORDER BY screening_start ASC");
+            if(screenings.length > 1) {
+                for(int i = 1; i < screenings.length; i++) {
+                    String movieName = dbConnection.getMovie(screenings[i][2], null,null)[1][2].toString();
+                    String auditoriumName = dbConnection.getAuditorium(screenings[i][3])[1][2].toString();
+                    String startingTime = screenings[i][4].toString().split(" ")[1].substring(0,5);
+
+                    Button movieButton = new Button(movieName + " | " + auditoriumName + " | " + startingTime);
+                    movieButton.getStyleClass().add("btn-primary");
+                    movieButton.setMinWidth(movie_scroll.getWidth()-25);
+                    movieButton.setFocusTraversable(false);
+                    int index = i;
+                    movieButton.setOnMouseClicked(e -> {
+                        try {
+                            showAuditoriumForUser(screenings[index][3], movieName, startingTime, screenings[index][1]);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                    movie_holder.getChildren().add(movieButton);
+                }
+            }else{
+                Text noMovieText = new Text("Erre a dátumra nincs listázható műsor!");
+                noMovieText.getStyleClass().add("text-danger");
+                noMovieText.setStyle("-fx-font-size: 18;");
+                movie_holder.getChildren().add(noMovieText);
+            }
+        }catch (SQLException error){
+            error.printStackTrace();
         }
-        for(int i=0; i< res.length; i++){
-            Button b = new Button(res[i][0] + " | " + res[i][1] + " | " + res[i][2].substring(11,res[i][2].length()));
-            b.getStyleClass().add("btn-primary");
-            b.setMinWidth(movie_scroll.getWidth()-25);
-            movie_holder.getChildren().add(b);
-        }
-        for(int i=0; i< res.length; i++){
-            Button b = new Button(res[i][0] + " | " + res[i][1] + " | " + res[i][2].substring(11,res[i][2].length()));
-            b.getStyleClass().add("btn-primary");
-            b.setMinWidth(movie_scroll.getWidth()-25);
-            movie_holder.getChildren().add(b);
-        }
-        /** -------------------------DUMMY DATA--------------------------------------------------------- */
     }
 
     @FXML
@@ -197,10 +196,10 @@ public class LandingPageController{
 
     }
     /**
-     * Fetches the seats from the database and creates a display of them.
+     * Fetches the seats from the database and creates a display of them for admins.
      * @param id event
      */
-    public static void showAuditorium(int id) throws Exception {
+    public static void showAuditoriumForAdmin(int id) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
         AnchorPane root = fxmlLoader.load();
 
@@ -234,7 +233,39 @@ public class LandingPageController{
         popupAuditoriumWindow.display();
 
         LandingPage.refresh();
+    }
 
+    public static void showAuditoriumForUser(Object id, String movieName, String startingTime, Object screeningId) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
+        AnchorPane root = fxmlLoader.load();
+
+        AuditoriumController Controller = fxmlLoader.getController();
+        Controller.createAuditorium(false, true);
+        Controller.setTitle(movieName + " - Kezdés:" + startingTime);
+        Controller.setButtonText("Foglalás");
+        Controller.setActionButtonType(0);
+        Controller.setActionButtonParams(new Object[]{screeningId, id});
+
+        Controller.setSecondButtonVisible(false);
+
+        Controller.toggleLegend(true);
+
+        MySQLConnect dbConnection = new MySQLConnect();
+        try {
+            Object[][] resultSeats;
+
+            dbConnection.establishConnection();
+            resultSeats = dbConnection.getSeat(null,null,null, id);
+            Controller.setAllSeatBasedOnreservation(resultSeats, screeningId);
+
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+
+        AuditoriumCreationPopup popupAuditoriumWindow = new AuditoriumCreationPopup();
+        popupAuditoriumWindow.createWindow(root);
+        Controller.setParentStage(popupAuditoriumWindow.getStage());
+        popupAuditoriumWindow.display();
     }
 
     @FXML
@@ -324,6 +355,7 @@ public class LandingPageController{
                 movieButton.getStyleClass().add("btn-primary");
                 movieButton.setStyle("-fx-cursor: hand;");
                 movieButton.setPrefWidth(286.0);
+                movieButton.setFocusTraversable(false);
 
 
                 movie_holder.getChildren().add(movieButton);
@@ -360,6 +392,7 @@ public class LandingPageController{
                 auditoriumButton.getStyleClass().add("btn");
                 auditoriumButton.getStyleClass().add("btn-primary");
                 auditoriumButton.setStyle("-fx-cursor: hand; -fx-padding: 10 5 10 5;");
+                auditoriumButton.setFocusTraversable(false);
                 audit_btn_holder.getChildren().add(auditoriumButton);
                 audit_btn_holder.setSpacing(20.0);
 
@@ -367,7 +400,7 @@ public class LandingPageController{
 
                 auditoriumButton.setOnMouseClicked(event -> {
                     try {
-                        showAuditorium(id);
+                        this.showAuditoriumForAdmin(id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -391,5 +424,10 @@ public class LandingPageController{
             }
 
         }
+    }
+
+    public void setTodayAsSelectedDate() {
+        date_picker.setValue(LocalDate.now());
+        current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
     }
 }
