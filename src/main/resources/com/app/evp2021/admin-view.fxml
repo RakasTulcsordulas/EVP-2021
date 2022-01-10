@@ -248,7 +248,7 @@
                </children></AnchorPane>
             <AnchorPane layoutX="620.0" layoutY="6.0" prefHeight="396.0" prefWidth="475.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox alignment="TOP_CENTER" layoutY="399.0" maxHeight="400.0" prefHeight="400.0" prefWidth="475.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox alignment="TOP_CENTER" layoutY="399.0" maxHeight="400.0" prefHeight="400.0" prefWidth="475.0" style="-fx-border-color: #d2d2d2; -fx-border-width: 1;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Text id="audit_title" fx:id="audit_title" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Termek" textAlignment="CENTER" wrappingWidth="386.1888008117676">
                            <font>
@@ -277,7 +277,44 @@
                         <Insets bottom="10.0" left="25.0" right="25.0" top="25.0" />
                      </padding>
                   </VBox>
-                  <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="397.0" prefWidth="475.0" style="-fx-border-color: d2d2d2; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox alignment="CENTER" maxHeight="50.0" prefHeight="50.0" prefWidth="102.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Text id="audit_title" fx:id="audit_title1" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: 700;" text="Foglalások" textAlignment="CENTER" wrappingWidth="386.1888008117676">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                                 <children>
+                                    <TextField fx:id="reservation_token_field" promptText="Foglalás azonosító..." style="-fx-font-size: 16;">
+                                       <VBox.margin>
+                                          <Insets left="50.0" right="50.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" maxHeight="70.0" prefHeight="70.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <children>
+                                    <Button id="check_reservation" fx:id="check_reservation_btn" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onReservationCheckButtonClicked" prefHeight="27.0" prefWidth="281.0" style="-fx-cursor: hand;" stylesheets="@css/bootstrap.css" text="Foglalás ellenőrzése">
+                                       <styleClass>
+                                          <String fx:value="btn" />
+                                          <String fx:value="btn-primary" />
+                                       </styleClass>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children></VBox>
                </children></AnchorPane>
          </children>
       </AnchorPane>
