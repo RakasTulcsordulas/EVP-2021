@@ -41,7 +41,7 @@ public class ScreeningSummaryController {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
 
-            Object[][] screenings = dbConnection.getScreening(null,null,null,null);
+            Object[][] screenings = dbConnection.getScreening(null,null,null,null, null);
             List<String> dates = new ArrayList<>();
             for(int i = 1; i < screenings.length; i++) {
 
@@ -81,7 +81,7 @@ public class ScreeningSummaryController {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
 
-            Object[][] specificScreening = dbConnection.getScreening(null, null, null, Timestamp.valueOf(date + " 00:00:00"));
+            Object[][] specificScreening = dbConnection.getScreening(null, null, null, Timestamp.valueOf(date + " 00:00:00"), null);
             List<String> auditoriums = new ArrayList<>();
             for(int i = 1; i < specificScreening.length; i++) {
                 String auditorium = specificScreening[i][3].toString();
@@ -129,7 +129,7 @@ public class ScreeningSummaryController {
             MySQLConnect dbConnection = new MySQLConnect();
             dbConnection.establishConnection();
 
-            Object[][] screenings = dbConnection.getScreening(null, null, auditoriumId, Timestamp.valueOf(date + " 00:00:00"));
+            Object[][] screenings = dbConnection.getScreening(null, null, auditoriumId, Timestamp.valueOf(date + " 00:00:00"),null);
             List<String> movies = new ArrayList<>();
 
             for (int i = 1; i < screenings.length; i++) {
