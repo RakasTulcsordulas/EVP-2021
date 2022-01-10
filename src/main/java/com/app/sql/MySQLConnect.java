@@ -746,4 +746,109 @@ public class MySQLConnect {
             e.printStackTrace();
         }
     }
+
+    public Object[][] getReservation (Object id, Object screening_id, Object employee_reserved_id, Object reservation_token, Object reservation_activated) {
+        Object[][] resultSetObject = null;
+        String query = "SELECT * FROM reservation WHERE " +
+                "(? IS NULL OR ? = id) " +
+                "AND " +
+                "(? IS NULL OR ? = screening_id) " +
+                "AND " +
+                "(? IS NULL OR ? = employee_reserved_id)" +
+                "AND " +
+                "(? IS NULL OR ? = reservation_token)" +
+                "AND " +
+                "(? IS NULL OR ? = reservation_activated)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+            preparedStatement.setObject(3, screening_id);
+            preparedStatement.setObject(4, screening_id);
+            preparedStatement.setObject(5, employee_reserved_id);
+            preparedStatement.setObject(6, employee_reserved_id);
+            preparedStatement.setObject(7, reservation_token);
+            preparedStatement.setObject(8, reservation_token);
+            preparedStatement.setObject(9, reservation_activated);
+            preparedStatement.setObject(10, reservation_activated);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
+
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
+                }
+
+                j++;
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        return resultSetObject;
+    }
+
+    public void activateReservation(Object reservation_token, Object employee_id) {
+
+            String query = "UPDATE reservation SET " +
+                    "employee_reserved_id = ?, " +
+                    "reservation_activated = 1 WHERE reservation_token = ?";
+
+            try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                preparedStatement.setObject(1,employee_id);
+                preparedStatement.setObject(2,reservation_token);
+
+                int result = preparedStatement.executeUpdate();
+
+                if (result > 0) {
+                    System.out.println("Reservation (TOKEN:" + reservation_token + ") updated!");
+                } else {
+                    System.out.println("Error! Incorrect parameters!");
+                }
+            } catch (SQLException e) {e.printStackTrace();}
+    }
+
+    private void deleteSeatReserved(Object reservationId) {
+        String query = "DELETE FROM seat_reserved WHERE reservation_id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setObject(1, reservationId);
+
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Reserved seat was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteReservation(Object reservationId) {
+        this.deleteSeatReserved(reservationId);
+
+        String query = "DELETE FROM reservation WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setObject(1, reservationId);
+
+            int result = preparedStatement.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Deletion successful!");
+            } else {
+                System.out.println("Reserved seat was not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
