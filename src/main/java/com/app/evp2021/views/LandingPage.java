@@ -16,10 +16,12 @@ import javafx.scene.control.skin.DatePickerSkin;
 
 import javafx.scene.layout.HBox;
 
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  * This is the Main page/window.
@@ -28,6 +30,7 @@ public class LandingPage extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 
     private static Stage _stage = null;
@@ -100,6 +103,8 @@ public class LandingPage extends Application {
         active_scene.getStylesheets().add(Main.class.getResource("css/bootstrap.css").toExternalForm());
         active_scene.getStylesheets().add(Main.class.getResource("css/main.css").toExternalForm());
         active_controller = fxmlLoader.getController();
+
+        active_controller.setTodayAsSelectedDate();
     }
     /**
      * Sets the admin scene.
