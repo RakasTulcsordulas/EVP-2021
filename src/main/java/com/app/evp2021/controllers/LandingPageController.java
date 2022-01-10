@@ -2,6 +2,7 @@ package com.app.evp2021.controllers;
 
 import com.app.evp2021.Main;
 import com.app.evp2021.services.MovieInputsController;
+import com.app.evp2021.services.PopupWindow;
 import com.app.evp2021.services.UserSession;
 import com.app.evp2021.views.*;
 import com.app.sql.MySQLConnect;
@@ -16,6 +17,8 @@ import javafx.scene.text.Text;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Controls the Landing page (First page)
@@ -47,11 +50,59 @@ public class LandingPageController{
     @FXML private Button list_movies_btn;
     private MovieInputsController movieInputsController = null;
 
+    @FXML private TextField reservation_token_field;
+
     @FXML private void openScreeningWindow(MouseEvent event) throws Exception {
 
         ScreeningSummaryController Controller = ScreeningSummary.createWindow();
 
         ScreeningSummary.display();
+    }
+
+    @FXML private void onReservationCheckButtonClicked(MouseEvent event) {
+        if(!reservation_token_field.getText().isEmpty()) {
+            try {
+
+                MySQLConnect dbConn = new MySQLConnect();
+                dbConn.establishConnection();
+
+                Object[][] reservation = dbConn.getReservation(null,null,null, reservation_token_field.getText(), null);
+
+                if(reservation.length == 2) {
+                    Object[][] screening = dbConn.getScreening(reservation[1][2],null,null,null, null);
+                    String screeningStartDate = screening[1][4].toString().split(" ")[0];
+                    String[] screeningStartTime = screening[1][4].toString().split(" ")[1].split(":");
+                    LocalDateTime screeningStart = LocalDateTime.of(
+                            LocalDate.parse(screeningStartDate),
+                            LocalTime.of(Integer.parseInt(screeningStartTime[0]), Integer.parseInt(screeningStartTime[1]))
+                    );
+                    screeningStart.minusMinutes(15);
+                    if(LocalDateTime.now().isBefore(screeningStart)) {
+                        int employeeId = (int) dbConn.getEmployee(null, UserSession.getSession().getEmployee())[1][1];
+
+                        dbConn.activateReservation(reservation_token_field.getText(), employeeId);
+
+                        PopupWindow successWindow = new PopupWindow(PopupWindow.TYPE.SUCCESS, "Foglalás sikeresen aktiválva.", "A foglalás sikeresen fel lett véve, fizetés megkezdhető!", null);
+                        reservation_token_field.clear();
+                        successWindow.displayWindow();
+                    }else{
+                        PopupWindow errorWindow = new PopupWindow(PopupWindow.TYPE.ERROR, "A foglalás lejárt!", "A foglalás már nem érvényes ezért törlésre kerül. A film kezdete előtt 15 percel kell beváltani!", null);
+                        reservation_token_field.clear();
+                        dbConn.deleteReservation(reservation[1][1]);
+                        errorWindow.displayWindow();
+                    }
+
+                }else{
+                    String errorString = "A megadott foglalási token ("+reservation_token_field.getText()+") nem található a rendszerben!";
+
+                    PopupWindow errorWindow = new PopupWindow(PopupWindow.TYPE.ERROR, "Nem található!", errorString, null);
+                    reservation_token_field.clear();
+                    errorWindow.displayWindow();
+                }
+            }catch (SQLException error) {
+                error.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -78,30 +129,39 @@ public class LandingPageController{
             dbConnection.establishConnection();
 
             Object[][] screenings = dbConnection.getScreening(null,null,null, Timestamp.valueOf(date_picker.getValue().toString() + " 00:00:00"), "ORDER BY screening_start ASC");
+            Text noMovieText = new Text("Erre a dátumra nincs listázható műsor!");
+            noMovieText.getStyleClass().add("text-danger");
+            noMovieText.setStyle("-fx-font-size: 18;");
+
             if(screenings.length > 1) {
                 for(int i = 1; i < screenings.length; i++) {
-                    String movieName = dbConnection.getMovie(screenings[i][2], null,null)[1][2].toString();
-                    String auditoriumName = dbConnection.getAuditorium(screenings[i][3])[1][2].toString();
-                    String startingTime = screenings[i][4].toString().split(" ")[1].substring(0,5);
+                    LocalDateTime screeningStartLocalDateTimeFormat = LocalDateTime.of(LocalDate.parse(
+                            screenings[i][4].toString().split(" ")[0]), LocalTime.parse(screenings[i][4].toString().split(" ")[1].substring(0,5)));
+                    if(screeningStartLocalDateTimeFormat.isAfter(LocalDateTime.now())){
+                        String movieName = dbConnection.getMovie(screenings[i][2], null,null)[1][2].toString();
+                        String auditoriumName = dbConnection.getAuditorium(screenings[i][3])[1][2].toString();
+                        String startingTime = screenings[i][4].toString().split(" ")[1].substring(0,5);
 
-                    Button movieButton = new Button(movieName + " | " + auditoriumName + " | " + startingTime);
-                    movieButton.getStyleClass().add("btn-primary");
-                    movieButton.setMinWidth(movie_scroll.getWidth()-25);
-                    movieButton.setFocusTraversable(false);
-                    int index = i;
-                    movieButton.setOnMouseClicked(e -> {
-                        try {
-                            showAuditoriumForUser(screenings[index][3], movieName, startingTime, screenings[index][1]);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    });
-                    movie_holder.getChildren().add(movieButton);
+                        Button movieButton = new Button(movieName + " | " + auditoriumName + " | " + startingTime);
+                        movieButton.getStyleClass().add("btn-primary");
+                        movieButton.setMinWidth(movie_scroll.getWidth()-25);
+                        movieButton.setFocusTraversable(false);
+                        int index = i;
+                        movieButton.setOnMouseClicked(e -> {
+                            try {
+                                showAuditoriumForUser(screenings[index][3], movieName, startingTime, screenings[index][1]);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        });
+                        movie_holder.getChildren().add(movieButton);
+                    }
+                }
+
+                if(movie_holder.getChildren().size() == 0) {
+                    movie_holder.getChildren().add(noMovieText);
                 }
             }else{
-                Text noMovieText = new Text("Erre a dátumra nincs listázható műsor!");
-                noMovieText.getStyleClass().add("text-danger");
-                noMovieText.setStyle("-fx-font-size: 18;");
                 movie_holder.getChildren().add(noMovieText);
             }
         }catch (SQLException error){
