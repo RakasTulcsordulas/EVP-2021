@@ -85,6 +85,7 @@
                                        </HBox.margin>
                                     </Pane>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nem látható" />
+                                    <Text fx:id="reserved_text" strokeType="OUTSIDE" strokeWidth="0.0" />
                                  </children>
                                  <opaqueInsets>
                                     <Insets />

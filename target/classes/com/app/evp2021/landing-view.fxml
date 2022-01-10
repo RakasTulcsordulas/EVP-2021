@@ -70,7 +70,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutY="705.673828125" prefHeight="68.0" prefWidth="363.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <Button fx:id="adminmodal" alignment="CENTER" mnemonicParsing="false" onAction="#openAdminModal" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
+                  <Button fx:id="adminmodal" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#openAdminModal" prefHeight="30.0" prefWidth="106.0" text="ADMIN">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -84,7 +84,7 @@
                   </Button>
                </children>
             </HBox>
-            <Text fx:id="current_date" layoutX="11.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="340.13671875" AnchorPane.topAnchor="5.0">
+            <Text id="current_date_text" fx:id="current_date" layoutX="11.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="340.13671875" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -104,7 +104,7 @@
             </AnchorPane>
             <HBox alignment="CENTER_LEFT" layoutY="337.673828125" prefHeight="48.0" prefWidth="363.0">
                <children>
-                  <Button fx:id="list_movies_btn" mnemonicParsing="false" onMouseClicked="#listMovies" prefHeight="30.0" prefWidth="343.0" text="FILMEK LISTÁZÁSA">
+                  <Button fx:id="list_movies_btn" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#listMovies" prefHeight="30.0" prefWidth="343.0" text="FILMEK LISTÁZÁSA">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
