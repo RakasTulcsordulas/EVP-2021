@@ -7,12 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Sums up the screening dates.
+ */
 public class ScreeningSummary {
 
     private static Scene scene = null;
     private static Stage modal = null;
 
-
+    /**
+     * Creates the window of the Summary.
+     */
     public static ScreeningSummaryController createWindow() throws Exception
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-summary-view.fxml"));
@@ -35,10 +40,16 @@ public class ScreeningSummary {
         return fxmlLoader.getController();
     }
 
+    /**
+     * Display window.
+     */
     public static void display() {
         modal.showAndWait();
     }
 
+    /**
+     * Returns Stage.
+     */
     public static Stage getStage() {
         return modal;
     }

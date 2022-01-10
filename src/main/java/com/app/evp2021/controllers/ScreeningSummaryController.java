@@ -21,6 +21,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controls the summary of the movies window.
+ */
 public class ScreeningSummaryController {
 
     @FXML
@@ -28,6 +31,9 @@ public class ScreeningSummaryController {
     @FXML
     TabPane screening_tabpane;
 
+    /**
+     * Screenings grouped by date, and a button is made of it.
+     */
     public void initialize() {
         screening_date_holder_hbox.setFocusTraversable(false);
         screening_tabpane.setFocusTraversable(false);
@@ -65,6 +71,10 @@ public class ScreeningSummaryController {
         }
     }
 
+    /**
+     * Creates tabs (around) based on dates.
+     * @param date YYYY-MM-DD
+     */
     private void generateTabsBasedOnDate(String date) {
         screening_tabpane.getTabs().clear();
         try{
@@ -108,6 +118,12 @@ public class ScreeningSummaryController {
         }
     }
 
+    /**
+     * Lists all the screening dates on tabs.
+     * @param date YYYY-MM-DD
+     * @param auditoriumId Id of the auditorium(s).
+     * @param grid Fix grid pane.
+     */
     private void listScreenings(String date, int auditoriumId, GridPane grid) {
         try {
             MySQLConnect dbConnection = new MySQLConnect();
@@ -143,6 +159,10 @@ public class ScreeningSummaryController {
 
     }
 
+    /**
+     * Sets the date (on each tabs) based on the picked one.
+     * @param date YYYY-MM-DD
+     */
     private void setSelectedDate(String date) {
         for(Node element : screening_date_holder_hbox.getChildren()){
             element.getStyleClass().removeAll("btn-danger");

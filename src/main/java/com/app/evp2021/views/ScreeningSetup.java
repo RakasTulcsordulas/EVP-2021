@@ -44,6 +44,9 @@ public class ScreeningSetup {
         modal.showAndWait();
     }
 
+    /**
+     * Returns Stage.
+     */
     public static Stage getStage() {
         return modal;
     }
