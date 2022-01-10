@@ -159,6 +159,44 @@ public class MySQLConnect {
         return false;
     }
 
+    public Object[][] getEmployee(Object id, Object username) {
+        Object[][] resultSetObject = null;
+        String query = "SELECT * FROM employee WHERE " +
+                "(? IS NULL OR ? = id)" +
+                "AND " +
+                "(? IS NULL OR ? = username)";
+
+        System.out.println("Searching for employee...");
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)){
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+            preparedStatement.setObject(3, username);
+            preparedStatement.setObject(4, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
+
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
+                }
+
+                j++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSetObject;
+    }
+
     //********************
     //** MOVIE HANDLING **
     //********************
@@ -549,7 +587,7 @@ public class MySQLConnect {
      * @param screening_start Timestamp of the screening as [YYYY-MM-DD hh:mm:ss]. Can be null
      * @return An Object[] starting from 1 containing in sequence every data of all rows where at least one given parameter is met.
      */
-    public Object[][] getScreening (Object id, Object movie_id, Object auditorium_id, Timestamp screening_start) {
+    public Object[][] getScreening (Object id, Object movie_id, Object auditorium_id, Timestamp screening_start, Object order) {
         Object[][] resultSetObject = null;
         String query = "SELECT * FROM screening WHERE " +
                 "(? IS NULL OR ? = id) " +
@@ -558,7 +596,8 @@ public class MySQLConnect {
                 "AND " +
                 "(? IS NULL OR ? = auditorium_id) " +
                 "AND " +
-                "(? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 23 HOUR)))";
+                "(? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 23 HOUR)))" +
+                ((order == null) ? "" : order);
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_READ_ONLY)) {
@@ -627,5 +666,84 @@ public class MySQLConnect {
     //** RESERVATION HANDLING **
     //**************************
 
+    public int insertReservation (Object screeningId, Object employeeReservedId, Object reservationToken) {
+        String query = "INSERT INTO reservation (id, screening_id, employee_reserved_id, reservation_token) VALUES (NULL, ?, ?, ?)";
 
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+            preparedStatement.setObject(1, screeningId);
+            preparedStatement.setObject(2, employeeReservedId);
+            preparedStatement.setString(3, (String) reservationToken);
+
+            if (preparedStatement.executeUpdate() > 0) {
+                System.out.println("New reservation inserted.");
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
+                return resultSet.getInt(1);
+            } else {
+                System.out.println("Error! Insertion failed!");
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public Object[][] getSeatReserved (Object id, Object reservation_id, Object screening_id) {
+        Object[][] resultSetObject = null;
+        String query = "SELECT * FROM seat_reserved WHERE " +
+                "(? IS NULL OR ? = id) " +
+                "AND " +
+                "(? IS NULL OR ? = reservation_id) " +
+                "AND " +
+                "(? IS NULL OR ? = screening_id)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+            preparedStatement.setObject(3, reservation_id);
+            preparedStatement.setObject(4, reservation_id);
+            preparedStatement.setObject(5, screening_id);
+            preparedStatement.setObject(6, screening_id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.last();
+            resultSetObject = new Object[resultSet.getRow()+1][];
+            resultSet.beforeFirst();
+
+            int j = 1;
+            while (resultSet.next()) {
+
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                resultSetObject[j] = new Object[rsmd.getColumnCount()+1];
+                for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+                    resultSetObject[j][i] = resultSet.getObject(i);
+                }
+
+                j++;
+            }
+        } catch (SQLException e) {e.printStackTrace();}
+        return resultSetObject;
+    }
+
+    public void insertSeatReserved(Object seatId, Object reservationId, Object screeningId) {
+        String query = "INSERT INTO seat_reserved (id, seat_id, reservation_id, screening_id) VALUES (NULL, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)){
+            preparedStatement.setInt(1, (int) seatId);
+            preparedStatement.setInt(2, (int) reservationId);
+            preparedStatement.setInt(3, (int) screeningId);
+
+            if (preparedStatement.executeUpdate() > 0) {
+                System.out.println("New seat reserved inserted.");
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                resultSet.next();
+            } else {
+                System.out.println("Error! Insertion failed!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
