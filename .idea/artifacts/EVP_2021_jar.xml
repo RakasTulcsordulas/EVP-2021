@@ -16,6 +16,8 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/17-ea+11/javafx-controls-17-ea+11-win.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/17-ea+11/javafx-controls-17-ea+11.jar" path-in-jar="/" />
       <element id="dir-copy" path="$PROJECT_DIR$/lib" />
+      <element id="file-copy" path="$PROJECT_DIR$/mysql-connector-java-8.0.26.jar" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/mysql-connector-java-8.0.26.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
