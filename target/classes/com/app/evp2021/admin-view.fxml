@@ -178,7 +178,7 @@
                               </VBox>
                               <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
                                  <children>
-                                    <TextField fx:id="director_input" alignment="CENTER" promptText="Rendezők" />
+                                    <TextField fx:id="director_input" promptText="Rendezők" />
                                  </children>
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
@@ -186,7 +186,7 @@
                               </VBox>
                               <VBox alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="400.0" prefHeight="96.0" prefWidth="240.0">
                                  <children>
-                                    <TextField id="cast_input" fx:id="cast_input" alignment="CENTER" promptText="Színészek" />
+                                    <TextField id="cast_input" fx:id="cast_input" promptText="Színészek" />
                                  </children>
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
