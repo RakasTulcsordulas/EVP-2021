@@ -168,6 +168,7 @@ public class MovieInputsController {
         movieCastInput.setText((movieCast != null) ? movieCast.toString() : "");
         movieDescriptionInput.setText((movieDescription != null) ? movieDescription.toString() : "");
         movieDurationInput.setText((movieDuration != null) ? movieDuration.toString() : "");
+        movieDurationInput.setEditable(false);
     }
     /**
      * Resetting all the errors.
