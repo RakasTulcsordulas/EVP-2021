@@ -638,17 +638,19 @@ public class MySQLConnect {
      * Must provide all two parameters in order to delete specific screening, screening removal will be used to update existing screening. One movie can be screened
      * once a day, in the same auditorium so in deleting by the movie_id and auditorium_id and without an exact timestamp it deletes the screening on that day.
      */
-    public void deleteScreening (Object movie_id, Object auditorium_id, Timestamp timestamp) {
-        String query = "DELETE FROM screening WHERE (? IS NULL OR ? = movie_id) AND (? IS NULL OR ? = auditorium_id) AND (? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 22 HOUR)))";
+    public void deleteScreening (Object id, Object movie_id, Object auditorium_id, Timestamp timestamp) {
+        String query = "DELETE FROM screening WHERE (? IS NULL OR ? = id) AND (? IS NULL OR ? = movie_id) AND (? IS NULL OR ? = auditorium_id) AND (? IS NULL OR (screening_start BETWEEN ? AND date_add(?,  INTERVAL 22 HOUR)))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)){
-            preparedStatement.setObject(1, movie_id);
-            preparedStatement.setObject(2, movie_id);
-            preparedStatement.setObject(3, auditorium_id);
-            preparedStatement.setObject(4, auditorium_id);
-            preparedStatement.setTimestamp(5, timestamp);
-            preparedStatement.setTimestamp(6, timestamp);
+            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(2, id);
+            preparedStatement.setObject(3, movie_id);
+            preparedStatement.setObject(4, movie_id);
+            preparedStatement.setObject(5, auditorium_id);
+            preparedStatement.setObject(6, auditorium_id);
             preparedStatement.setTimestamp(7, timestamp);
+            preparedStatement.setTimestamp(8, timestamp);
+            preparedStatement.setTimestamp(9, timestamp);
 
             int result = preparedStatement.executeUpdate();
 
@@ -814,11 +816,17 @@ public class MySQLConnect {
             } catch (SQLException e) {e.printStackTrace();}
     }
 
-    private void deleteSeatReserved(Object reservationId) {
-        String query = "DELETE FROM seat_reserved WHERE reservation_id = ?";
+    private void deleteSeatReserved(Object reservationId,  Object screening_id) {
+        String query = "DELETE FROM seat_reserved WHERE " +
+                "(? IS NULL OR ? = reservation_id) " +
+                "AND " +
+                "(? IS NULL OR ? = screening_id)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)){
             preparedStatement.setObject(1, reservationId);
+            preparedStatement.setObject(2, reservationId);
+            preparedStatement.setObject(3, screening_id);
+            preparedStatement.setObject(4, screening_id);
 
             int result = preparedStatement.executeUpdate();
 
@@ -832,13 +840,20 @@ public class MySQLConnect {
         }
     }
 
-    public void deleteReservation(Object reservationId) {
-        this.deleteSeatReserved(reservationId);
+    public void deleteReservation(Object reservationId, Object screening_id) {
+        this.deleteSeatReserved(reservationId, screening_id);
 
-        String query = "DELETE FROM reservation WHERE id = ?";
+        String query = "DELETE FROM reservation WHERE " +
+                "(? IS NULL OR ? = id) " +
+                "AND " +
+                "(? IS NULL OR ? = screening_id)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)){
             preparedStatement.setObject(1, reservationId);
+            preparedStatement.setObject(2, reservationId);
+            preparedStatement.setObject(3, screening_id);
+            preparedStatement.setObject(4, screening_id);
+
 
             int result = preparedStatement.executeUpdate();
 
