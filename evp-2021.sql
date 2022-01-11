@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Nov 02. 10:28
--- Kiszolgáló verziója: 10.4.18-MariaDB
--- PHP verzió: 8.0.3
+-- Létrehozás ideje: 2022. Jan 11. 13:14
+-- Kiszolgáló verziója: 10.4.22-MariaDB
+-- PHP verzió: 8.0.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -81,15 +81,6 @@ CREATE TABLE `movie` (
   `duration_min` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- A tábla adatainak kiíratása `movie`
---
-
-INSERT INTO `movie` VALUES
-(2, 'Elk*rtuk', 'Keith English', 'Vivianne Bánovits,András Mózes,Barna Bokor', 'When a young, ambitious market researcher finds out her boss is involved in the leaking of a scandalous Prime Minister speech, she decides to investigate the case to gain a position among the big-shots. Based on actual events.', 16, 125),
-(3, 'Dune', 'Denis Villeneuve', 'Timothée Chalamet,Rebecca Ferguson,Oscar Isaac,Jason Momoa', 'Feature adaptation of Frank Herbert\'s science fiction novel, about the son of a noble family entrusted with the protection of the most valuable asset and most vital element in the galaxy.', 16, 155),
-(4, 'Blade Runner 2049', 'Denis Villeneuve', 'Ryan Gosling,Dave Bautista,Robin Wright,Mark Arnold', 'Young Blade Runner K\'s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who\'s been missing for thirty years.', 18, 204);
-
 -- --------------------------------------------------------
 
 --
@@ -100,23 +91,8 @@ CREATE TABLE `reservation` (
   `id` int(11) NOT NULL,
   `screening_id` int(11) NOT NULL,
   `employee_reserved_id` int(11) DEFAULT NULL,
-  `reservation_type_id` int(11) DEFAULT NULL,
-  `reservation_contact` varchar(1024) NOT NULL,
-  `reserved` tinyint(1) DEFAULT NULL,
-  `employee_paid_id` int(11) DEFAULT NULL,
-  `paid` tinyint(1) DEFAULT NULL,
-  `active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `reservation_type`
---
-
-CREATE TABLE `reservation_type` (
-  `id` int(11) NOT NULL,
-  `reservation_type` varchar(32) NOT NULL
+  `reservation_token` varchar(1024) NOT NULL,
+  `reservation_activated` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -185,16 +161,7 @@ ALTER TABLE `movie`
 --
 ALTER TABLE `reservation`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `Reservation_Projection` (`screening_id`),
-  ADD KEY `Reservation_Reservation_type` (`reservation_type_id`),
-  ADD KEY `Reservation_paid_Employee` (`employee_paid_id`),
-  ADD KEY `Reservation_reserving_employee` (`employee_reserved_id`);
-
---
--- A tábla indexei `reservation_type`
---
-ALTER TABLE `reservation_type`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `Reservation_Projection` (`screening_id`);
 
 --
 -- A tábla indexei `screening`
@@ -216,9 +183,9 @@ ALTER TABLE `seat`
 --
 ALTER TABLE `seat_reserved`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `Seat_reserved_Reservation_projection` (`screening_id`),
   ADD KEY `Seat_reserved_Reservation_reservation` (`reservation_id`),
-  ADD KEY `Seat_reserved_Seat` (`seat_id`);
+  ADD KEY `Seat_reserved_Seat` (`seat_id`),
+  ADD KEY `Seat_reserved_screening` (`screening_id`);
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
@@ -228,7 +195,7 @@ ALTER TABLE `seat_reserved`
 -- AUTO_INCREMENT a táblához `auditorium`
 --
 ALTER TABLE `auditorium`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT a táblához `employee`
@@ -240,37 +207,31 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT a táblához `movie`
 --
 ALTER TABLE `movie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT a táblához `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT a táblához `reservation_type`
---
-ALTER TABLE `reservation_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT a táblához `screening`
 --
 ALTER TABLE `screening`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT a táblához `seat`
 --
 ALTER TABLE `seat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=819;
 
 --
 -- AUTO_INCREMENT a táblához `seat_reserved`
 --
 ALTER TABLE `seat_reserved`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -281,8 +242,6 @@ ALTER TABLE `seat_reserved`
 --
 ALTER TABLE `reservation`
   ADD CONSTRAINT `Reservation_Projection` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`),
-  ADD CONSTRAINT `Reservation_Reservation_type` FOREIGN KEY (`reservation_type_id`) REFERENCES `reservation_type` (`id`),
-  ADD CONSTRAINT `Reservation_paid_Employee` FOREIGN KEY (`employee_paid_id`) REFERENCES `employee` (`id`),
   ADD CONSTRAINT `Reservation_reserving_employee` FOREIGN KEY (`employee_reserved_id`) REFERENCES `employee` (`id`);
 
 --
@@ -302,9 +261,9 @@ ALTER TABLE `seat`
 -- Megkötések a táblához `seat_reserved`
 --
 ALTER TABLE `seat_reserved`
-  ADD CONSTRAINT `Seat_reserved_Reservation_projection` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`),
   ADD CONSTRAINT `Seat_reserved_Reservation_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`),
-  ADD CONSTRAINT `Seat_reserved_Seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`);
+  ADD CONSTRAINT `Seat_reserved_Seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`),
+  ADD CONSTRAINT `Seat_reserved_screening` FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
