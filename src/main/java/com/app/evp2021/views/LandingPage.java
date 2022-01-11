@@ -23,6 +23,8 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the Main page/window.
@@ -50,8 +52,47 @@ public class LandingPage extends Application {
 
         checkConnection();
 
+        deleteExpiredData();
+
         showStage(active_scene);
     }
+
+    private void deleteExpiredScreenings(ArrayList<Integer> expiredScreeningIds) {
+        System.out.println("Deleting expired screenings...");
+        try{
+            MySQLConnect dbConnection = new MySQLConnect();
+            dbConnection.establishConnection();
+
+            for(int i = 0; i < expiredScreeningIds.size(); i++) {
+                dbConnection.deleteScreening(expiredScreeningIds.get(i),null,null,null);
+            }
+        }catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    private void deleteExpiredData() {
+        try {
+            System.out.println("Deleting expired reservations...");
+            MySQLConnect dbConnection = new MySQLConnect();
+            dbConnection.establishConnection();
+            ArrayList<Integer> expiredScreeningIds = new ArrayList<>();
+
+            Object[][] screenings = dbConnection.getScreening(null,null,null,null, null);
+            for(int i = 1; i< screenings.length; i++) {
+                String startingDate = screenings[i][4].toString().split(" ")[0];
+                if(LocalDate.parse(startingDate).isBefore(LocalDate.now())) {
+                    expiredScreeningIds.add((int) screenings[1][1]);
+                    dbConnection.deleteReservation(null, screenings[1][1]);
+                }
+            }
+            dbConnection.closeConnection();
+            deleteExpiredScreenings(expiredScreeningIds);
+        }catch (SQLException error) {
+             error.printStackTrace();
+        }
+    }
+
     /**
      * Changes the scene.
      * @param scene Scene that contains UI elements.
