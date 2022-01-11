@@ -136,7 +136,6 @@ public class AuditoriumController {
     /**
      * It generates auditorium rooms' seats into an array.
      * @param seats It adds seats to the auditorium.
-     * @return An array of objects.
      */
     void setAllSeat(Object[][] seats)  {
         for(int i = 1; i < seats.length; i++) {
