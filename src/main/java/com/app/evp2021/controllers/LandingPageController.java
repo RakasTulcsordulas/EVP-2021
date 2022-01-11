@@ -85,17 +85,25 @@ public class LandingPageController{
                     );
                     screeningStart.minusMinutes(15);
                     if(LocalDateTime.now().isBefore(screeningStart)) {
-                        int employeeId = (int) dbConn.getEmployee(null, UserSession.getSession().getEmployee())[1][1];
 
-                        dbConn.activateReservation(reservation_token_field.getText(), employeeId);
+                        if((int) reservation[1][5] == 0) {
+                            int employeeId = (int) dbConn.getEmployee(null, UserSession.getSession().getEmployee())[1][1];
 
-                        PopupWindow successWindow = new PopupWindow(PopupWindow.TYPE.SUCCESS, "Foglalás sikeresen aktiválva.", "A foglalás sikeresen fel lett véve, fizetés megkezdhető!", null);
-                        reservation_token_field.clear();
-                        successWindow.displayWindow();
+                            dbConn.activateReservation(reservation_token_field.getText(), employeeId);
+
+                            PopupWindow successWindow = new PopupWindow(PopupWindow.TYPE.SUCCESS, "Foglalás sikeresen aktiválva.", "A foglalás sikeresen fel lett véve, fizetés megkezdhető!", null);
+                            reservation_token_field.clear();
+                            successWindow.displayWindow();
+                        }else{
+                            PopupWindow errorWindow = new PopupWindow(PopupWindow.TYPE.ERROR, "A foglalás már felvéve!", "A foglalás már nem érvényes mert már beváltották!", null);
+                            reservation_token_field.clear();
+                            errorWindow.displayWindow();
+                        }
+
                     }else{
                         PopupWindow errorWindow = new PopupWindow(PopupWindow.TYPE.ERROR, "A foglalás lejárt!", "A foglalás már nem érvényes ezért törlésre kerül. A film kezdete előtt 15 percel kell beváltani!", null);
                         reservation_token_field.clear();
-                        dbConn.deleteReservation(reservation[1][1]);
+                        dbConn.deleteReservation(reservation[1][1], null);
                         errorWindow.displayWindow();
                     }
 
@@ -211,15 +219,24 @@ public class LandingPageController{
      * Deletes a movie from the list.
      */
     void deleteMovie(){
-        try {
-            MySQLConnect connection = new MySQLConnect();
-            connection.establishConnection();
-            connection.deleteScreening(editMovieId, null, null);
-            connection.deleteMovie(editMovieId);
-        } catch (SQLException err){
-            err.printStackTrace();
-        } finally {
-            LandingPage.refresh();
+        PopupWindow areYouSureWindow = new PopupWindow(PopupWindow.TYPE.YESNO, "Film törlése", "Biztosan szeretnéd törölni ezt a filmet? A foglalások és a műsor is törlésre fog kerülni!", null);
+        int response = areYouSureWindow.displayWindow();
+        if(response == 1){
+            try {
+                MySQLConnect connection = new MySQLConnect();
+                connection.establishConnection();
+
+                Object[][] screeningsBasedOnMovie = connection.getScreening(null, editMovieId, null,null,null);
+                for(int i = 1; i < screeningsBasedOnMovie.length; i++) {
+                    connection.deleteReservation(null, screeningsBasedOnMovie[1][1]);
+                }
+                connection.deleteScreening(null, editMovieId, null, null);
+                connection.deleteMovie(editMovieId);
+            } catch (SQLException err){
+                err.printStackTrace();
+            } finally {
+                LandingPage.refresh();
+            }
         }
     }
 
