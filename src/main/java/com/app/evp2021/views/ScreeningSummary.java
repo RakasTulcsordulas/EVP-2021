@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Sums up the screening dates.
  */
@@ -18,10 +20,16 @@ public class ScreeningSummary {
     /**
      * Creates the window of the Summary.
      */
-    public static ScreeningSummaryController createWindow() throws Exception
+    public static ScreeningSummaryController createWindow()
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-summary-view.fxml"));
-        scene = new Scene(fxmlLoader.load());
+        try {
+
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         modal = new Stage();
 
         modal.initModality(Modality.APPLICATION_MODAL);
@@ -49,6 +57,7 @@ public class ScreeningSummary {
 
     /**
      * Returns Stage.
+     * @return modal.
      */
     public static Stage getStage() {
         return modal;

@@ -165,6 +165,7 @@ public class PopupWindow {
 
 		/**
 		 * Shows the display window
+         * @return Values on Close.
 		 */
     public int displayWindow()
     {

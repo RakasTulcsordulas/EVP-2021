@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -50,16 +51,22 @@ public class LandingPageController{
     @FXML private Button list_movies_btn;
     private MovieInputsController movieInputsController = null;
 
-    @FXML private TextField reservation_token_field;
 
-    @FXML private void openScreeningWindow(MouseEvent event) throws Exception {
+    @FXML private TextField reservation_token_field;
+    /**
+     * Opens screening summary pop up window.
+     */
+    @FXML private void openScreeningWindow() {
 
         ScreeningSummaryController Controller = ScreeningSummary.createWindow();
 
         ScreeningSummary.display();
     }
 
-    @FXML private void onReservationCheckButtonClicked(MouseEvent event) {
+    /**
+     * Checks reservation token when button clicked.
+     */
+    @FXML private void onReservationCheckButtonClicked() {
         if(!reservation_token_field.getText().isEmpty()) {
             try {
 
@@ -106,8 +113,7 @@ public class LandingPageController{
     }
 
     /**
-     * Listens whenever the datepicker changes value.
-     * @param event ActionEvent.
+     * Listens whenever the date picker changes value.
      */
     @FXML private void onActionPerformed(ActionEvent event) {
         current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());
@@ -184,9 +190,8 @@ public class LandingPageController{
     @FXML
     /**
      * Log out the admin interface.
-     * @param MouseEvent event
      */
-    void logoutAdmin(MouseEvent event) throws Exception{
+    void logoutAdmin(){
         UserSession.getSession().logout();
         LandingPage.refresh();
     }
@@ -195,9 +200,8 @@ public class LandingPageController{
     @FXML
     /**
      * Adds a new movie to the list.
-     * @param MouseEvent event
      */
-    void addMovie(MouseEvent event) {
+    void addMovie() {
         movieInputsController.addNewMovie();
         new_movie = true;
     }
@@ -205,9 +209,8 @@ public class LandingPageController{
     @FXML
     /**
      * Deletes a movie from the list.
-     * @param MouseEvent event
      */
-    void deleteMovie(MouseEvent event) throws Exception {
+    void deleteMovie(){
         try {
             MySQLConnect connection = new MySQLConnect();
             connection.establishConnection();
@@ -223,21 +226,23 @@ public class LandingPageController{
     @FXML
     /**
      * Refreshes the admin interface.
-     * @param MouseEvent event
      */
-    void refreshAdminView(MouseEvent event) throws Exception {
+    void refreshAdminView() {
         LandingPage.refresh();
     }
 
     @FXML
     /**
      * Creates a new auditorium.
-     * @param MouseEvent event
      */
-    void addNewAuditorium(MouseEvent event) throws Exception {
+    void addNewAuditorium() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
-        AnchorPane rootAnchorPane = fxmlLoader.load();
-
+        AnchorPane rootAnchorPane = null;
+        try{
+             rootAnchorPane = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AuditoriumController Controller = fxmlLoader.getController();
         Controller.createAuditorium(true, false);
         Controller.setTitle("Terem létrehozás");
@@ -257,12 +262,16 @@ public class LandingPageController{
     }
     /**
      * Fetches the seats from the database and creates a display of them for admins.
-     * @param id event
+     * @param id Integer
      */
-    public static void showAuditoriumForAdmin(int id) throws Exception {
+    public static void showAuditoriumForAdmin(int id) {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
-        AnchorPane root = fxmlLoader.load();
-
+        AnchorPane root = null;
+        try{
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AuditoriumController Controller = fxmlLoader.getController();
         Controller.createAuditorium(false, true);
         Controller.setTitle("Terem mutatás");
@@ -295,9 +304,21 @@ public class LandingPageController{
         LandingPage.refresh();
     }
 
-    public static void showAuditoriumForUser(Object id, String movieName, String startingTime, Object screeningId) throws Exception {
+    /**
+     * Creates/shows the auditorium for the user.
+     * @param id Object of integers.
+     * @param movieName Name of the movie(s).
+     * @param startingTime Starting time.
+     * @param screeningId Object of Screening IDs.
+     */
+    public static void showAuditoriumForUser(Object id, String movieName, String startingTime, Object screeningId)  {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("audit-view.fxml"));
-        AnchorPane root = fxmlLoader.load();
+        AnchorPane root = null;
+        try{
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         AuditoriumController Controller = fxmlLoader.getController();
         Controller.createAuditorium(false, true);
@@ -331,20 +352,16 @@ public class LandingPageController{
     @FXML
     /**
      * Disables the displays of the movie controllers.
-     * @param MouseEvent event
      */
-    void closeInputs(MouseEvent event) {
+    void closeInputs() {
         movieInputsController.closeInputFields();
     }
-
-
 
     @FXML
     /**
      * Saves movies to the database.
-     * @param MouseEvent event
      */
-    void saveMovie(MouseEvent event) throws Exception {
+    void saveMovie() {
         if(new_movie){
             Object[] validationValues = movieInputsController.validateInputFields();
 
@@ -474,7 +491,7 @@ public class LandingPageController{
      * Initializes the admin view.
      */
     //set up initial things
-    public void initializeAdminView() throws Exception {
+    public void initializeAdminView() {
         if(movieInputsController == null) {
             Object[] inputFields = {movie_title_input, director_input, cast_input, description_input, rating_drop, duration_input};
             try {
@@ -486,6 +503,9 @@ public class LandingPageController{
         }
     }
 
+    /**
+     * Sets the default date to today, and chose one.
+     */
     public void setTodayAsSelectedDate() {
         date_picker.setValue(LocalDate.now());
         current_date.setText("Kiválasztott dátum: " + date_picker.getValue().toString());

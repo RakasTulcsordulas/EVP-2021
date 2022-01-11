@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -42,7 +43,7 @@ public class LandingPage extends Application {
      * Entry point.
      * @param stage Employee name.
      */
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage){
         _stage = stage;
 
         setLoggedOutScene();
@@ -72,21 +73,24 @@ public class LandingPage extends Application {
     /**
      * Refresh the views(User / Admin).
      */
-    public static void refresh() throws Exception{
+    public static void refresh() {
         boolean loggedIn = UserSession.getSession().getLoggedIn();
         if(loggedIn == true) { setLoggedInScene(); }else{ setLoggedOutScene(); }
     }
     /**
      * Sets the user scene.
      */
-    public static void setLoggedOutScene() throws Exception{
+    public static void setLoggedOutScene() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("landing-view.fxml"));
         _stage.setTitle("CinemApp - Főoldal");
-
-        if (active_scene == null) {
-            active_scene = new Scene(fxmlLoader.load());
-        }else{
-            active_scene.setRoot(fxmlLoader.load());
+        try {
+            if (active_scene == null) {
+                active_scene = new Scene(fxmlLoader.load());
+            } else {
+                active_scene.setRoot(fxmlLoader.load());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         DatePicker datePicker = (DatePicker) active_scene.lookup("#datepicker");
@@ -109,16 +113,19 @@ public class LandingPage extends Application {
     /**
      * Sets the admin scene.
      */
-    public static void setLoggedInScene() throws Exception{
+    public static void setLoggedInScene() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("admin-view.fxml"));
         _stage.setTitle("CinemApp - Admin");
-
-        if (active_scene == null) {
-            active_scene = new Scene(fxmlLoader.load());
-        }else{
-            active_scene.setRoot(fxmlLoader.load());
+        try {
+            if (active_scene == null) {
+                active_scene = new Scene(fxmlLoader.load());
+            } else {
+                active_scene.setRoot(fxmlLoader.load());
+            }
         }
-
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         Button newMovieButton = (Button) active_scene.lookup("#new_movie");
         newMovieButton.setStyle("-fx-cursor: hand;");
 

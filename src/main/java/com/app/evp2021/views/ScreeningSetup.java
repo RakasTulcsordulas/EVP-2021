@@ -19,7 +19,7 @@ public class ScreeningSetup {
      * Creates screening window.
      * @param screeningView Node from fxml.
      */
-    public static void createWindow(Node screeningView) throws Exception
+    public static void createWindow(Node screeningView)
     {
         scene = new Scene((Parent) screeningView);
         modal = new Stage();
@@ -46,6 +46,7 @@ public class ScreeningSetup {
 
     /**
      * Returns Stage.
+     * @return modal.
      */
     public static Stage getStage() {
         return modal;

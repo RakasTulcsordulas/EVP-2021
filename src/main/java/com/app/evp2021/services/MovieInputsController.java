@@ -38,7 +38,7 @@ public class MovieInputsController {
      * @param confirmButton Button of confirmation.
      * @param deleteButton Button of deleting.
      */
-    public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton) throws Exception {
+    public MovieInputsController(VBox inputHolder, Object[] inputFields, Text inputSectionTitle, Button confirmButton, Button deleteButton) {
         this.inputHolder = inputHolder;
         this.movieTitleInput = (TextField) inputFields[0];
         this.movieDirectorInput = (TextField) inputFields[1];
@@ -205,6 +205,7 @@ public class MovieInputsController {
 
     /**
      * Input fields validations
+     * @return errorFound True/False
      */
     private boolean checkInputs() {
         boolean errorFound = true;

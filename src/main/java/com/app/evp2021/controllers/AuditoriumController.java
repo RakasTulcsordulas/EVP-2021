@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,15 +136,20 @@ public class AuditoriumController {
     /**
      * It generates auditorium rooms' seats into an array.
      * @param seats It adds seats to the auditorium.
-     * @return An array of objects .
+     * @return An array of objects.
      */
-    void setAllSeat(Object[][] seats) throws Exception {
+    void setAllSeat(Object[][] seats)  {
         for(int i = 1; i < seats.length; i++) {
             setSeat((Integer) seats[i][2], (Integer) seats[i][3], 0);
         }
     }
 
-    void setAllSeatBasedOnreservation(Object[][] seats, Object screeningId) throws Exception {
+    /**
+     * Set all seats based on reservation.
+     * @param seats Array of seats.
+     * @param screeningId Object of IDs.
+     */
+    void setAllSeatBasedOnreservation(Object[][] seats, Object screeningId) {
         Object[][] reservedSeats = null;
         try{
             MySQLConnect dbConn = new MySQLConnect();
@@ -171,10 +177,12 @@ public class AuditoriumController {
             }
         }
     }
+
     /**
      * It generates auditorium rooms' seats into an array.
      * @param index It adds seats to the auditorium.
-     * @return An array of objects.
+     * @param row Seat rows of the auditorium(s).
+     * @param col Seat column of the auditorium(s).
      */
     private void paneClick(int index, int row, int col) {
         if(_button_action == 1) {
@@ -224,6 +232,12 @@ public class AuditoriumController {
         movie_title.setText(s);
     }
 
+    /**
+     * Gives back a seat's number (row and col).
+     * @param row Seat rows of the auditorium(s).
+     * @param col Seat column of the auditorium(s).
+     * @return Returns the inner text of the seat label with the given parameters.
+     */
     private String getSeatLabel(int row, int col) {
         int index = ((row-1)*19)+col;
         StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
@@ -236,42 +250,46 @@ public class AuditoriumController {
      * @param col Seat column of the auditorium(s).
      * @param status Checks the reservation status of the seats.
      */
-    void setSeat(int row, int col, int status) throws Exception{
-        if(row <= 0 || col <= 0) throw new Exception("0-nál nagyobb szám elvárt!");
+    void setSeat(int row, int col, int status) {
+        if(row <= 0 || col <= 0)
+        {
+            System.err.println("0-nál nagyobb szám elvárt!");
+        }
+        else {
+            int index = ((row - 1) * 19) + col;
+            StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
 
-        int index = ((row-1)*19)+col;
-        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
-
-        switch (status){
-            case -1:
-                seatPane.setVisible(false);
-                seatPane.getStyleClass().removeAll();
-                addClass(seatPane, "seat");
-                break;
-            case 0:
-                seatPane.setVisible(true);
-                addClass(seatPane, "btn-success");
-                seatPane.setCursor(Cursor.HAND);
-                break;
-            case 1:
-                seatPane.setVisible(true);
-                addClass(seatPane, "btn-danger");
-                break;
-            case 2:
-                seatPane.setVisible(true);
-                removeClass(seatPane, "btn-success");
-                break;
-            case 3:
-                seatPane.setVisible(true);
-                seatPane.getStyleClass().removeAll();
-                addClass(seatPane, "btn-warning");
-                seatPane.setCursor(Cursor.HAND);
-                break;
-            case 4:
-                seatPane.setVisible(true);
-                removeClass(seatPane, "btn-warning");
-                seatPane.setCursor(Cursor.HAND);
-                break;
+            switch (status) {
+                case -1:
+                    seatPane.setVisible(false);
+                    seatPane.getStyleClass().removeAll();
+                    addClass(seatPane, "seat");
+                    break;
+                case 0:
+                    seatPane.setVisible(true);
+                    addClass(seatPane, "btn-success");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+                case 1:
+                    seatPane.setVisible(true);
+                    addClass(seatPane, "btn-danger");
+                    break;
+                case 2:
+                    seatPane.setVisible(true);
+                    removeClass(seatPane, "btn-success");
+                    break;
+                case 3:
+                    seatPane.setVisible(true);
+                    seatPane.getStyleClass().removeAll();
+                    addClass(seatPane, "btn-warning");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+                case 4:
+                    seatPane.setVisible(true);
+                    removeClass(seatPane, "btn-warning");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+            }
         }
     }
     /**
@@ -279,46 +297,49 @@ public class AuditoriumController {
      * @param index Determines the number of seats for each auditorium.
      * @param status Checks the reservation status of the seats.
      */
-    void setSeat(int index, int status) throws Exception{
-        if(index <= 0 || index > 342) throw new Exception("0-nál nagyobb szám elvárt!");
+    void setSeat(int index, int status){
+        if(index <= 0 || index > 342){
+            System.err.println("0-nál nagyobb szám elvárt!");
+        }
+        else {
+            StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
 
-        StackPane seatPane = (StackPane) rootGridPane.getChildren().get(index);
-
-        switch (status){
-            case -1:
-                seatPane.setVisible(false);
-                seatPane.getStyleClass().removeAll();
-                addClass(seatPane, "seat");
-                break;
-            case 0:
-                seatPane.setVisible(true);
-                addClass(seatPane, "btn-success");
-                seatPane.setCursor(Cursor.HAND);
-                break;
-            case 1:
-                seatPane.setVisible(true);
-                addClass(seatPane, "btn-danger");
-                break;
-            case 2:
-                seatPane.setVisible(true);
-                removeClass(seatPane, "btn-success");
-                break;
-            case 3:
-                seatPane.setVisible(true);
-                addClass(seatPane, "btn-warning");
-                seatPane.setCursor(Cursor.HAND);
-                break;
-            case 4:
-                seatPane.setVisible(true);
-                removeClass(seatPane, "btn-warning");
-                seatPane.setCursor(Cursor.HAND);
-                break;
+            switch (status) {
+                case -1:
+                    seatPane.setVisible(false);
+                    seatPane.getStyleClass().removeAll();
+                    addClass(seatPane, "seat");
+                    break;
+                case 0:
+                    seatPane.setVisible(true);
+                    addClass(seatPane, "btn-success");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+                case 1:
+                    seatPane.setVisible(true);
+                    addClass(seatPane, "btn-danger");
+                    break;
+                case 2:
+                    seatPane.setVisible(true);
+                    removeClass(seatPane, "btn-success");
+                    break;
+                case 3:
+                    seatPane.setVisible(true);
+                    addClass(seatPane, "btn-warning");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+                case 4:
+                    seatPane.setVisible(true);
+                    removeClass(seatPane, "btn-warning");
+                    seatPane.setCursor(Cursor.HAND);
+                    break;
+            }
         }
     }
     /**
      * Creates a Node, if it's not existing.
-     * @param node
-     * @param className
+     * @param node View box, contains the elements.
+     * @param className The name of the Class to be added.
      */
     private void addClass(Node node, String className){
         if(!node.getStyleClass().contains(className)){
@@ -327,8 +348,8 @@ public class AuditoriumController {
     }
     /**
      * Removes a Node, if it's existing.
-     * @param node
-     * @param className
+     * @param node View box, contains the elements.
+     * @param className The name of the Class to be added.
      */
     private void removeClass(Node node, String className){
         if(node.getStyleClass().contains(className)){
@@ -337,9 +358,9 @@ public class AuditoriumController {
     }
     /**
      * Returns the type of the class.
-     * @param node
-     * @param className
-     * @return
+     * @param node View box, contains the elements.
+     * @param className The name of the Class to be added.
+     * @return Returns true node if the Node contains the given classname.
      */
     private boolean hasClass(Node node, String className){
         return node.getStyleClass().contains(className);
@@ -351,9 +372,23 @@ public class AuditoriumController {
     void setButtonText(String text){
         audit_btn.setText(text);
     }
+
+    /**
+     * Sets the text of the SecondButton.
+     * @param text Button's text.
+     */
     void setSecondButtonText(String text) { audit_btn1.setText(text); }
+
+    /**
+     * Sets the SecondButton's visibility.
+     * @param toggle True/False
+     */
     void setSecondButtonVisible(boolean toggle) { audit_btn1.setVisible(toggle); }
 
+    /**
+     * Sets the SecondButton's visibility.
+     * @param b True/False
+     */
     void showSelf(boolean b){
         auditorium.setVisible(b);
     }
@@ -378,10 +413,9 @@ public class AuditoriumController {
     }
     /**
      * Sets the buttons' types.
-     * @param event MouseEvent.
      */
     @FXML
-    void onActionButtonClicked(MouseEvent event) {
+    void onActionButtonClicked() {
         if(_button_action == 0){
             String reservationInfo = "Székek: \n";
             for(int i = 0; i < reservedSeats.size(); i++) {
@@ -469,6 +503,10 @@ public class AuditoriumController {
         }
     }
 
+    /**
+     * Creates a token for each Reservation.
+     * @return returnString, generated token.
+     */
     private String generateReservationToken() {
         String returnString = "";
         List<String> finalString = new ArrayList<>();
@@ -494,9 +532,18 @@ public class AuditoriumController {
     }
 
     @FXML
-    void onSecondButtonClicked() throws Exception {
+    /**
+     * Creates a new window with a button.
+     */
+    void onSecondButtonClicked() {
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("screening-setup-view.fxml"));
-        AnchorPane rootAnchorPane = fxmlLoader.load();
+        AnchorPane rootAnchorPane = null;
+        try {
+            rootAnchorPane = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         ScreeningSetup.createWindow(rootAnchorPane);
         ScreeningController Controller = fxmlLoader.getController();
@@ -506,6 +553,10 @@ public class AuditoriumController {
         ScreeningSetup.display();
     }
 
+    /**
+     * Sets the action of a button.
+     * @param params Sets the actionParams to the auditorium controller.
+     */
     public void setActionButtonParams(Object[] params) {
         this.actionParams = params;
     }

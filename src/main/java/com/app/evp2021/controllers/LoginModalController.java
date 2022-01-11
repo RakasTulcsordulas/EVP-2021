@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import java.sql.SQLException;
+
 /**
  * Controls the login module.
  */
@@ -21,15 +23,21 @@ public class LoginModalController {
     /**
      * Username and password verification.
      */
-    private void onLoginAttempt() throws Exception{
+    private void onLoginAttempt() {
         if(username.getText().isEmpty() || psw.getText().isEmpty()) {
             errormsg.setText("Minden mező kitöltése kötelező!");
         }else{
+            boolean loginAttempt = false;
+            try {
+                MySQLConnect dbConnection = new MySQLConnect();
 
-            MySQLConnect dbConnection = new MySQLConnect();
-            dbConnection.establishConnection();
-            boolean loginAttempt = dbConnection.checkPassword(username.getText(), psw.getText());
+                dbConnection.establishConnection();
 
+                loginAttempt = dbConnection.checkPassword(username.getText(), psw.getText());
+            }
+        catch(SQLException error){
+            error.printStackTrace();
+        }
             if(loginAttempt) {
                 LoginModal.closeWindow();
                 UserSession.setSession(username.getText(), true);

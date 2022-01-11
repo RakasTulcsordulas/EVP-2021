@@ -30,10 +30,15 @@ public class AuditoriumCreationPopup {
      * Creates window with Node that contains generated grid.
      * @param auditoriumView Fix grid.
      */
-    public static void createWindow(Node auditoriumView) throws Exception
+    public static void createWindow(Node auditoriumView)
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("popup-audit-creator.fxml"));
-        scene = new Scene(fxmlLoader.load());
+       try {
+           scene = new Scene(fxmlLoader.load());
+       }
+       catch (IOException e) {
+           e.printStackTrace();
+       }
         modal = new Stage();
 
         modal.initModality(Modality.APPLICATION_MODAL);
@@ -60,6 +65,7 @@ public class AuditoriumCreationPopup {
     }
     /**
      * Returns stage.
+     * @return modal.
      */
     public Stage getStage() {
         return modal;

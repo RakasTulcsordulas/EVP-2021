@@ -13,6 +13,8 @@ import javafx.stage.Modality;
 
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Creates login window.
  */
@@ -24,10 +26,15 @@ public class LoginModal {
     /**
      * Creates login display view from fxml.
      */
-        public static void displayWindow() throws Exception
+        public static void displayWindow()
         {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-modal.fxml"));
-            scene = new Scene(fxmlLoader.load());
+
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             modal = new Stage();
 
             modal.initModality(Modality.APPLICATION_MODAL);

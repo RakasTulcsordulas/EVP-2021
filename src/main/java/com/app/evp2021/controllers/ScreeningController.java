@@ -56,9 +56,8 @@ public class ScreeningController {
     private Stage parentStage;
     /**
      * Next button = Step forward
-     * @param event
      */
-    @FXML void onNextButtonClicked(MouseEvent event) {
+    @FXML void onNextButtonClicked() {
         if(this.stepCount <= 4) {
             this.stepCount++;
         }
@@ -67,9 +66,8 @@ public class ScreeningController {
     }
     /**
      * Back button = Step backward
-     * @param event
      */
-    @FXML void onBackButtonClicked(MouseEvent event) {
+    @FXML void onBackButtonClicked() {
         if(this.stepCount >= 2 && this.stepCount <= 4) {
             this.stepCount--;
         }
