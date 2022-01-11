@@ -485,20 +485,29 @@ public class AuditoriumController {
             parentStage.close();
 
         }else if(_button_action == 2 && actionParams[0] != null) {
-            MySQLConnect dbConnection = null;
-            try{
-                dbConnection = new MySQLConnect();
-                dbConnection.establishConnection();
-            }catch (SQLException err){
-                err.printStackTrace();
+            PopupWindow areYouSureWindow = new PopupWindow(PopupWindow.TYPE.YESNO, "Terem törlése", "Biztosan szeretnéd törölni ezt a termet? A foglalások és a műsor is törlésre fog kerülni!", null);
+            int response = areYouSureWindow.displayWindow();
+            if(response == 1) {
+                MySQLConnect dbConnection = null;
+                try{
+                    dbConnection = new MySQLConnect();
+                    dbConnection.establishConnection();
+                }catch (SQLException err){
+                    err.printStackTrace();
+                }
+                Object[][] screenings = dbConnection.getScreening(null, null,actionParams[0],null,null);
+                for(int i = 1; i < screenings.length; i++) {
+                    dbConnection.deleteReservation(null, screenings[1][1]);
+                }
+                dbConnection.deleteScreening(null,null,actionParams[0],null);
+
+                dbConnection.deleteSeats((Integer) actionParams[0]);
+                dbConnection.deleteAuditorium((Integer) actionParams[0]);
+
+                dbConnection.closeConnection();
+                audit_btn.setDisable(true);
+                parentStage.close();
             }
-
-            dbConnection.deleteSeats((Integer) actionParams[0]);
-            dbConnection.deleteAuditorium((Integer) actionParams[0]);
-
-            dbConnection.closeConnection();
-            audit_btn.setDisable(true);
-            parentStage.close();
         }
     }
 
