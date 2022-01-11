@@ -301,15 +301,37 @@
                               </VBox>
                               <VBox alignment="CENTER" maxHeight="70.0" prefHeight="70.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <children>
-                                    <Button id="check_reservation" fx:id="check_reservation_btn" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onReservationCheckButtonClicked" prefHeight="27.0" prefWidth="281.0" style="-fx-cursor: hand;" stylesheets="@css/bootstrap.css" text="Foglalás ellenőrzése">
-                                       <styleClass>
-                                          <String fx:value="btn" />
-                                          <String fx:value="btn-primary" />
-                                       </styleClass>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </Button>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button id="check_reservation" fx:id="delete_reservation_btn" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onReservationDeleteButtonClicked" prefHeight="30.0" prefWidth="171.0" style="-fx-cursor: hand;" stylesheets="@css/bootstrap.css" text="Foglalás törlése">
+                                             <styleClass>
+                                                <String fx:value="btn" />
+                                                <String fx:value="btn-danger" />
+                                             </styleClass>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <HBox.margin>
+                                                <Insets right="20.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button id="check_reservation" fx:id="check_reservation_btn" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#onReservationCheckButtonClicked" prefHeight="27.0" prefWidth="281.0" style="-fx-cursor: hand;" stylesheets="@css/bootstrap.css" text="Foglalás ellenőrzése">
+                                             <styleClass>
+                                                <String fx:value="btn" />
+                                                <String fx:value="btn-primary" />
+                                             </styleClass>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <HBox.margin>
+                                                <Insets left="20.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                       <padding>
+                                          <Insets left="20.0" right="20.0" />
+                                       </padding>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>

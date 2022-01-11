@@ -20,6 +20,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  * Controls the Landing page (First page)
@@ -61,6 +63,36 @@ public class LandingPageController{
         ScreeningSummaryController Controller = ScreeningSummary.createWindow();
 
         ScreeningSummary.display();
+    }
+
+    @FXML private void onReservationDeleteButtonClicked() {
+            try{
+                MySQLConnect dbConnection = new MySQLConnect();
+                dbConnection.establishConnection();
+
+                Object[][] screening = dbConnection.getScreening(null,null,null,null,null);
+                ArrayList<Integer> expiredReservationIds = new ArrayList<>();
+                for(int i = 1; i < screening.length; i++) {
+                    String start = screening[i][4].toString().substring(0, 16);
+                    LocalDateTime startDateTime = LocalDateTime.of(LocalDate.parse(start.split(" ")[0]), LocalTime.parse(start.split(" ")[1]));
+                    if(startDateTime.isBefore(LocalDateTime.now())){
+                        expiredReservationIds.add((int) screening[1][1]);
+                        //dbConnection.deleteReservation(null, screening[1][1]);
+                    }
+                }
+
+                LocalDateTime nowDateTime = LocalDateTime.now();
+                PopupWindow yesNoWindow = new PopupWindow(PopupWindow.TYPE.YESNO, "Lejárt foglalások törlése", "Szeretnéd törölni [" + nowDateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm")) + "] dátumig a lejárt a foglalásokat?  \nÖsszesen: " + (expiredReservationIds.size()),null);
+
+                int response = yesNoWindow.displayWindow();
+                if(response == 1) {
+                    for (int i = 0; i < expiredReservationIds.size(); i++) {
+                        dbConnection.deleteReservation(null, expiredReservationIds.get(i));
+                    }
+                }
+            }catch (SQLException error) {
+                error.printStackTrace();
+            }
     }
 
     /**
