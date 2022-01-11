@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.DatePickerSkin;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.text.Text;
@@ -47,6 +48,8 @@ public class LandingPage extends Application {
      */
     public void start(Stage stage){
         _stage = stage;
+
+        _stage.getIcons().add(new Image(Main.class.getResourceAsStream("images/cinemapp.png")));
 
         setLoggedOutScene();
 
