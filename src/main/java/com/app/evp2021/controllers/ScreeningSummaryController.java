@@ -137,7 +137,7 @@ public class ScreeningSummaryController {
                 if(!movies.contains(screenings[i][2].toString())) {
                     movies.add(screenings[i][2].toString());
                     Text movieName = new Text(movieData[1][2].toString());
-                    movieName.setStyle("-fx-font-size: 22; -fx-font-weight: 700;");
+                    movieName.setStyle("-fx-font-size: 18; -fx-font-weight: 700;");
 
                     grid.add(movieName, 0,i,1,1);
                 }
@@ -147,7 +147,7 @@ public class ScreeningSummaryController {
 
                 Text screeningFromTo = new Text(screeningFrom.toString() + " - " + screeningTo.toString());
                 screeningFromTo.setStyle("-fx-font-weight: 700;");
-                screeningFromTo.setStyle("-fx-font-size: 16;");
+                screeningFromTo.setStyle("-fx-font-size: 14;");
                 grid.add(screeningFromTo, i, movies.indexOf(screenings[i][2].toString())+1, 1,1);
 
 
