@@ -2,7 +2,6 @@
 ## Team 'RakásTúlcsordulás' 💪
 
 Csapattagok:
-- Balika Kornél Gyula
 - Horváth Ádám
 - Kovács Gergő
 - Gömböcz Zsolt
